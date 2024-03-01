@@ -47,7 +47,7 @@
 
 ## ✨ 特点
 
-- 🤖 在一个应用中使用不同的聊天机器人，目前支持 ChatGPT、新的 Bing Chat、Google Bard、Claude 以及包括 Alpaca、Vicuna、ChatGLM 等在内的 10 多个开源模型
+- 🤖 在一个应用中使用不同的聊天机器人，目前支持 ChatGPT、新的 Bing Chat、Google Gemini、Claude 以及包括 Alpaca、Vicuna、ChatGLM 等在内的 10 多个开源模型
 - 💬 同时与多个聊天机器人进行对话，方便比较它们的回答
 - 🚀 支持 ChatGPT API 和 GPT-4 浏览
 - 🔍 快捷方式，可在浏览器的任何位置快速激活应用
@@ -60,21 +60,21 @@
 
 ## 🤖 支持的聊天机器人
 
-* ChatGPT（通过 Web 应用/API/Azure/Poe）
-* Bing Chat
-* Google Bard
-* Claude（通过 Poe）
-* iFlytek Spark
-* ChatGLM
-* Alpaca
-* Vicuna
-* Koala
-* Dolly
-* LLaMA
-* StableLM
-* OpenAssistant
-* ChatRWKV
-* ...
+- ChatGPT（通过 Web 应用/API/Azure/Poe）
+- Bing Chat
+- Google Gemini
+- Claude（通过 Poe）
+- iFlytek Spark
+- ChatGLM
+- Alpaca
+- Vicuna
+- Koala
+- Dolly
+- LLaMA
+- StableLM
+- OpenAssistant
+- ChatRWKV
+- ...
 
 ## 🔧 手动安装
 
@@ -174,7 +174,7 @@
 
 ### v1.6.0
 
-- 增加了对 Google Bard 的支持
+- 增加了对 Google Gemini 的支持
 
 ### v1.5.4
 

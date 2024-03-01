@@ -8,7 +8,7 @@ function extractFromHTML(variableName: string, html: string) {
 }
 
 export async function fetchRequestParams() {
-  const html = await ofetch('https://bard.google.com/', { responseType: 'text' })
+  const html = await ofetch('https://gemini.google.com/', { responseType: 'text' })
 
   const atValue = extractFromHTML('SNlM0e', html)
   const blValue = extractFromHTML('cfb2h', html)
@@ -20,13 +20,13 @@ export async function fetchRequestParams() {
   return { atValue, blValue }
 }
 
-export function parseBardResponse(resp: string) {
+export function parseGeminiResponse(resp: string) {
   const data = JSON.parse(resp.split('\n')[3])
   const payload = JSON.parse(data[0][2])
   if (!payload) {
-    throw new ChatError('Failed to load bard response', ErrorCode.BARD_EMPTY_RESPONSE)
+    throw new ChatError('Failed to load gemini response', ErrorCode.BARD_EMPTY_RESPONSE)
   }
-  console.debug('bard response payload', payload)
+  console.debug('gemini response payload', payload)
 
   let text = payload[4][0][1][0] as string
 

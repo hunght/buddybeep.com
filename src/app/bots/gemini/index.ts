@@ -1,6 +1,6 @@
 import { ofetch } from 'ofetch'
 import { AbstractBot, SendMessageParams } from '../abstract-bot'
-import { fetchRequestParams, parseBardResponse } from './api'
+import { fetchRequestParams, parseGeminiResponse } from './api'
 
 function generateReqId() {
   return Math.floor(Math.random() * 900000) + 100000
@@ -11,7 +11,7 @@ interface ConversationContext {
   contextIds: [string, string, string]
 }
 
-export class BardBot extends AbstractBot {
+export class GeminiBot extends AbstractBot {
   private conversationContext?: ConversationContext
 
   async doSendMessage(params: SendMessageParams) {
@@ -38,7 +38,7 @@ export class BardBot extends AbstractBot {
     ]
 
     const resp = await ofetch(
-      'https://bard.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate',
+      'https://gemini.google.com/_/BardChatUi/data/assistant.lamda.BardFrontendService/StreamGenerate',
       {
         method: 'POST',
         signal: params.signal,
@@ -54,7 +54,7 @@ export class BardBot extends AbstractBot {
         parseResponse: (txt) => txt,
       },
     )
-    const { text, ids } = parseBardResponse(resp)
+    const { text, ids } = parseGeminiResponse(resp)
     this.conversationContext.contextIds = ids
     params.onEvent({
       type: 'UPDATE_ANSWER',
@@ -77,7 +77,7 @@ export class BardBot extends AbstractBot {
       'push-id': 'feeds/mcudyrk2a4khkz',
       'x-goog-upload-header-content-length': image.size.toString(),
       'x-goog-upload-protocol': 'resumable',
-      'x-tenant-id': 'bard-storage',
+      'x-tenant-id': 'gemini-storage',
     }
     const resp = await ofetch.raw('https://content-push.googleapis.com/upload/', {
       method: 'POST',
@@ -88,7 +88,7 @@ export class BardBot extends AbstractBot {
       body: new URLSearchParams({ [`File name: ${image.name}`]: '' }),
     })
     const uploadUrl = resp.headers.get('x-goog-upload-url')
-    console.debug('Bard upload url', uploadUrl)
+    console.debug('Gemini upload url', uploadUrl)
     if (!uploadUrl) {
       throw new Error('Failed to upload image')
     }
