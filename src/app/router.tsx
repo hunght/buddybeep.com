@@ -22,8 +22,21 @@ const indexRoute = new Route({
 
 function ChatRoute() {
   const { botId } = useParams({ from: chatRoute.id })
+
   return <SingleBotChatPanel botId={botId as BotId} />
 }
+
+function AgentChatRoute() {
+  const { botId, agentId } = useParams({ from: agentchatRoute.id })
+
+  return <SingleBotChatPanel botId={botId as BotId} agentId={agentId} />
+}
+
+const agentchatRoute = new Route({
+  getParentRoute: () => layoutRoute,
+  path: 'chat-agent/$botId/$agentId',
+  component: AgentChatRoute,
+})
 
 const chatRoute = new Route({
   getParentRoute: () => layoutRoute,
@@ -48,7 +61,9 @@ export const premiumRoute = new Route({
   },
 })
 
-const routeTree = rootRoute.addChildren([layoutRoute.addChildren([indexRoute, chatRoute, settingRoute, premiumRoute])])
+const routeTree = rootRoute.addChildren([
+  layoutRoute.addChildren([indexRoute, agentchatRoute, chatRoute, settingRoute, premiumRoute]),
+])
 
 const hashHistory = createHashHistory()
 const router = new ReactRouter({ routeTree, history: hashHistory })

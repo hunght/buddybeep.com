@@ -47,7 +47,7 @@ export class GeminiApiBot extends AbstractBot {
   }
 }
 
-export class GeminiBot extends AsyncAbstractBot {
+export class GeminiProBot extends AsyncAbstractBot {
   async initializeBot() {
     const { geminiApiKey } = await getUserConfig()
     if (!geminiApiKey) {

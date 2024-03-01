@@ -11,21 +11,21 @@
 [![author][author-image]][author-url]
 [![license][license-image]][license-url]
 [![release][release-image]][release-url]
-[![last commit][last-commit-image]][last-commit-url]  
+[![last commit][last-commit-image]][last-commit-url]
 
 [Inggris](README.md) &nbsp;&nbsp;|&nbsp;&nbsp; Indonesia &nbsp;&nbsp;|&nbsp;&nbsp; [简体中文](README_ZH-CN.md) &nbsp;&nbsp;|&nbsp;&nbsp; [繁體中文](README_ZH-TW.md) &nbsp;&nbsp;|&nbsp;&nbsp; [日本語](README_JA.md)
 
-##    
-    
+##
+
 ### Instal
-    
+
 <a href="https://chrome.google.com/webstore/detail/chathub-all-in-one-chatbo/iaakpnchhognanibcahlpcplchdfmgma?utm_source=github"><img src="https://user-images.githubusercontent.com/64502893/231991498-8df6dd63-727c-41d0-916f-c90c15127de3.png" width="200" alt="Dapatkan ChatHub untuk Chromium"></a>
 <a href="https://microsoftedge.microsoft.com/addons/detail/chathub-allinone-chat/kdlmggoacmfoombiokflpeompajfljga?utm_source=github"><img src="https://user-images.githubusercontent.com/64502893/231991158-1b54f831-2fdc-43b6-bf9a-f894000e5aa8.png" width="160" alt="Dapatkan ChatHub untuk Microsoft Edge"></a>
-    
+
 ##
 
 [Tangkapan Layar](#-tangkapan-layar) &nbsp;&nbsp;|&nbsp;&nbsp; [Fitur](#-fitur) &nbsp;&nbsp;|&nbsp;&nbsp; [Bot yang Didukung](#-supported-bots) &nbsp;&nbsp;|&nbsp;&nbsp; [Instalasi Manual](#-instalasi-manual) &nbsp;&nbsp;|&nbsp;&nbsp; [Membangun dari Source](#-membangun-dari-source) &nbsp;&nbsp;|&nbsp;&nbsp; [Changelog](#-changelog)
-    
+
 [author-image]: https://img.shields.io/badge/author-wong2-blue.svg
 [author-url]: https://github.com/wong2
 [license-image]: https://img.shields.io/github/license/chathub-dev/chathub?color=blue
@@ -47,7 +47,7 @@
 
 ## ✨ Fitur
 
-- 🤖 Gunakan chatbot yang berbeda dalam satu aplikasi, saat ini mendukung ChatGPT, Bing Chat baru, Google Bard, Claude, dan 10+ model open-source termasuk Alpaca, Vicuna, ChatGLM, dll
+- 🤖 Gunakan chatbot yang berbeda dalam satu aplikasi, saat ini mendukung ChatGPT, Bing Chat baru, Google Gemini, Claude, dan 10+ model open-source termasuk Alpaca, Vicuna, ChatGLM, dll
 - 💬 Chat dengan beberapa chatbot secara bersamaan, sehingga mudah untuk membandingkan jawaban mereka
 - 🚀 Mendukung API ChatGPT dan Browsing GPT-4
 - 🔍 Pintasan untuk dengan cepat mengaktifkan aplikasi di mana saja di browser
@@ -60,21 +60,21 @@
 
 ## 🤖 Bot yang Didukung
 
-* ChatGPT (melalui Webapp/API/Azure/Poe)
-* Bing Chat
-* Google Bard
-* Claude (melalui Poe)
-* iFlytek Spark
-* ChatGLM
-* Alpaca
-* Vicuna
-* Koala
-* Dolly
-* LLaMA
-* StableLM
-* OpenAssistant
-* ChatRWKV
-* ...
+- ChatGPT (melalui Webapp/API/Azure/Poe)
+- Bing Chat
+- Google Gemini
+- Claude (melalui Poe)
+- iFlytek Spark
+- ChatGLM
+- Alpaca
+- Vicuna
+- Koala
+- Dolly
+- LLaMA
+- StableLM
+- OpenAssistant
+- ChatRWKV
+- ...
 
 ## 🔧 Instalasi Manual
 
@@ -174,7 +174,7 @@
 
 ### v1.6.0
 
-- Menambahkan dukungan untuk Google Bard
+- Menambahkan dukungan untuk Google Gemini
 
 ### v1.5.4
 

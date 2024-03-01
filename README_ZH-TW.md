@@ -11,23 +11,23 @@
 [![作者][作者-image]][作者-url]
 [![許可證][許可證-image]][許可證-url]
 [![發布][發布-image]][發布-url]
-[![版本發佈][版本發佈-image]][版本發佈-url]    
-    
+[![版本發佈][版本發佈-image]][版本發佈-url]
+
 [English](README.md) &nbsp;&nbsp;|&nbsp;&nbsp; [Indonesia](README_IN.md) &nbsp;&nbsp;|&nbsp;&nbsp; [简体中文](README_ZH-CN.md) &nbsp;&nbsp;|&nbsp;&nbsp; 繁體中文 &nbsp;&nbsp;|&nbsp;&nbsp; [日本語](README_JA.md)
 
-##    
-    
+##
+
 ### 安装
-    
+
 <a href="https://chrome.google.com/webstore/detail/chathub-all-in-one-chatbo/iaakpnchhognanibcahlpcplchdfmgma?utm_source=website"><img src="https://user-images.githubusercontent.com/64502893/231991498-8df6dd63-727c-41d0-916f-c90c15127de3.png" width="200" alt="获取 Chromium 版本的 ChatHub"></a>&nbsp;&nbsp;
 <a href="https://microsoftedge.microsoft.com/addons/detail/chathub-allinone-chat/kdlmggoacmfoombiokflpeompajfljga"><img src="https://user-images.githubusercontent.com/64502893/231991158-1b54f831-2fdc-43b6-bf9a-f894000e5aa8.png" width="160" alt="获取 Microsoft Edge 版本的 ChatHub"></a>
-    
+
 ##
 
 [螢幕截圖](#-螢幕截圖) &nbsp;&nbsp;|&nbsp;&nbsp; [功能特色](#-功能特色) &nbsp;&nbsp;|&nbsp;&nbsp; [支援的聊天機器人](#-支援的聊天機器人) &nbsp;&nbsp;|&nbsp;&nbsp; [手動安裝](#-手動安裝) &nbsp;&nbsp;|&nbsp;&nbsp; [從原始碼建立](#-從原始碼建立) &nbsp;&nbsp;|&nbsp;&nbsp; [更新日誌](#-更新日誌)
 
 [作者-image]: https://img.shields.io/badge/author-wong2-blue.svg
-[作者-url]: https://github.com/wong2    
+[作者-url]: https://github.com/wong2
 [許可證-image]: https://img.shields.io/github/license/chathub-dev/chathub?color=blue
 [許可證-url]: https://github.com/chathub-dev/chathub/blob/main/LICENSE
 [發布-image]: https://img.shields.io/github/v/release/chathub-dev/chathub?color=blue
@@ -47,7 +47,7 @@
 
 ## ✨ 功能特色
 
-- 🤖 在一個應用程式中使用不同的聊天機器人，目前支援 ChatGPT、新的 Bing Chat、Google Bard、Claude，還有 10 多個開源模型，包括 Alpaca、Vicuna、ChatGLM 等
+- 🤖 在一個應用程式中使用不同的聊天機器人，目前支援 ChatGPT、新的 Bing Chat、Google Gemini、Claude，還有 10 多個開源模型，包括 Alpaca、Vicuna、ChatGLM 等
 - 💬 同時與多個聊天機器人進行對話，輕鬆比較它們的回答
 - 🚀 支援 ChatGPT API 和 GPT-4 瀏覽
 - 🔍 快速啟動應用程式的捷徑，可在瀏覽器中的任何地方使用
@@ -60,21 +60,21 @@
 
 ## 🤖 支援的聊天機器人
 
-* ChatGPT（透過網頁應用程式/API/Azure/Poe）
-* Bing Chat
-* Google Bard
-* Claude（透過 Poe）
-* iFlytek Spark
-* ChatGLM
-* Alpaca
-* Vicuna
-* Koala
-* Dolly
-* LLaMA
-* StableLM
-* OpenAssistant
-* ChatRWKV
-* ...
+- ChatGPT（透過網頁應用程式/API/Azure/Poe）
+- Bing Chat
+- Google Gemini
+- Claude（透過 Poe）
+- iFlytek Spark
+- ChatGLM
+- Alpaca
+- Vicuna
+- Koala
+- Dolly
+- LLaMA
+- StableLM
+- OpenAssistant
+- ChatRWKV
+- ...
 
 ## 🔧 手動安裝
 
@@ -174,7 +174,7 @@
 
 ### v1.6.0
 
-- 新增支援 Google Bard
+- 新增支援 Google Gemini
 
 ### v1.5.4
 

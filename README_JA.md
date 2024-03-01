@@ -11,27 +11,27 @@
 [![author][author-image]][author-url]
 [![license][license-image]][license-url]
 [![release][release-image]][release-url]
-[![last commit][last-commit-image]][last-commit-url]    
-    
+[![last commit][last-commit-image]][last-commit-url]
+
 [English](README.md) &nbsp;&nbsp;|&nbsp;&nbsp; [Indonesia](README_IN.md) &nbsp;&nbsp;|&nbsp;&nbsp; [简体中文](README_ZH-CN.md) &nbsp;&nbsp;|&nbsp;&nbsp; [繁體中文](README_ZH-TW.md) &nbsp;&nbsp;|&nbsp;&nbsp; 日本語
 
-##    
-    
+##
+
 ### インストール
-    
+
 <a href="https://chrome.google.com/webstore/detail/chathub-all-in-one-chatbo/iaakpnchhognanibcahlpcplchdfmgma?utm_source=github"><img src="https://user-images.githubusercontent.com/64502893/231991498-8df6dd63-727c-41d0-916f-c90c15127de3.png" width="200" alt="Chromium 用の ChatHub を入手してください"></a>
 <a href="https://microsoftedge.microsoft.com/addons/detail/chathub-allinone-chat/kdlmggoacmfoombiokflpeompajfljga?utm_source=github"><img src="https://user-images.githubusercontent.com/64502893/231991158-1b54f831-2fdc-43b6-bf9a-f894000e5aa8.png" width="160" alt="Microsoft Edge 用の ChatHub を入手してください"></a>
-    
+
 ##
 
 [スクリーンショット](#-スクリーンショット) &nbsp;&nbsp;|&nbsp;&nbsp; [特徴](#-特徴) &nbsp;&nbsp;|&nbsp;&nbsp; [サポートされているボット](#-サポートされているボット) &nbsp;&nbsp;|&nbsp;&nbsp; [手動インストール](#-手動インストール) &nbsp;&nbsp;|&nbsp;&nbsp; [ソースからビルドする](#-ソースからビルドする) &nbsp;&nbsp;|&nbsp;&nbsp; [変更ログ](#-変更ログ)
 
 [author-image]: https://img.shields.io/badge/author-wong2-blue.svg
-[author-url]: https://github.com/wong2    
+[author-url]: https://github.com/wong2
 [license-image]: https://img.shields.io/github/license/chathub-dev/chathub?color=blue
 [license-url]: https://github.com/chathub-dev/chathub/blob/main/LICENSE
 [release-image]: https://img.shields.io/github/v/release/chathub-dev/chathub?color=blue
-[release-url]: https://github.com/chathub-dev/chathub/releases/latest   
+[release-url]: https://github.com/chathub-dev/chathub/releases/latest
 [last-commit-image]: https://img.shields.io/github/last-commit/chathub-dev/chathub?label=last%20commit
 [last-commit-url]: https://github.com/chathub-dev/chathub/commits
 
@@ -45,10 +45,9 @@
 
 ![Screenshot (Dark Mode)](screenshots/dark.png?raw=true)
 
-
 ## ✨ 特徴
 
-- 🤖 アプリ内で異なるチャットボットを使用できます。現在は ChatGPT、新しい Bing Chat、Google Bard、Claude、および Alpaca、Vicuna、ChatGLM などを含む10以上のオープンソースモデルをサポートしています
+- 🤖 アプリ内で異なるチャットボットを使用できます。現在は ChatGPT、新しい Bing Chat、Google Gemini、Claude、および Alpaca、Vicuna、ChatGLM などを含む10以上のオープンソースモデルをサポートしています
 - 💬 複数のチャットボットと同時にチャットすることで、回答を比較しやすくします
 - 🚀 ChatGPT API および GPT-4 Browsing をサポートします
 - 🔍 ブラウザのどこからでもアプリを素早くアクティブにするためのショートカット
@@ -61,21 +60,21 @@
 
 ## 🤖 サポートされているボット
 
-* ChatGPT（Web アプリ/API/Azure/Poe経由）
-* Bing Chat
-* Google Bard
-* Claude（Poe 経由）
-* iFlytek Spark
-* ChatGLM
-* Alpaca
-* Vicuna
-* Koala
-* Dolly
-* LLaMA
-* StableLM
-* OpenAssistant
-* ChatRWKV
-* ...
+- ChatGPT（Web アプリ/API/Azure/Poe経由）
+- Bing Chat
+- Google Gemini
+- Claude（Poe 経由）
+- iFlytek Spark
+- ChatGLM
+- Alpaca
+- Vicuna
+- Koala
+- Dolly
+- LLaMA
+- StableLM
+- OpenAssistant
+- ChatRWKV
+- ...
 
 ## 🔧 手動インストール
 
@@ -175,7 +174,7 @@
 
 ### v1.6.0
 
-- Google Bard のサポートを追加
+- Google Gemini のサポートを追加
 
 ### v1.5.4
 

@@ -21,7 +21,7 @@
 
 ## ✨ Features
 
-- 🤖 Use different chatbots in one app, currently supporting ChatGPT, new Bing Chat, Google Bard, Claude, and open-source models including LLama2, Vicuna, ChatGLM etc
+- 🤖 Use different chatbots in one app, currently supporting ChatGPT, new Bing Chat, Google Gemini, Claude, and open-source models including LLama2, Vicuna, ChatGLM etc
 - 💬 Chat with multiple chatbots at the same time, making it easy to compare their answers
 - 🚀 Support ChatGPT API and GPT-4 Browsing
 - 🔍 Shortcut to quickly activate the app anywhere in the browser
@@ -37,7 +37,7 @@
 
 - ChatGPT (via Webapp/API/Azure/Poe)
 - Bing Chat
-- Google Bard
+- Google Gemini
 - Claude 2 (via Webapp/API/Poe)
 - LLaMA 2
 - ChatGLM
