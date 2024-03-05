@@ -42,6 +42,7 @@ type OriginalChatState = {
   generatingMessageId: string
   abortController: AbortController | undefined
   conversationId: string
+  isSetup: boolean
 }
 const atomWithLocalStorage = (key: string, initialValue: OriginalChatState) => {
   const getInitialValue = (): OriginalChatState => {
@@ -59,7 +60,8 @@ const atomWithLocalStorage = (key: string, initialValue: OriginalChatState) => {
         image: m.image,
         author: m.author,
       }))
-      initialValue.bot.setcontextIds = serializeChatState.conversationContext.contextIds
+      initialValue.bot.setcontextIds = serializeChatState.conversationContext
+      initialValue.isSetup = serializeChatState.isSetup
       initialValue.generatingMessageId = serializeChatState.generatingMessageId
       initialValue.conversationId = serializeChatState.conversationId
     }
@@ -83,10 +85,10 @@ const atomWithLocalStorage = (key: string, initialValue: OriginalChatState) => {
       const serializeChatState: ChatState = {
         botId: nextValue.botId,
         messages: messages,
-
+        isSetup: nextValue.isSetup,
         generatingMessageId: nextValue.generatingMessageId,
         conversationId: nextValue.conversationId,
-        conversationContext: { contextIds: nextValue.bot.contextIds },
+        conversationContext: nextValue.bot.contextIds,
       }
       console.log(`==== nextValue ===`)
       console.log(nextValue)
@@ -108,6 +110,7 @@ export const chatFamily = atomFamily(
       generatingMessageId: '',
       abortController: undefined as AbortController | undefined,
       conversationId: uuid(),
+      isSetup: false,
     }
     return withImmer(atomWithLocalStorage(botSlug, initialValue))
   },

@@ -4,10 +4,14 @@ export type ChatState = {
   botId: BotId
   conversationContext: {
     contextIds: [string, string, string]
+    requestParams: {
+      atValue: string
+      blValue?: string
+    }
   }
   messages: ChatMessageModel[]
   generatingMessageId: string
-
+  isSetup: boolean
   conversationId: string
 }
 export interface ChatMessageModel {
