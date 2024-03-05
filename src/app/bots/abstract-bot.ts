@@ -83,6 +83,12 @@ export abstract class AbstractBot {
   get supportsImageInput() {
     return false
   }
+  get contextIds(): [string, string, string] {
+    return ['', '', '']
+  }
+  set setcontextIds(contextIds: [string, string, string]) {
+    // dummy
+  }
 
   abstract doSendMessage(params: SendMessageParams): Promise<void>
   abstract resetConversation(): void

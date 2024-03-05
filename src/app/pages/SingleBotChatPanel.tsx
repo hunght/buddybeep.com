@@ -9,10 +9,8 @@ interface Props {
 }
 
 const SingleBotChatPanel: FC<Props> = ({ botId, agentId }) => {
-  const chat = useChat(botId)
-  console.log(`==== agentId ===`)
-  console.log(agentId)
-  console.log('==== end log ===')
+  const chat = useChat(botId, agentId)
+
   return (
     <div className="overflow-hidden h-full">
       <ConversationPanel

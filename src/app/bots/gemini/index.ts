@@ -67,6 +67,16 @@ export class GeminiBot extends AbstractBot {
     this.conversationContext = undefined
   }
 
+  get contextIds() {
+    return this.conversationContext?.contextIds ?? ['', '', '']
+  }
+
+  set setcontextIds(contextIds: [string, string, string]) {
+    if (this.conversationContext) {
+      this.conversationContext.contextIds = contextIds
+    }
+  }
+
   get supportsImageInput() {
     return true
   }
