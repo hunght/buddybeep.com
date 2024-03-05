@@ -8,6 +8,7 @@ import { ChatMessageModel } from '~types'
 import { uuid } from '~utils'
 import { ChatError } from '~utils/errors'
 import { BotId } from '../bots'
+import { agents } from './agents'
 
 export function useChat(botId: BotId, agentId?: string) {
   const chatAtom = useMemo(() => chatFamily({ botId, agentId }), [botId, agentId])
@@ -82,6 +83,15 @@ export function useChat(botId: BotId, agentId?: string) {
     },
     [botId, chatState.bot, setChatState, updateMessage],
   )
+  useEffect(() => {
+    const prompt = agentId ? agents[agentId]?.prompt : undefined
+    if (prompt && !chatState.isSetup) {
+      sendMessage(prompt)
+      setChatState((draft) => {
+        draft.isSetup = true
+      })
+    }
+  }, [agentId, chatState.isSetup, sendMessage, setChatState])
 
   const resetConversation = useCallback(() => {
     chatState.bot.resetConversation()
@@ -90,6 +100,7 @@ export function useChat(botId: BotId, agentId?: string) {
       draft.generatingMessageId = ''
       draft.messages = []
       draft.conversationId = uuid()
+      draft.isSetup = false
     })
   }, [chatState.bot, setChatState])
 
