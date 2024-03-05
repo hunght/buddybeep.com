@@ -8,10 +8,48 @@ import { ChatMessageModel } from '~types'
 import { uuid } from '~utils'
 import { ChatError } from '~utils/errors'
 import { BotId } from '../bots'
+import { atomWithStorage } from 'jotai/utils'
+import { ChatState } from './type'
+import { agents } from './agents'
 
-export function useChat(botId: BotId) {
-  const chatAtom = useMemo(() => chatFamily({ botId, page: 'singleton' }), [botId])
+const chatStateStorageAtom = atomWithStorage<Record<string, ChatState>>('chatStateStorage', {})
+
+export function useChat(botId: BotId, agentId?: string) {
+  const [storedChatState, setStoredChatState] = useAtom(chatStateStorageAtom)
+  const chatAtom = useMemo(() => chatFamily({ botId }), [botId])
   const [chatState, setChatState] = useAtom(chatAtom)
+  const botSlug = botId + (agentId ? `-${agentId}` : '')
+  console.log(`==== storedChatState ===`)
+  console.log(storedChatState)
+  console.log(chatState)
+  console.log('==== end log ===')
+  useEffect(() => {
+    const agent = agentId ? agents[agentId] : undefined
+    const storedChat = storedChatState[botSlug]
+
+    if (agent && chatState.messages.length === 0 && storedChatState && (!storedChat || storedChat.messages.length)) {
+      // chat.sendMessage(agent.prompt)
+    }
+  }, [])
+
+  useEffect(() => {
+    const storedChat = storedChatState[botSlug]
+
+    if (storedChat && chatState.messages.length === 0 && storedChat.messages.length > 0) {
+      setChatState((draft) => {
+        draft.botId = storedChat.botId
+        draft.messages = storedChat.messages.map((m) => ({
+          id: m.id,
+          text: m.text,
+          image: m.image,
+          author: m.author,
+        }))
+        draft.bot.setcontextIds = storedChat.conversationContext.contextIds
+        draft.generatingMessageId = storedChat.generatingMessageId
+        draft.conversationId = storedChat.conversationId
+      })
+    }
+  }, [chatState, storedChatState])
 
   const updateMessage = useCallback(
     (messageId: string, updater: (message: ChatMessageModel) => void) => {
@@ -59,6 +97,30 @@ export function useChat(botId: BotId) {
           updateMessage(botMessageId, (message) => {
             message.text = answer.text
           })
+          if (chatState.messages.length === 0) {
+            return
+          }
+          const messages = chatState.messages.map((m) => ({
+            id: m.id,
+            text: m.text,
+            image: m.image,
+            error: m.error?.code,
+            author: m.author,
+          }))
+
+          const mychat: ChatState = {
+            botId: chatState.botId,
+            messages: messages,
+
+            generatingMessageId: chatState.generatingMessageId,
+            conversationId: chatState.conversationId,
+            conversationContext: { contextIds: chatState.bot.contextIds },
+          }
+
+          setStoredChatState((prevState) => ({
+            ...prevState,
+            [botSlug]: mychat,
+          }))
         }
       } catch (err: unknown) {
         if (!abortController.signal.aborted) {
