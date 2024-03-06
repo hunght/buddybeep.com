@@ -4,7 +4,7 @@ import Browser from 'webextension-polyfill'
 
 export interface Prompt {
   id: string
-  title: string
+  name: string
   prompt: string
 }
 
@@ -18,7 +18,7 @@ export async function saveLocalPrompt(prompt: Prompt) {
   let existed = false
   for (const p of prompts) {
     if (p.id === prompt.id) {
-      p.title = prompt.title
+      p.name = prompt.name
       p.prompt = prompt.prompt
       existed = true
       break

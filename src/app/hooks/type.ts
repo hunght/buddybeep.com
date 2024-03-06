@@ -2,6 +2,7 @@ import { BotId } from '~app/bots'
 import { ErrorCode } from '~utils/errors'
 export type ChatState = {
   botId: BotId
+  agentId: string | null
   conversationContext: {
     contextIds: [string, string, string]
     requestParams: {

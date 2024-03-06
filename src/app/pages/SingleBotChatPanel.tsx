@@ -5,7 +5,7 @@ import ConversationPanel from '../components/Chat/ConversationPanel'
 
 interface Props {
   botId: BotId
-  agentId?: string
+  agentId: string | null
 }
 
 const SingleBotChatPanel: FC<Props> = ({ botId, agentId }) => {

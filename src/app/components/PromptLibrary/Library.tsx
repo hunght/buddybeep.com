@@ -1,14 +1,14 @@
-import { Suspense, useCallback, useMemo, useState } from 'react'
+import { Suspense, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BeatLoader } from 'react-spinners'
 import useSWR from 'swr'
 import closeIcon from '~/assets/icons/close.svg'
 import { trackEvent } from '~app/plausible'
-import { Prompt, loadLocalPrompts, loadRemotePrompts, removeLocalPrompt, saveLocalPrompt } from '~services/prompts'
+import { Prompt, loadLocalPrompts, removeLocalPrompt, saveLocalPrompt } from '~services/prompts'
 import { uuid } from '~utils'
 import Button from '../Button'
 import { Input, Textarea } from '../Input'
-import Tabs, { Tab } from '../Tabs'
+import { agents } from '~app/hooks/agents'
 
 const ActionButton = (props: { text: string; onClick: () => void }) => {
   return (
@@ -72,7 +72,7 @@ function PromptForm(props: { initialData: Prompt; onSubmit: (data: Prompt) => vo
       if (json.title && json.prompt) {
         props.onSubmit({
           id: props.initialData.id,
-          title: json.title as string,
+          name: json.title as string,
           prompt: json.prompt as string,
         })
       }
@@ -84,7 +84,7 @@ function PromptForm(props: { initialData: Prompt; onSubmit: (data: Prompt) => vo
     <form className="flex flex-col gap-2 w-full" onSubmit={onSubmit}>
       <div className="w-full">
         <span className="text-sm font-semibold block mb-1 text-primary-text">Prompt {t('Title')}</span>
-        <Input className="w-full" name="title" defaultValue={props.initialData.title} />
+        <Input className="w-full" name="title" defaultValue={props.initialData.name} />
       </div>
       <div className="w-full">
         <span className="text-sm font-semibold block mb-1 text-primary-text">Prompt {t('Content')}</span>
@@ -123,7 +123,7 @@ function LocalPrompts(props: { insertPrompt: (text: string) => void }) {
   )
 
   const create = useCallback(() => {
-    setFormData({ id: uuid(), title: '', prompt: '' })
+    setFormData({ id: uuid(), name: '', prompt: '' })
   }, [])
 
   return (
@@ -133,7 +133,7 @@ function LocalPrompts(props: { insertPrompt: (text: string) => void }) {
           {localPromptsQuery.data.map((prompt) => (
             <PromptItem
               key={prompt.id}
-              title={prompt.title}
+              title={prompt.name}
               prompt={prompt.prompt}
               edit={() => !formData && setFormData(prompt)}
               remove={() => removePrompt(prompt.id)}
@@ -158,19 +158,69 @@ function LocalPrompts(props: { insertPrompt: (text: string) => void }) {
 }
 
 function CommunityPrompts(props: { insertPrompt: (text: string) => void }) {
-  const promptsQuery = useSWR('community-prompts', () => loadRemotePrompts(), { suspense: true })
-
   const copyToLocal = useCallback(async (prompt: Prompt) => {
     await saveLocalPrompt({ ...prompt, id: uuid() })
+  }, [])
+  const agentsArray = Object.keys(agents).map((key) => agents[key])
+  const { t } = useTranslation()
+  const [formData, setFormData] = useState<Prompt | null>(null)
+  const localPromptsQuery = useSWR('local-prompts', () => loadLocalPrompts(), { suspense: true })
+
+  const savePrompt = useCallback(
+    async (prompt: Prompt) => {
+      const existed = await saveLocalPrompt(prompt)
+      localPromptsQuery.mutate()
+      setFormData(null)
+      trackEvent(existed ? 'edit_local_prompt' : 'add_local_prompt')
+    },
+    [localPromptsQuery],
+  )
+
+  const removePrompt = useCallback(
+    async (id: string) => {
+      await removeLocalPrompt(id)
+      localPromptsQuery.mutate()
+      trackEvent('remove_local_prompt')
+    },
+    [localPromptsQuery],
+  )
+
+  const create = useCallback(() => {
+    setFormData({ id: uuid(), name: '', prompt: '' })
   }, [])
 
   return (
     <>
+      {localPromptsQuery.data.length ? (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 pt-2">
+          {localPromptsQuery.data.map((prompt) => (
+            <PromptItem
+              key={prompt.id}
+              title={prompt.name}
+              prompt={prompt.prompt}
+              edit={() => !formData && setFormData(prompt)}
+              remove={() => removePrompt(prompt.id)}
+              insertPrompt={props.insertPrompt}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-3 text-center text-sm mt-5 text-primary-text">
+          You have no prompts.
+        </div>
+      )}
+      <div className="mt-5">
+        {formData ? (
+          <PromptForm initialData={formData} onSubmit={savePrompt} onClose={() => setFormData(null)} />
+        ) : (
+          <Button text={t('Create new prompt')} size="small" onClick={create} />
+        )}
+      </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 pt-2">
-        {promptsQuery.data.map((prompt, index) => (
+        {agentsArray.map((prompt, index) => (
           <PromptItem
             key={index}
-            title={prompt.title}
+            title={prompt.name}
             prompt={prompt.prompt}
             insertPrompt={props.insertPrompt}
             copyToLocal={() => copyToLocal(prompt)}
@@ -207,34 +257,10 @@ const PromptLibrary = (props: { insertPrompt: (text: string) => void }) => {
     [props],
   )
 
-  const tabs = useMemo<Tab[]>(
-    () => [
-      { name: t('Your Prompts'), value: 'local' },
-      { name: t('Community Prompts'), value: 'community' },
-    ],
-    [t],
-  )
-
   return (
-    <Tabs
-      tabs={tabs}
-      renderTab={(tab: (typeof tabs)[0]['value']) => {
-        if (tab === 'local') {
-          return (
-            <Suspense fallback={<BeatLoader size={10} className="mt-5" color="rgb(var(--primary-text))" />}>
-              <LocalPrompts insertPrompt={insertPrompt} />
-            </Suspense>
-          )
-        }
-        if (tab === 'community') {
-          return (
-            <Suspense fallback={<BeatLoader size={10} className="mt-5" color="rgb(var(--primary-text))" />}>
-              <CommunityPrompts insertPrompt={insertPrompt} />
-            </Suspense>
-          )
-        }
-      }}
-    />
+    <Suspense fallback={<BeatLoader size={10} className="mt-5" color="rgb(var(--primary-text))" />}>
+      <CommunityPrompts insertPrompt={insertPrompt} />
+    </Suspense>
   )
 }
 
