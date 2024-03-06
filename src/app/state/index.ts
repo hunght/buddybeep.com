@@ -15,14 +15,17 @@ import { PiBot } from '~app/bots/pi'
 import { QianwenWebBot } from '~app/bots/qianwen'
 import { XunfeiBot } from '~app/bots/xunfei'
 import { FeatureId } from '~app/components/Premium/FeatureList'
+import { CHAT_STATE_STORAGE } from '~app/consts'
 import { ChatState } from '~app/hooks/type'
 
 import { getDefaultThemeColor } from '~app/utils/color-scheme'
+import { getNestedLocalStorage, setNestedLocalStorage } from '~app/utils/localStorage'
+import { getBotSlug } from '~app/utils/slug'
 import { Campaign } from '~services/server-api'
 import { ChatMessageModel } from '~types'
 import { uuid } from '~utils'
 
-type Param = { botId: BotId; agentId?: string }
+type Param = { botId: BotId; agentId: string | null }
 type OriginalChatState = {
   botId: BotId
   bot:
@@ -38,17 +41,19 @@ type OriginalChatState = {
     | BaichuanWebBot
     | PerplexityBot
     | GrokWebBot
+  agentId: string | null
   messages: ChatMessageModel[]
   generatingMessageId: string
   abortController: AbortController | undefined
   conversationId: string
   isSetup: boolean
 }
+
 const atomWithLocalStorage = (key: string, initialValue: OriginalChatState) => {
   const getInitialValue = (): OriginalChatState => {
-    const item = localStorage.getItem(key)
-    if (item !== null) {
-      const serializeChatState: ChatState = JSON.parse(item)
+    const serializeChatState = getNestedLocalStorage<ChatState>({ mainKey: CHAT_STATE_STORAGE, subKey: key })
+
+    if (serializeChatState) {
       console.log(`==== serializeChatState ===`)
       console.log(serializeChatState)
       console.log('==== end log ===')
@@ -60,10 +65,12 @@ const atomWithLocalStorage = (key: string, initialValue: OriginalChatState) => {
         image: m.image,
         author: m.author,
       }))
+
       initialValue.bot.setcontextIds = serializeChatState.conversationContext
       initialValue.isSetup = serializeChatState.isSetup
       initialValue.generatingMessageId = serializeChatState.generatingMessageId
       initialValue.conversationId = serializeChatState.conversationId
+      initialValue.agentId = serializeChatState.agentId
     }
     return initialValue
   }
@@ -89,12 +96,12 @@ const atomWithLocalStorage = (key: string, initialValue: OriginalChatState) => {
         generatingMessageId: nextValue.generatingMessageId,
         conversationId: nextValue.conversationId,
         conversationContext: nextValue.bot.contextIds,
+        agentId: nextValue.agentId,
       }
       console.log(`==== nextValue ===`)
       console.log(nextValue)
       console.log('==== end log ===')
-
-      localStorage.setItem(key, JSON.stringify(serializeChatState))
+      setNestedLocalStorage({ mainKey: CHAT_STATE_STORAGE, subKey: key, value: serializeChatState })
     },
   )
   return derivedAtom
@@ -102,7 +109,7 @@ const atomWithLocalStorage = (key: string, initialValue: OriginalChatState) => {
 
 export const chatFamily = atomFamily(
   (param: Param) => {
-    const botSlug = param.botId + (param.agentId ? `-${param.agentId}` : '')
+    const botSlug = getBotSlug({ botId: param.botId, agentId: param.agentId })
     const initialValue = {
       botId: param.botId,
       bot: createBotInstance(param.botId),
@@ -110,6 +117,7 @@ export const chatFamily = atomFamily(
       generatingMessageId: '',
       abortController: undefined as AbortController | undefined,
       conversationId: uuid(),
+      agentId: param.agentId ?? null,
       isSetup: false,
     }
     return withImmer(atomWithLocalStorage(botSlug, initialValue))

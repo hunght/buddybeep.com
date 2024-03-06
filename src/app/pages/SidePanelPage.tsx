@@ -16,7 +16,7 @@ function SidePanelPage() {
   const { t } = useTranslation()
   const [botId, setBotId] = useAtom(sidePanelBotAtom)
   const botInfo = CHATBOTS[botId]
-  const chat = useChat(botId)
+  const chat = useChat(botId, null)
 
   const onSubmit = useCallback(
     async (input: string) => {

@@ -137,8 +137,8 @@ const GeneralChatPanel: FC<{
 const TwoBotChatPanel = () => {
   const [bots, setBots] = useAtom(twoPanelBotsAtom)
   const multiPanelBotIds = useMemo(() => replaceDeprecatedBots(bots), [bots])
-  const chat1 = useChat(multiPanelBotIds[0])
-  const chat2 = useChat(multiPanelBotIds[1])
+  const chat1 = useChat(multiPanelBotIds[0], null)
+  const chat2 = useChat(multiPanelBotIds[1], null)
   const chats = useMemo(() => [chat1, chat2], [chat1, chat2])
   return <GeneralChatPanel chats={chats} setBots={setBots} />
 }
@@ -146,9 +146,9 @@ const TwoBotChatPanel = () => {
 const ThreeBotChatPanel = () => {
   const [bots, setBots] = useAtom(threePanelBotsAtom)
   const multiPanelBotIds = useMemo(() => replaceDeprecatedBots(bots), [bots])
-  const chat1 = useChat(multiPanelBotIds[0])
-  const chat2 = useChat(multiPanelBotIds[1])
-  const chat3 = useChat(multiPanelBotIds[2])
+  const chat1 = useChat(multiPanelBotIds[0], null)
+  const chat2 = useChat(multiPanelBotIds[1], null)
+  const chat3 = useChat(multiPanelBotIds[2], null)
   const chats = useMemo(() => [chat1, chat2, chat3], [chat1, chat2, chat3])
   return <GeneralChatPanel chats={chats} setBots={setBots} />
 }
@@ -156,10 +156,10 @@ const ThreeBotChatPanel = () => {
 const FourBotChatPanel = () => {
   const [bots, setBots] = useAtom(fourPanelBotsAtom)
   const multiPanelBotIds = useMemo(() => replaceDeprecatedBots(bots), [bots])
-  const chat1 = useChat(multiPanelBotIds[0])
-  const chat2 = useChat(multiPanelBotIds[1])
-  const chat3 = useChat(multiPanelBotIds[2])
-  const chat4 = useChat(multiPanelBotIds[3])
+  const chat1 = useChat(multiPanelBotIds[0], null)
+  const chat2 = useChat(multiPanelBotIds[1], null)
+  const chat3 = useChat(multiPanelBotIds[2], null)
+  const chat4 = useChat(multiPanelBotIds[3], null)
   const chats = useMemo(() => [chat1, chat2, chat3, chat4], [chat1, chat2, chat3, chat4])
   return <GeneralChatPanel chats={chats} setBots={setBots} />
 }
@@ -167,20 +167,20 @@ const FourBotChatPanel = () => {
 const SixBotChatPanel = () => {
   const [bots, setBots] = useAtom(sixPanelBotsAtom)
   const multiPanelBotIds = useMemo(() => replaceDeprecatedBots(bots), [bots])
-  const chat1 = useChat(multiPanelBotIds[0])
-  const chat2 = useChat(multiPanelBotIds[1])
-  const chat3 = useChat(multiPanelBotIds[2])
-  const chat4 = useChat(multiPanelBotIds[3])
-  const chat5 = useChat(multiPanelBotIds[4])
-  const chat6 = useChat(multiPanelBotIds[5])
+  const chat1 = useChat(multiPanelBotIds[0], null)
+  const chat2 = useChat(multiPanelBotIds[1], null)
+  const chat3 = useChat(multiPanelBotIds[2], null)
+  const chat4 = useChat(multiPanelBotIds[3], null)
+  const chat5 = useChat(multiPanelBotIds[4], null)
+  const chat6 = useChat(multiPanelBotIds[5], null)
   const chats = useMemo(() => [chat1, chat2, chat3, chat4, chat5, chat6], [chat1, chat2, chat3, chat4, chat5, chat6])
   return <GeneralChatPanel chats={chats} setBots={setBots} />
 }
 
 const ImageInputPanel = () => {
-  const chat1 = useChat('chatgpt')
-  const chat2 = useChat('bing')
-  const chat3 = useChat('gemini')
+  const chat1 = useChat('chatgpt', null)
+  const chat2 = useChat('bing', null)
+  const chat3 = useChat('gemini', null)
   const chats = useMemo(() => [chat1, chat2, chat3], [chat1, chat2, chat3])
   return <GeneralChatPanel chats={chats} supportImageInput={true} />
 }

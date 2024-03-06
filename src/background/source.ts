@@ -1,18 +1,11 @@
 import { ofetch } from 'ofetch'
 
-const plausibleApiHost = import.meta.env.VITE_PLAUSIBLE_API_HOST || 'https://plausible.io'
-
 async function trackEvent(name: string, props: object) {
-  await ofetch(`${plausibleApiHost}/api/event`, {
-    method: 'POST',
-    body: {
-      domain: 'chathub.gg',
-      name,
-      url: location.href,
-      props,
-    },
-    mode: 'no-cors',
-  })
+  try {
+    console.log('plausible.trackEvent', name, props)
+  } catch (err) {
+    console.error('plausible.trackEvent error', err)
+  }
 }
 
 export async function trackInstallSource() {

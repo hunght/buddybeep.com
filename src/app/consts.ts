@@ -16,6 +16,7 @@ import wizardlmLogo from '~/assets/logos/wizardlm.png'
 import xunfeiLogo from '~/assets/logos/xunfei.png'
 import yiLogo from '~/assets/logos/yi.svg'
 import { BotId } from './bots'
+export const CHAT_STATE_STORAGE = 'CHAT_STATE_STORAGE'
 
 export const CHATBOTS: Record<BotId, { name: string; avatar: string }> = {
   chatgpt: {

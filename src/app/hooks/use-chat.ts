@@ -10,7 +10,7 @@ import { ChatError } from '~utils/errors'
 import { BotId } from '../bots'
 import { agents } from './agents'
 
-export function useChat(botId: BotId, agentId?: string) {
+export function useChat(botId: BotId, agentId: string | null) {
   const chatAtom = useMemo(() => chatFamily({ botId, agentId }), [botId, agentId])
   const [chatState, setChatState] = useAtom(chatAtom)
 
