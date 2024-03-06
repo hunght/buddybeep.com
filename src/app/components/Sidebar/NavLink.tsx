@@ -1,8 +1,10 @@
-import { Link, LinkPropsOptions } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
 import { cx } from '~/utils'
+import { getAgent } from '~app/hooks/agents'
 
-function NavLink(props: LinkPropsOptions & { text: string; icon: any; iconOnly?: boolean }) {
-  const { text, icon, iconOnly, ...linkProps } = props
+function NavLink(props: { botId: string; agentId: string | null; iconOnly?: boolean }) {
+  const { botId, agentId, iconOnly } = props
+  const agent = getAgent({ agentId: agentId ?? '', botId })
   return (
     <Link
       className={cx(
@@ -14,11 +16,12 @@ function NavLink(props: LinkPropsOptions & { text: string; icon: any; iconOnly?:
       inactiveProps={{
         className: 'bg-secondary bg-opacity-20 text-primary-text opacity-80 hover:opacity-100',
       }}
-      title={text}
-      {...linkProps}
+      title={agent.name}
+      params={{ botId, agentId: agentId ?? '' }}
+      to="/chat-agent/$agentId/$botId"
     >
-      <img src={icon} className="w-5 h-5" />
-      {<span className="font-medium text-sm">{iconOnly ? '' : text}</span>}
+      <img src={agent.avatar ?? ''} className="w-5 h-5" />
+      {<span className="font-medium text-sm">{iconOnly ? '' : agent.name}</span>}
     </Link>
   )
 }

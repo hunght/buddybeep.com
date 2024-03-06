@@ -7,7 +7,7 @@ import { Prompt, loadLocalPrompts } from '~services/prompts'
 
 const LIBRARY_PROMPT: Prompt = {
   id: 'PROMPT_LIBRARY',
-  title: t('Open Prompt Library'),
+  name: t('Open Prompt Library'),
   prompt: '',
 }
 
@@ -46,7 +46,7 @@ const PromptItem: FC<{ prompt: Prompt }> = ({ prompt }) => {
         },
       })}
     >
-      {prompt.title}
+      {prompt.name}
     </div>
   )
 }

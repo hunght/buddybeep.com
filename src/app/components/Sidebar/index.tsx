@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { useAtom, useSetAtom } from 'jotai'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import allInOneIcon from '~/assets/all-in-one.svg'
+
 import collapseIcon from '~/assets/icons/collapse.svg'
 import feedbackIcon from '~/assets/icons/feedback.svg'
 import githubIcon from '~/assets/icons/github.svg'
@@ -12,7 +12,8 @@ import themeIcon from '~/assets/icons/theme.svg'
 import minimalLogo from '~/assets/minimal-logo.svg'
 import logo from '~/assets/santa-logo.png'
 import { cx } from '~/utils'
-import { useEnabledBots } from '~app/hooks/use-enabled-bots'
+import { FaRegEdit } from 'react-icons/fa'
+
 import { releaseNotesAtom, showDiscountModalAtom, sidebarCollapsedAtom } from '~app/state'
 import { getPremiumActivation } from '~services/premium'
 import { checkReleaseNotes } from '~services/release-notes'
@@ -23,6 +24,11 @@ import ThemeSettingModal from '../ThemeSettingModal'
 import Tooltip from '../Tooltip'
 import NavLink from './NavLink'
 import PremiumEntry from './PremiumEntry'
+import PromptLibraryDialog from '../PromptLibrary/Dialog'
+import { trackEvent } from '~app/plausible'
+import { chatStatesArrayAtomValue } from '~app/utils/atomWithLocalStorage'
+
+import { getBotSlug } from '~app/utils/slug'
 
 function IconButton(props: { icon: string; onClick?: () => void }) {
   return (
@@ -39,9 +45,10 @@ function Sidebar() {
   const { t } = useTranslation()
   const [collapsed, setCollapsed] = useAtom(sidebarCollapsedAtom)
   const [themeSettingModalOpen, setThemeSettingModalOpen] = useState(false)
-  const enabledBots = useEnabledBots()
+  const [chatStatesArray] = useAtom(chatStatesArrayAtomValue)
   const setShowDiscountModal = useSetAtom(showDiscountModalAtom)
   const setReleaseNotes = useSetAtom(releaseNotesAtom)
+  const [isPromptLibraryDialogOpen, setIsPromptLibraryDialogOpen] = useState(false)
 
   useEffect(() => {
     Promise.all([getAppOpenTimes(), getPremiumModalOpenTimes(), checkReleaseNotes()]).then(
@@ -62,6 +69,11 @@ function Sidebar() {
     )
   }, [])
 
+  const openPromptLibrary = useCallback(() => {
+    setIsPromptLibraryDialogOpen(true)
+    trackEvent('open_prompt_library')
+  }, [])
+
   return (
     <motion.aside
       className={cx(
@@ -69,7 +81,7 @@ function Sidebar() {
         collapsed ? 'items-center px-[15px]' : 'w-[230px] px-4',
       )}
     >
-      <div className={cx('flex mt-8 gap-3 items-center', collapsed ? 'flex-col-reverse' : 'flex-row justify-between')}>
+      <div className={cx('flex mt-8 gap-3 items-center', collapsed ? 'flex-col' : 'flex-row justify-between')}>
         {collapsed ? <img src={minimalLogo} className="w-[30px]" /> : <img src={logo} className="w-[100px] ml-2" />}
         <motion.img
           src={collapseIcon}
@@ -77,19 +89,30 @@ function Sidebar() {
           animate={{ rotate: collapsed ? 180 : 0 }}
           onClick={() => setCollapsed((c) => !c)}
         />
+        <FaRegEdit
+          size={22}
+          color="#ffffffb3"
+          className="cursor-pointer"
+          onClick={openPromptLibrary}
+          title="Prompt library"
+        />
+
+        {isPromptLibraryDialogOpen && (
+          <PromptLibraryDialog
+            isOpen={true}
+            onClose={() => setIsPromptLibraryDialogOpen(false)}
+            insertPrompt={(insertPrompt) => {
+              console.log(`==== insertPrompt ===`)
+              console.log(insertPrompt)
+              console.log('==== end log ===')
+            }}
+          />
+        )}
       </div>
       <div className="flex flex-col gap-[13px] mt-10 overflow-y-auto scrollbar-none">
-        <NavLink to="/" text={'All-In-One'} icon={allInOneIcon} iconOnly={collapsed} />
-        {enabledBots.map(({ botId, bot }) => (
-          <NavLink
-            key={botId}
-            to="/chat/$botId"
-            params={{ botId }}
-            text={bot.name}
-            icon={bot.avatar}
-            iconOnly={collapsed}
-          />
-        ))}
+        {chatStatesArray.map(({ botId, agentId }) => {
+          return <NavLink key={getBotSlug({ botId, agentId })} botId={botId} agentId={agentId} iconOnly={collapsed} />
+        })}
       </div>
       <div className="mt-auto pt-2">
         {!collapsed && <hr className="border-[#ffffff4d]" />}

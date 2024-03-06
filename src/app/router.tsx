@@ -1,4 +1,4 @@
-import { createHashHistory, ReactRouter, RootRoute, Route, useParams } from '@tanstack/react-router'
+import { createHashHistory, createRoute, useParams, createRouter, createRootRoute } from '@tanstack/react-router'
 import { BotId } from './bots'
 import Layout from './components/Layout'
 import MultiBotChatPanel from './pages/MultiBotChatPanel'
@@ -6,15 +6,15 @@ import PremiumPage from './pages/PremiumPage'
 import SettingPage from './pages/SettingPage'
 import SingleBotChatPanel from './pages/SingleBotChatPanel'
 
-const rootRoute = new RootRoute()
+const rootRoute = createRootRoute()
 
-const layoutRoute = new Route({
+const layoutRoute = createRoute({
   getParentRoute: () => rootRoute,
   component: Layout,
   id: 'layout',
 })
 
-const indexRoute = new Route({
+const indexRoute = createRoute({
   getParentRoute: () => layoutRoute,
   path: '/',
   component: MultiBotChatPanel,
@@ -23,7 +23,7 @@ const indexRoute = new Route({
 function ChatRoute() {
   const { botId } = useParams({ from: chatRoute.id })
 
-  return <SingleBotChatPanel botId={botId as BotId} />
+  return <SingleBotChatPanel botId={botId as BotId} agentId={null} />
 }
 
 function AgentChatRoute() {
@@ -32,25 +32,25 @@ function AgentChatRoute() {
   return <SingleBotChatPanel botId={botId as BotId} agentId={agentId} />
 }
 
-const agentchatRoute = new Route({
+const agentchatRoute = createRoute({
   getParentRoute: () => layoutRoute,
-  path: 'chat-agent/$botId/$agentId',
+  path: 'chat-agent/$agentId/$botId',
   component: AgentChatRoute,
 })
 
-const chatRoute = new Route({
+const chatRoute = createRoute({
   getParentRoute: () => layoutRoute,
   path: 'chat/$botId',
   component: ChatRoute,
 })
 
-const settingRoute = new Route({
+const settingRoute = createRoute({
   getParentRoute: () => layoutRoute,
   path: 'setting',
   component: SettingPage,
 })
 
-export const premiumRoute = new Route({
+export const premiumRoute = createRoute({
   getParentRoute: () => layoutRoute,
   path: 'premium',
   component: PremiumPage,
@@ -66,7 +66,7 @@ const routeTree = rootRoute.addChildren([
 ])
 
 const hashHistory = createHashHistory()
-const router = new ReactRouter({ routeTree, history: hashHistory })
+const router = createRouter({ routeTree, history: hashHistory })
 
 declare module '@tanstack/react-router' {
   interface Register {
