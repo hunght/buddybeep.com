@@ -10,10 +10,14 @@ interface Props {
 
 const SingleBotChatPanel: FC<Props> = ({ botId, agentId }) => {
   const chat = useChat(botId, agentId)
+  console.log(`==== { botId, agentId } ===`)
+  console.log({ botId, agentId })
+  console.log('==== end log ===')
 
   return (
     <div className="overflow-hidden h-full">
       <ConversationPanel
+        agentId={agentId}
         botId={botId}
         bot={chat.bot}
         messages={chat.messages}

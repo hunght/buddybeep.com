@@ -105,6 +105,7 @@ const GeneralChatPanel: FC<{
       >
         {chats.map((chat, index) => (
           <ConversationPanel
+            agentId={null}
             key={`${chat.botId}-${index}`}
             botId={chat.botId}
             bot={chat.bot}
