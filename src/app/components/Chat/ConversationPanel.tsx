@@ -21,6 +21,7 @@ import WebAccessCheckbox from './WebAccessCheckbox'
 
 interface Props {
   botId: BotId
+  agentId: string | null
   bot: BotInstance
   messages: ChatMessageModel[]
   onUserSendMessage: (input: string, image?: File) => void

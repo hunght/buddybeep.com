@@ -122,7 +122,7 @@ export const chatFamily = atomFamily(
     }
     return withImmer(atomWithLocalStorage(botSlug, initialValue))
   },
-  (a, b) => a.botId === b.botId,
+  (a, b) => a.botId === b.botId && a.agentId === b.agentId,
 )
 
 export const licenseKeyAtom = atomWithStorage('licenseKey', '', undefined, { getOnInit: true })
