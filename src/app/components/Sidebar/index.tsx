@@ -26,7 +26,7 @@ import NavLink from './NavLink'
 import PremiumEntry from './PremiumEntry'
 import PromptLibraryDialog from '../PromptLibrary/Dialog'
 import { trackEvent } from '~app/plausible'
-import { chatStatesArrayAtomValue } from '~app/utils/atomWithLocalStorage'
+import { atomChatStateLocalStorage, chatStatesArrayAtomValue } from '~app/utils/atomWithLocalStorage'
 
 import { getBotSlug } from '~app/utils/slug'
 
@@ -46,6 +46,7 @@ function Sidebar() {
   const [collapsed, setCollapsed] = useAtom(sidebarCollapsedAtom)
   const [themeSettingModalOpen, setThemeSettingModalOpen] = useState(false)
   const [chatStatesArray] = useAtom(chatStatesArrayAtomValue)
+  const [chatStateLocalStorage, setChatStateLocalStorage] = useAtom(atomChatStateLocalStorage())
   const setShowDiscountModal = useSetAtom(showDiscountModalAtom)
   const setReleaseNotes = useSetAtom(releaseNotesAtom)
   const [isPromptLibraryDialogOpen, setIsPromptLibraryDialogOpen] = useState(false)
@@ -105,6 +106,15 @@ function Sidebar() {
               console.log(`==== insertPrompt ===`)
               console.log(insertPrompt)
               console.log('==== end log ===')
+              if (chatStateLocalStorage[insertPrompt]) {
+              }
+              setChatStateLocalStorage((prev: any) => {
+                return {
+                  ...prev,
+                  prompt: insertPrompt,
+                }
+              })
+              setIsPromptLibraryDialogOpen(false)
             }}
           />
         )}

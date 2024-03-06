@@ -12,9 +12,6 @@ import { agents } from './agents'
 
 export function useChat(botId: BotId, agentId: string | null) {
   const chatAtom = useMemo(() => chatFamily({ botId, agentId }), [botId, agentId])
-  console.log(`==== chatAtom ===`)
-  console.log(chatAtom)
-  console.log('==== end log ===')
 
   const [chatState, setChatState] = useAtom(chatAtom)
 
@@ -127,10 +124,6 @@ export function useChat(botId: BotId, agentId: string | null) {
       setConversationMessages(botId, chatState.conversationId, chatState.messages)
     }
   }, [botId, chatState.conversationId, chatState.messages])
-  console.log(`==== agentId ===`)
-  console.log(agentId)
-  console.log(chatState.messages)
-  console.log('==== end log ===')
 
   const chat = useMemo(
     () => ({

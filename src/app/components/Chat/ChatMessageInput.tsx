@@ -59,7 +59,7 @@ const ChatMessageInput: FC<Props> = (props) => {
   const floatingListRef = useRef([])
 
   const handleSelect = useCallback((p: Prompt) => {
-    if (p.id === 'PROMPT_LIBRARY') {
+    if (p.agentId === 'PROMPT_LIBRARY') {
       setIsPromptLibraryDialogOpen(true)
       setIsComboboxOpen(false)
       trackEvent('open_prompt_library', { source: 'combobox' })

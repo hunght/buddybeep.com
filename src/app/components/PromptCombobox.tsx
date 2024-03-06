@@ -6,7 +6,7 @@ import useSWR from 'swr'
 import { Prompt, loadLocalPrompts } from '~services/prompts'
 
 const LIBRARY_PROMPT: Prompt = {
-  id: 'PROMPT_LIBRARY',
+  agentId: 'PROMPT_LIBRARY',
   name: t('Open Prompt Library'),
   prompt: '',
 }
@@ -59,10 +59,10 @@ const PromptCombobox: FC = () => {
   return (
     <div className="overflow-auto rounded-md py-1 shadow-lg ring-1 ring-primary-border focus:outline-none text-sm min-w-[150px] bg-primary-background">
       {promptsQuery.data.map((prompt) => {
-        return <PromptItem key={prompt.id} prompt={prompt} />
+        return <PromptItem key={prompt.agentId} prompt={prompt} />
       })}
       {promptsQuery.data.length > 0 && <div className="h-[1px] bg-primary-border" />}
-      <PromptItem key={LIBRARY_PROMPT.id} prompt={LIBRARY_PROMPT} />
+      <PromptItem key={LIBRARY_PROMPT.agentId} prompt={LIBRARY_PROMPT} />
     </div>
   )
 }

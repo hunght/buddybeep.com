@@ -1,10 +1,13 @@
 import { Link } from '@tanstack/react-router'
 import { cx } from '~/utils'
-import { getAgent } from '~app/hooks/agents'
+import { agents } from '~app/hooks/agents'
 
 function NavLink(props: { botId: string; agentId: string | null; iconOnly?: boolean }) {
   const { botId, agentId, iconOnly } = props
-  const agent = getAgent({ agentId: agentId ?? '', botId })
+  const agent = agents[agentId ?? '']
+  if (!agent) {
+    return null
+  }
   return (
     <Link
       className={cx(
