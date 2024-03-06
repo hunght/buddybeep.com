@@ -9,6 +9,9 @@ import { uuid } from '~utils'
 import Button from '../Button'
 import { Input, Textarea } from '../Input'
 import { agents } from '~app/hooks/agents'
+import { BotId } from '~app/bots'
+import Select from '../Select'
+import { CHATBOTS } from '~app/consts'
 
 const ActionButton = (props: { text: string; onClick: () => void }) => {
   return (
@@ -22,33 +25,45 @@ const ActionButton = (props: { text: string; onClick: () => void }) => {
 }
 
 const PromptItem = (props: {
+  agentId: string
   title: string
   prompt: string
   edit?: () => void
   remove?: () => void
-  copyToLocal?: () => void
-  insertPrompt: (text: string) => void
+  copyToLocal?: (botId: BotId) => void
+  insertPrompt: (botId: BotId, agentId: string) => void
 }) => {
   const { t } = useTranslation()
   const [saved, setSaved] = useState(false)
+  const [botId, setBotId] = useState<BotId>('gemini')
 
   const copyToLocal = useCallback(() => {
-    props.copyToLocal?.()
+    props.copyToLocal?.(botId)
     setSaved(true)
-  }, [props])
+  }, [botId, props])
 
   return (
-    <div className="group relative flex items-center space-x-3 rounded-lg border border-primary-border bg-primary-background px-5 py-4 shadow-sm hover:border-gray-400">
-      <div className="min-w-0 flex-1">
-        <p title={props.prompt} className="truncate text-sm font-medium text-primary-text">
-          {props.title}
-        </p>
+    <div className="group relative flex space-x-3 rounded-lg border border-primary-border bg-primary-background px-5 py-4 shadow-sm hover:border-gray-400 flex-col items-start">
+      <div className="flex flex-row">
+        <img src={agents[props.agentId].avatar ?? ''} className="w-10 h-10 rounded-full" />
+        <div>
+          <p className="truncate text-sm font-medium text-primary-text">{props.title}</p>
+          <p className="text-xs text-primary-text line-clamp-5">{props.prompt}</p>
+          <div className="flex flex-row gap-1">
+            {props.edit && <ActionButton text={t('Edit')} onClick={props.edit} />}
+            {props.copyToLocal && <ActionButton text={t(saved ? 'Saved' : 'Save')} onClick={copyToLocal} />}
+            <ActionButton text={t('Use')} onClick={() => props.insertPrompt(botId, props.agentId)} />
+            <div className="w-[100px]">
+              <Select
+                options={[...Object.entries(CHATBOTS).map(([botId, bot]) => ({ name: bot.name, value: botId }))]}
+                value={botId}
+                onChange={(v) => setBotId(v as BotId)}
+              />
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="flex flex-row gap-1">
-        {props.edit && <ActionButton text={t('Edit')} onClick={props.edit} />}
-        {props.copyToLocal && <ActionButton text={t(saved ? 'Saved' : 'Save')} onClick={copyToLocal} />}
-        <ActionButton text={t('Use')} onClick={() => props.insertPrompt(props.prompt)} />
-      </div>
+
       {props.remove && (
         <img
           src={closeIcon}
@@ -71,9 +86,10 @@ function PromptForm(props: { initialData: Prompt; onSubmit: (data: Prompt) => vo
       const json = Object.fromEntries(formdata.entries())
       if (json.title && json.prompt) {
         props.onSubmit({
-          id: props.initialData.id,
+          agentId: props.initialData.agentId,
           name: json.title as string,
           prompt: json.prompt as string,
+          botId: json.botId as BotId,
         })
       }
     },
@@ -123,7 +139,7 @@ function LocalPrompts(props: { insertPrompt: (text: string) => void }) {
   )
 
   const create = useCallback(() => {
-    setFormData({ id: uuid(), name: '', prompt: '' })
+    setFormData({ agentId: uuid(), name: '', prompt: '', botId: 'gemini' })
   }, [])
 
   return (
@@ -132,11 +148,12 @@ function LocalPrompts(props: { insertPrompt: (text: string) => void }) {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 pt-2">
           {localPromptsQuery.data.map((prompt) => (
             <PromptItem
-              key={prompt.id}
+              agentId={prompt.agentId}
+              key={prompt.agentId}
               title={prompt.name}
               prompt={prompt.prompt}
               edit={() => !formData && setFormData(prompt)}
-              remove={() => removePrompt(prompt.id)}
+              remove={() => removePrompt(prompt.agentId)}
               insertPrompt={props.insertPrompt}
             />
           ))}
@@ -159,7 +176,7 @@ function LocalPrompts(props: { insertPrompt: (text: string) => void }) {
 
 function CommunityPrompts(props: { insertPrompt: (text: string) => void }) {
   const copyToLocal = useCallback(async (prompt: Prompt) => {
-    await saveLocalPrompt({ ...prompt, id: uuid() })
+    await saveLocalPrompt({ ...prompt, agentId: uuid() })
   }, [])
   const agentsArray = Object.keys(agents).map((key) => agents[key])
   const { t } = useTranslation()
@@ -186,7 +203,7 @@ function CommunityPrompts(props: { insertPrompt: (text: string) => void }) {
   )
 
   const create = useCallback(() => {
-    setFormData({ id: uuid(), name: '', prompt: '' })
+    setFormData({ agentId: uuid(), name: '', prompt: '', botId: 'gemini' })
   }, [])
 
   return (
@@ -195,11 +212,12 @@ function CommunityPrompts(props: { insertPrompt: (text: string) => void }) {
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 pt-2">
           {localPromptsQuery.data.map((prompt) => (
             <PromptItem
-              key={prompt.id}
+              agentId={prompt.agentId}
+              key={prompt.agentId}
               title={prompt.name}
               prompt={prompt.prompt}
               edit={() => !formData && setFormData(prompt)}
-              remove={() => removePrompt(prompt.id)}
+              remove={() => removePrompt(prompt.agentId)}
               insertPrompt={props.insertPrompt}
             />
           ))}
@@ -217,13 +235,14 @@ function CommunityPrompts(props: { insertPrompt: (text: string) => void }) {
         )}
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 pt-2">
-        {agentsArray.map((prompt, index) => (
+        {agentsArray.map((prompt) => (
           <PromptItem
-            key={index}
+            key={prompt.agentId}
+            agentId={prompt.agentId}
             title={prompt.name}
             prompt={prompt.prompt}
             insertPrompt={props.insertPrompt}
-            copyToLocal={() => copyToLocal(prompt)}
+            copyToLocal={(botId: BotId) => copyToLocal({ ...prompt, botId })}
           />
         ))}
       </div>

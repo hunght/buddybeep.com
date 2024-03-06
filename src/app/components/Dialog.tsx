@@ -26,7 +26,7 @@ const Dialog: FC<PropsWithChildren<Props>> = (props) => {
         >
           <div className="fixed inset-0 bg-black/30 bg-opacity-75 transition-opacity" />
         </Transition.Child>
-        <div className="fixed inset-0 flex items-center justify-center max-h-screen m-5">
+        <div className="fixed inset-0 flex items-center justify-center max-h-screen bg-secondary bg-opacity-90">
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"

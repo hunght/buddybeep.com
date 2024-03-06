@@ -1,9 +1,11 @@
 import i18next from 'i18next'
 import { ofetch } from 'ofetch'
 import Browser from 'webextension-polyfill'
+import { BotId } from '~app/bots'
 
 export interface Prompt {
-  id: string
+  agentId: string
+  botId: BotId
   name: string
   prompt: string
 }
@@ -17,7 +19,7 @@ export async function saveLocalPrompt(prompt: Prompt) {
   const prompts = await loadLocalPrompts()
   let existed = false
   for (const p of prompts) {
-    if (p.id === prompt.id) {
+    if (p.agentId === prompt.agentId) {
       p.name = prompt.name
       p.prompt = prompt.prompt
       existed = true
@@ -33,7 +35,7 @@ export async function saveLocalPrompt(prompt: Prompt) {
 
 export async function removeLocalPrompt(id: string) {
   const prompts = await loadLocalPrompts()
-  await Browser.storage.local.set({ prompts: prompts.filter((p) => p.id !== id) })
+  await Browser.storage.local.set({ prompts: prompts.filter((p) => p.agentId !== id) })
 }
 
 export async function loadRemotePrompts() {
