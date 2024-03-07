@@ -11,7 +11,9 @@ import { BotId } from '~app/bots'
 import { PromptItem } from './PromptItem'
 import { PromptForm } from './PromptForm'
 
-function CommunityPrompts(props: { insertPrompt: (text: string) => void }) {
+function CommunityPrompts(props: {
+  insertPrompt: ({ botId, agentId }: { botId: BotId; agentId: string | null }) => void
+}) {
   const copyToLocal = useCallback(async (prompt: Prompt) => {
     await saveLocalPrompt({ ...prompt, agentId: uuid() })
   }, [])
@@ -102,12 +104,14 @@ function CommunityPrompts(props: { insertPrompt: (text: string) => void }) {
   )
 }
 
-const PromptLibrary = (props: { insertPrompt: (text: string) => void }) => {
+const PromptLibrary = (props: {
+  insertPrompt: ({ botId, agentId }: { botId: BotId; agentId: string | null }) => void
+}) => {
   const { t } = useTranslation()
 
   const insertPrompt = useCallback(
-    (text: string) => {
-      props.insertPrompt(text)
+    ({ botId, agentId }: { botId: BotId; agentId: string | null }) => {
+      props.insertPrompt({ botId, agentId })
       trackEvent('use_prompt')
     },
     [props],

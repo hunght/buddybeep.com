@@ -15,7 +15,7 @@ export const PromptItem = (props: {
   edit?: () => void
   remove?: () => void
   copyToLocal?: (botId: BotId) => void
-  insertPrompt: (botId: BotId, agentId: string) => void
+  insertPrompt: ({ botId, agentId }: { botId: BotId; agentId: string | null }) => void
 }) => {
   const { t } = useTranslation()
   const [saved, setSaved] = useState(false)
@@ -40,7 +40,7 @@ export const PromptItem = (props: {
           <div className="flex flex-row gap-2 items-center mt-2">
             {props.edit && <ActionButton text={t('Edit')} onClick={props.edit} />}
             {props.copyToLocal && <ActionButton text={t(saved ? 'Saved' : 'Save')} onClick={copyToLocal} />}
-            <ActionButton text={t('Use')} onClick={() => props.insertPrompt(botId, props.agentId)} />
+            <ActionButton text={t('Use')} onClick={() => props.insertPrompt({ botId, agentId: props.agentId })} />
             <div className="w-[120px]">
               <Select
                 options={[...Object.entries(CHATBOTS).map(([botId, bot]) => ({ name: bot.name, value: botId }))]}
