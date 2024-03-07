@@ -5,28 +5,56 @@ export interface Category {
 }
 export const categories = [
   {
-    category: 'Creative Writing',
-    subcategories: ['Fiction', 'Poetry', 'Screenwriting', 'Blogging'],
+    category: 'Art and Design',
+    subcategories: ['Architectural Design', 'Digital Art', 'Music Composition', 'Consultation'],
   },
   {
-    category: 'Data Analysis',
-    subcategories: ['Data Summarization', 'Predictive Analysis', 'Statistical Analysis', 'Text Analytics'],
+    category: 'Business & Finance',
+    subcategories: ['Financial Planning', 'Investment', 'Human Resources', 'Real Estate', 'Legal'],
+  },
+  {
+    category: 'Creative Writing',
+    subcategories: [
+      'Fiction',
+      'Poetry',
+      'Content Generation',
+      'Journalism',
+      'Technical Writing',
+      'Critique',
+      'Editing',
+      'Screenwriting',
+    ],
   },
   {
     category: 'Educational',
-    subcategories: ['Learning Aids', 'Language Learning', 'STEM', 'Humanities'],
+    subcategories: [
+      'Humanities',
+      'STEM',
+      'Learning Aids',
+      'Language Learning',
+      'Career Development',
+      'Religious Studies',
+      'Critical Thinking',
+      'Academic Review',
+    ],
   },
   {
     category: 'Entertainment',
-    subcategories: ['Gaming', 'Humor', 'Interactive Stories', 'Virtual Experiences'],
+    subcategories: ['Gaming', 'Humor', 'Interactive Stories', 'Music', 'Travel'],
+  },
+  {
+    category: 'Personal Use',
+    subcategories: [
+      'Personal Health and Wellness',
+      'Personal Planning',
+      'Hobbyist Projects',
+      'Pet Care',
+      'Travel Planning',
+    ],
   },
   {
     category: 'Productivity',
-    subcategories: ['Administrative Assistance', 'Content Generation', 'Software Development', 'Project Management'],
-  },
-  {
-    category: 'Art and Design',
-    subcategories: ['Digital Art', 'Music Composition', 'Architectural Design', 'Fashion Design'],
+    subcategories: ['Administrative Assistance', 'Project Management'],
   },
   {
     category: 'Research and Development',
@@ -34,13 +62,23 @@ export const categories = [
   },
   {
     category: 'Social Media and Marketing',
-    subcategories: ['Social Media Content', 'SEO Optimization', 'Branding'],
+    subcategories: ['Social Media Content', 'SEO Optimization', 'Branding', 'Sales Techniques'],
   },
   {
-    category: 'Personal Use',
-    subcategories: ['Personal Planning', 'Hobbyist Projects', 'Personal Health and Wellness'],
+    category: 'Technology',
+    subcategories: [
+      'Software Development',
+      'Information Security',
+      'Database Management',
+      'Information Technology',
+      'Blockchain',
+      'Artificial Intelligence',
+      'Developer Relations',
+      'Software Quality Assurance',
+    ],
   },
 ]
+
 export const agentsCategorization = [
   { agentId: 'interior-decorator', category: 'Art and Design', subCategory: 'Architectural Design' },
   { agentId: 'smart-domain-name-generator', category: 'Productivity', subCategory: 'Content Generation' },
