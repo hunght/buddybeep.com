@@ -24,8 +24,6 @@ with open(csv_file_path, mode='r', encoding='utf-8') as csvfile:
             "agentId": agentId,
             "name": row[1],     # Assuming the second column is 'name'
             "prompt": row[2],   # Assuming the third column is 'prompt'
-            "category": row[3], # Assuming the fourth column is 'category'
-            "subCategory": subCategory,
         }
 
 # Write the data to a JSON file
