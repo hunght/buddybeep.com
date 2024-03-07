@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { useAtom, useSetAtom } from 'jotai'
 import { useCallback, useEffect, useState } from 'react'
@@ -50,7 +50,7 @@ function Sidebar() {
   const setShowDiscountModal = useSetAtom(showDiscountModalAtom)
   const setReleaseNotes = useSetAtom(releaseNotesAtom)
   const [isPromptLibraryDialogOpen, setIsPromptLibraryDialogOpen] = useState(false)
-
+  const navigate = useNavigate()
   useEffect(() => {
     Promise.all([getAppOpenTimes(), getPremiumModalOpenTimes(), checkReleaseNotes()]).then(
       async ([appOpenTimes, premiumModalOpenTimes, releaseNotes]) => {
@@ -102,18 +102,24 @@ function Sidebar() {
           <PromptLibraryDialog
             isOpen={true}
             onClose={() => setIsPromptLibraryDialogOpen(false)}
-            insertPrompt={(insertPrompt) => {
-              console.log(`==== insertPrompt ===`)
-              console.log(insertPrompt)
-              console.log('==== end log ===')
-              if (chatStateLocalStorage[insertPrompt]) {
+            insertPrompt={({ botId, agentId }) => {
+              const botSlug = getBotSlug({ botId, agentId })
+              const storedChatState = chatStateLocalStorage[botSlug]
+              if (!storedChatState) {
+                setChatStateLocalStorage((prev: any) => {
+                  return {
+                    ...prev,
+                    [botSlug]: null,
+                  }
+                })
               }
-              setChatStateLocalStorage((prev: any) => {
-                return {
-                  ...prev,
-                  prompt: insertPrompt,
-                }
-              })
+              if (agentId) {
+                //navigate to the agent
+                navigate({ to: '/chat-agent/$agentId/$botId', params: { agentId, botId } })
+              } else {
+                //navigate to the bot
+                navigate({ to: '/chat/$botId', params: { botId } })
+              }
               setIsPromptLibraryDialogOpen(false)
             }}
           />
