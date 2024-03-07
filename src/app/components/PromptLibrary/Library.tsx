@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useState } from 'react'
+import { Suspense, useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BeatLoader } from 'react-spinners'
 import useSWR from 'swr'
@@ -10,6 +10,7 @@ import { agents } from '~app/hooks/agents'
 import { BotId } from '~app/bots'
 import { PromptItem } from './PromptItem'
 import { PromptForm } from './PromptForm'
+import Sidebar from './Sidebar'
 
 function CommunityPrompts(props: {
   insertPrompt: ({ botId, agentId }: { botId: BotId; agentId: string | null }) => void
@@ -118,8 +119,13 @@ const PromptLibrary = (props: {
   )
 
   return (
-    <Suspense fallback={<BeatLoader size={10} className="mt-5" color="rgb(var(--primary-text))" />}>
-      <CommunityPrompts insertPrompt={insertPrompt} />
+    <Suspense fallback={<BeatLoader size={10} className="mt-5 " color="rgb(var(--primary-text))" />}>
+      <div className="flex min-h-screen">
+        <Sidebar />
+        <div className="flex-grow p-5">
+          <CommunityPrompts insertPrompt={insertPrompt} />
+        </div>
+      </div>
     </Suspense>
   )
 }
