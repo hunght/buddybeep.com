@@ -27,15 +27,15 @@ export const PromptItem = (props: {
   }, [botId, props])
 
   return (
-    <div className="group relative flex flex-col space-y-4 rounded-lg border border-primary-border bg-primary-background px-5 py-4 shadow-sm transition duration-200 ease-in-out hover:border-gray-400 hover:shadow-md">
+    <div className="group relative flex flex-col space-y-4 rounded-lg border border-primary-border bg-primary-background px-5 py-4 shadow-sm transition duration-200 ease-in-out hover:border-gray-400 hover:shadow-md ">
       <div className="flex flex-row space-x-4 items-start">
         <img
           src={agents[props.agentId]?.avatar ?? premiumIcon}
           alt="Agent Avatar"
           className="w-24 h-24 rounded-full object-cover"
         />
-        <div className="flex-1">
-          <p className="truncate text-sm font-semibold text-primary-text">{props.title}</p>
+        <div className="flex-1 max-w-96">
+          <p className="w-full truncate text-sm font-semibold text-primary-text">{props.title}</p>
           <p className="mt-1 text-xs text-primary-text line-clamp-5">{props.prompt}</p>
           <div className="flex flex-row gap-2 items-center mt-2">
             {props.edit && <ActionButton text={t('Edit')} onClick={props.edit} />}
