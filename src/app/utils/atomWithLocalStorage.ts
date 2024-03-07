@@ -22,4 +22,6 @@ export const atomChatStateLocalStorage = () => {
   )
   return derivedAtom
 }
-export const chatStatesArrayAtomValue = atom((get) => Object.values(get(atomChatStateLocalStorage())))
+export const chatStatesArrayAtomValue = atom((get) =>
+  Object.values(get(atomChatStateLocalStorage())).filter((state) => !!state),
+)

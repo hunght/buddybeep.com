@@ -18,6 +18,7 @@ import ChatMessageInput from './ChatMessageInput'
 import ChatMessageList from './ChatMessageList'
 import ChatbotName from './ChatbotName'
 import WebAccessCheckbox from './WebAccessCheckbox'
+import { agents } from '~app/hooks/agents'
 
 interface Props {
   botId: BotId
@@ -81,7 +82,7 @@ const ConversationPanel: FC<Props> = (props) => {
       </div>
     )
   }
-
+  const avatar = props.agentId ? agents[props.agentId].avatar : botInfo.avatar
   return (
     <ConversationContext.Provider value={context}>
       <div className={cx('flex flex-col overflow-hidden bg-primary-background h-full rounded-2xl')}>
@@ -92,11 +93,13 @@ const ConversationPanel: FC<Props> = (props) => {
           )}
         >
           <div className="flex flex-row items-center">
-            <motion.img
-              src={botInfo.avatar}
-              className="w-[18px] h-[18px] object-contain rounded-sm mr-2"
-              whileHover={{ rotate: 180 }}
-            />
+            {avatar && (
+              <motion.img
+                src={avatar}
+                className="w-[18px] h-[18px] object-contain rounded-sm mr-2"
+                whileHover={{ rotate: 180 }}
+              />
+            )}
             <ChatbotName
               botId={props.botId}
               name={botInfo.name}
@@ -132,7 +135,7 @@ const ConversationPanel: FC<Props> = (props) => {
             </Tooltip>
           </div>
         </div>
-        <ChatMessageList botId={props.botId} messages={props.messages} className={marginClass} />
+        <ChatMessageList avatar={avatar} botId={props.botId} messages={props.messages} className={marginClass} />
         <div className={cx('mt-3 flex flex-col ', marginClass, mode === 'full' ? 'mb-3' : 'mb-[5px]')}>
           <div className={cx('flex flex-row items-center gap-[5px]', mode === 'full' ? 'mb-3' : 'mb-0')}>
             {mode === 'compact' && (

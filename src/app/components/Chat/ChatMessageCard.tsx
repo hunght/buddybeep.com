@@ -13,9 +13,10 @@ const COPY_ICON_CLASS = 'self-top cursor-pointer invisible group-hover:visible m
 interface Props {
   message: ChatMessageModel
   className?: string
+  avatar: string | null
 }
 
-const ChatMessageCard: FC<Props> = ({ message, className }) => {
+const ChatMessageCard: FC<Props> = ({ message, className, avatar }) => {
   const [copied, setCopied] = useState(false)
 
   const imageUrl = useMemo(() => {
@@ -41,6 +42,7 @@ const ChatMessageCard: FC<Props> = ({ message, className }) => {
     <div
       className={cx('group flex gap-3 w-full', message.author === 'user' ? 'flex-row-reverse' : 'flex-row', className)}
     >
+      {message.author !== 'user' && avatar && <img src={avatar} alt="Avatar" className="w-10 h-10 rounded-full" />}
       <div className="flex flex-col w-11/12  max-w-fit items-start gap-2">
         <MessageBubble color={message.author === 'user' ? 'primary' : 'flat'}>
           {!!imageUrl && <img src={imageUrl} className="max-w-xs my-2" />}
