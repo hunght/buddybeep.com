@@ -15,6 +15,7 @@ import { ChatMessageModel } from '~types'
 import { uuid } from '~utils'
 
 type Param = { botId: BotId; agentId: string | null }
+
 const atomWithLocalStorage = (key: string, initialValue: OriginalChatState) => {
   const getInitialValue = (): OriginalChatState => {
     const serializeChatState = getNestedLocalStorage<ChatState>({ mainKey: CHAT_STATE_STORAGE, subKey: key })

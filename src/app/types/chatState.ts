@@ -1,15 +1,10 @@
 import { BotId } from '~app/bots'
 import { ErrorCode } from '~utils/errors'
+import { ConversationContext } from './ConversationContext'
 export type ChatState = {
   botId: BotId
   agentId: string | null
-  conversationContext: {
-    contextIds: [string, string, string]
-    requestParams: {
-      atValue: string
-      blValue?: string
-    }
-  }
+  conversationContext?: ConversationContext
   messages: ChatMessageModel[]
   generatingMessageId: string
   isSetup: boolean
