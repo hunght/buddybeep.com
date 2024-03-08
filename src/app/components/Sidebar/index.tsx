@@ -1,7 +1,7 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
-import { useAtom, useSetAtom } from 'jotai'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import collapseIcon from '~/assets/icons/collapse.svg'
@@ -29,7 +29,7 @@ import { trackEvent } from '~app/plausible'
 
 import { getBotSlug } from '~app/utils/slug'
 import { atomChatStateLocalStorage, chatStatesArrayAtomValue } from '~app/state/atomWithLocalStorage'
-import { agents } from '~app/state/agentAtom'
+import { allAgents } from '~app/state/agentAtom'
 import { InsertPropmtType } from '~app/types/InsertPropmtType'
 
 function IconButton(props: { icon: string; onClick?: () => void }) {
@@ -47,7 +47,7 @@ function Sidebar() {
   const { t } = useTranslation()
   const [collapsed, setCollapsed] = useAtom(sidebarCollapsedAtom)
   const [themeSettingModalOpen, setThemeSettingModalOpen] = useState(false)
-  const [chatStatesArray] = useAtom(chatStatesArrayAtomValue)
+  const chatStatesArray = useAtomValue(chatStatesArrayAtomValue)
 
   const [chatStateLocalStorage, setChatStateLocalStorage] = useAtom(atomChatStateLocalStorage)
   const setShowDiscountModal = useSetAtom(showDiscountModalAtom)
@@ -143,7 +143,7 @@ function Sidebar() {
             <NavLink
               key={getBotSlug({ botId, agentId })}
               botId={botId}
-              agent={agents[agentId ?? '']}
+              agent={allAgents[agentId ?? '']}
               iconOnly={collapsed}
             />
           )

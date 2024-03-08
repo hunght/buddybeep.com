@@ -11,7 +11,8 @@ import { BotId } from '~app/bots'
 import { PromptItem } from './PromptItem'
 import { PromptForm } from './PromptForm'
 import Sidebar from './Sidebar'
-import { agents } from '~app/state/agentAtom'
+import { agentsByCategoryAtom, categoryAtom } from '~app/state/agentAtom'
+import { useAtom, useAtomValue } from 'jotai'
 
 function CommunityPrompts(props: {
   insertPrompt: ({ botId, agentId }: { botId: BotId; agentId: string | null }) => void
@@ -19,7 +20,8 @@ function CommunityPrompts(props: {
   const copyToLocal = useCallback(async (prompt: Prompt) => {
     await saveLocalPrompt({ ...prompt, agentId: uuid() })
   }, [])
-  const agentsArray = Object.keys(agents).map((key) => agents[key])
+  const agentsArray = useAtomValue(agentsByCategoryAtom)
+  const [category, setCategory] = useAtom(categoryAtom)
   const { t } = useTranslation()
   const [formData, setFormData] = useState<Prompt | null>(null)
   const localPromptsQuery = useSWR('local-prompts', () => loadLocalPrompts(), { suspense: true })
@@ -46,9 +48,56 @@ function CommunityPrompts(props: {
   const create = useCallback(() => {
     setFormData({ agentId: uuid(), name: '', prompt: '', botId: 'gemini' })
   }, [])
-
+  if (category.category !== null || category.subcategory !== null) {
+    return (
+      <div>
+        <div className="flex flex-row text-2xl ">
+          <h2
+            className="font-bold text-primary-text mb-3 hover:text-blue-500 cursor-pointer"
+            onClick={() => {
+              setCategory({ category: null, subcategory: null })
+            }}
+          >
+            All
+          </h2>
+          {category.category && (
+            <>
+              <h2 className="font-bold text-secondary-text px-4 ">{'/'}</h2>
+              <h2
+                className="font-bold text-primary-text mb-3 hover:text-blue-500 cursor-pointer"
+                onClick={() => {
+                  setCategory({ category: category.category, subcategory: null })
+                }}
+              >
+                {category.category}
+              </h2>
+            </>
+          )}
+          {category.subcategory && (
+            <>
+              <h2 className="font-bold text-secondary-text px-4">{'/'}</h2>
+              <h2 className="font-bold text-primary-text mb-3 ">{category.subcategory}</h2>
+            </>
+          )}
+        </div>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 pt-2">
+          {agentsArray.map((prompt) => (
+            <PromptItem
+              key={prompt.agentId}
+              agentId={prompt.agentId}
+              title={prompt.name}
+              prompt={prompt.prompt}
+              insertPrompt={props.insertPrompt}
+              copyToLocal={(botId: BotId) => copyToLocal({ ...prompt, botId })}
+            />
+          ))}
+        </div>
+      </div>
+    )
+  }
   return (
     <>
+      <h2 className="text-2xl font-bold text-primary-text mb-3">All</h2>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 pt-2">
         {agentsArray.map((prompt) => (
           <PromptItem
