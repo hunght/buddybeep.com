@@ -1,3 +1,4 @@
+import { ConversationContext } from '~app/types/ConversationContext'
 import { Sentry } from '~services/sentry'
 import { ChatError, ErrorCode } from '~utils/errors'
 import { streamAsyncIterable } from '~utils/stream-async-iterable'
@@ -83,10 +84,10 @@ export abstract class AbstractBot {
   get supportsImageInput() {
     return false
   }
-  get getConversationContext(): { contextIds: [string, string, string]; requestParams: { atValue: string } } {
-    return { contextIds: ['', '', ''], requestParams: { atValue: '' } }
+  get getConversationContext(): ConversationContext | undefined {
+    return undefined
   }
-  set setConversationContext(contextIds: { contextIds: [string, string, string]; requestParams: { atValue: string } }) {
+  set setConversationContext(conversationContext: ConversationContext | undefined) {
     // dummy
   }
 

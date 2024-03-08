@@ -1,14 +1,10 @@
 import { ofetch } from 'ofetch'
 import { AbstractBot, SendMessageParams } from '../abstract-bot'
 import { fetchRequestParams, parseGeminiResponse } from './api'
+import { ConversationContext } from '~app/types/ConversationContext'
 
 function generateReqId() {
   return Math.floor(Math.random() * 900000) + 100000
-}
-
-interface ConversationContext {
-  requestParams: Awaited<ReturnType<typeof fetchRequestParams>>
-  contextIds: [string, string, string]
 }
 
 export class GeminiBot extends AbstractBot {
@@ -67,11 +63,11 @@ export class GeminiBot extends AbstractBot {
     this.conversationContext = undefined
   }
 
-  get getConversationContext() {
-    return this.conversationContext ?? { contextIds: ['', '', ''], requestParams: { atValue: '' } }
+  get getConversationContext(): ConversationContext | undefined {
+    return this.conversationContext ?? undefined
   }
 
-  set setConversationContext(conversationContext: ConversationContext) {
+  set setConversationContext(conversationContext: ConversationContext | undefined) {
     this.conversationContext = conversationContext
   }
 

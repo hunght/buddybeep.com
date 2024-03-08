@@ -1,11 +1,11 @@
 import PromptLibrary from './Library'
 import Dialog from '../Dialog'
-import { BotId } from '~app/bots'
+import { InsertPropmtType } from '~app/types/InsertPropmtType'
 
 interface Props {
   isOpen: boolean
   onClose: () => void
-  insertPrompt: ({ botId, agentId }: { botId: BotId; agentId: string | null }) => void
+  insertPrompt: InsertPropmtType
 }
 
 const PromptLibraryDialog = (props: Props) => {

@@ -1,7 +1,7 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
 import { useAtom, useSetAtom } from 'jotai'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import collapseIcon from '~/assets/icons/collapse.svg'
@@ -30,6 +30,7 @@ import { trackEvent } from '~app/plausible'
 import { getBotSlug } from '~app/utils/slug'
 import { atomChatStateLocalStorage, chatStatesArrayAtomValue } from '~app/state/atomWithLocalStorage'
 import { agents } from '~app/state/agentAtom'
+import { InsertPropmtType } from '~app/types/InsertPropmtType'
 
 function IconButton(props: { icon: string; onClick?: () => void }) {
   return (
@@ -47,7 +48,8 @@ function Sidebar() {
   const [collapsed, setCollapsed] = useAtom(sidebarCollapsedAtom)
   const [themeSettingModalOpen, setThemeSettingModalOpen] = useState(false)
   const [chatStatesArray] = useAtom(chatStatesArrayAtomValue)
-  const [chatStateLocalStorage, setChatStateLocalStorage] = useAtom(atomChatStateLocalStorage())
+
+  const [chatStateLocalStorage, setChatStateLocalStorage] = useAtom(atomChatStateLocalStorage)
   const setShowDiscountModal = useSetAtom(showDiscountModalAtom)
   const setReleaseNotes = useSetAtom(releaseNotesAtom)
   const [isPromptLibraryDialogOpen, setIsPromptLibraryDialogOpen] = useState(false)
@@ -76,6 +78,34 @@ function Sidebar() {
     trackEvent('open_prompt_library')
   }, [])
 
+  const insertPrompt: InsertPropmtType = ({ botId, agentId }): void => {
+    const botSlug = getBotSlug({ botId, agentId })
+    const storedChatState = chatStateLocalStorage[botSlug]
+    if (!storedChatState) {
+      setChatStateLocalStorage((prev) => {
+        return {
+          ...prev,
+          [botSlug]: {
+            botId,
+            agentId,
+            messages: [],
+            isSetup: false,
+            generatingMessageId: '',
+            conversationId: '',
+          },
+        }
+      })
+    }
+    if (agentId) {
+      //navigate to the agent
+      navigate({ to: '/chat-agent/$agentId/$botId', params: { agentId, botId } })
+    } else {
+      //navigate to the bot
+      navigate({ to: '/chat/$botId', params: { botId } })
+    }
+    setIsPromptLibraryDialogOpen(false)
+  }
+
   return (
     <motion.aside
       className={cx(
@@ -103,26 +133,7 @@ function Sidebar() {
           <PromptLibraryDialog
             isOpen={true}
             onClose={() => setIsPromptLibraryDialogOpen(false)}
-            insertPrompt={({ botId, agentId }) => {
-              const botSlug = getBotSlug({ botId, agentId })
-              const storedChatState = chatStateLocalStorage[botSlug]
-              if (!storedChatState) {
-                setChatStateLocalStorage((prev) => {
-                  return {
-                    ...prev,
-                    [botSlug]: null,
-                  }
-                })
-              }
-              if (agentId) {
-                //navigate to the agent
-                navigate({ to: '/chat-agent/$agentId/$botId', params: { agentId, botId } })
-              } else {
-                //navigate to the bot
-                navigate({ to: '/chat/$botId', params: { botId } })
-              }
-              setIsPromptLibraryDialogOpen(false)
-            }}
+            insertPrompt={insertPrompt}
           />
         )}
       </div>
