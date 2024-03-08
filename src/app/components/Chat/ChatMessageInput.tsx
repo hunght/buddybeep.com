@@ -119,23 +119,6 @@ const ChatMessageInput: FC<Props> = (props) => {
     setIsComboboxOpen(v === '/')
   }, [])
 
-  const insertTextAtCursor = useCallback(
-    (text: string) => {
-      const cursorPosition = inputRef.current?.selectionStart || 0
-      const textBeforeCursor = value.slice(0, cursorPosition)
-      const textAfterCursor = value.slice(cursorPosition)
-      setValue(`${textBeforeCursor}${text}${textAfterCursor}`)
-      setIsPromptLibraryDialogOpen(false)
-      inputRef.current?.focus()
-    },
-    [value],
-  )
-
-  const openPromptLibrary = useCallback(() => {
-    setIsPromptLibraryDialogOpen(true)
-    trackEvent('open_prompt_library')
-  }, [])
-
   const selectImage = useCallback(async () => {
     const file = await fileOpen({
       mimeTypes: ['image/jpg', 'image/jpeg', 'image/png', 'image/gif'],
@@ -162,20 +145,6 @@ const ChatMessageInput: FC<Props> = (props) => {
     <form className={cx('flex flex-row items-center gap-3', props.className)} onSubmit={onFormSubmit} ref={formRef}>
       {props.mode === 'full' && (
         <>
-          <GoBook
-            size={22}
-            color="#707070"
-            className="cursor-pointer"
-            onClick={openPromptLibrary}
-            title="Prompt library"
-          />
-          {isPromptLibraryDialogOpen && (
-            <PromptLibraryDialog
-              isOpen={true}
-              onClose={() => setIsPromptLibraryDialogOpen(false)}
-              insertPrompt={insertTextAtCursor}
-            />
-          )}
           <ComboboxContext.Provider value={comboboxContext}>
             {isComboboxOpen && (
               <FloatingFocusManager context={context} modal={false} initialFocus={-1}>
