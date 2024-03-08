@@ -26,9 +26,9 @@ import NavLink from './NavLink'
 import PremiumEntry from './PremiumEntry'
 import PromptLibraryDialog from '../PromptLibrary/Dialog'
 import { trackEvent } from '~app/plausible'
-import { atomChatStateLocalStorage, chatStatesArrayAtomValue } from '~app/utils/atomWithLocalStorage'
 
 import { getBotSlug } from '~app/utils/slug'
+import { atomChatStateLocalStorage, chatStatesArrayAtomValue } from '~app/state/atomWithLocalStorage'
 
 function IconButton(props: { icon: string; onClick?: () => void }) {
   return (
@@ -106,7 +106,7 @@ function Sidebar() {
               const botSlug = getBotSlug({ botId, agentId })
               const storedChatState = chatStateLocalStorage[botSlug]
               if (!storedChatState) {
-                setChatStateLocalStorage((prev: any) => {
+                setChatStateLocalStorage((prev) => {
                   return {
                     ...prev,
                     [botSlug]: null,
