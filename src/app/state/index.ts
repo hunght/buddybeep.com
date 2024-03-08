@@ -2,21 +2,10 @@ import { SetStateAction, atom } from 'jotai'
 import { withImmer } from 'jotai-immer'
 import { atomFamily, atomWithStorage } from 'jotai/utils'
 import { BotId, createBotInstance } from '~app/bots'
-import { BaichuanWebBot } from '~app/bots/baichuan'
-import { BingWebBot } from '~app/bots/bing'
-import { ChatGPTBot } from '~app/bots/chatgpt'
-import { ClaudeBot } from '~app/bots/claude'
-import { GeminiBot } from '~app/bots/gemini'
-import { GeminiProBot } from '~app/bots/gemini-api'
-import { GrokWebBot } from '~app/bots/grok'
-import { LMSYSBot } from '~app/bots/lmsys'
-import { PerplexityBot } from '~app/bots/perplexity'
-import { PiBot } from '~app/bots/pi'
-import { QianwenWebBot } from '~app/bots/qianwen'
-import { XunfeiBot } from '~app/bots/xunfei'
 import { FeatureId } from '~app/components/Premium/FeatureList'
 import { CHAT_STATE_STORAGE } from '~app/consts'
-import { ChatState } from '~app/hooks/type'
+import { OriginalChatState } from '~app/types/OriginalChatState'
+import { ChatState } from '~app/types/chatState'
 
 import { getDefaultThemeColor } from '~app/utils/color-scheme'
 import { getNestedLocalStorage, setNestedLocalStorage } from '~app/utils/localStorage'
@@ -26,29 +15,6 @@ import { ChatMessageModel } from '~types'
 import { uuid } from '~utils'
 
 type Param = { botId: BotId; agentId: string | null }
-type OriginalChatState = {
-  botId: BotId
-  bot:
-    | ChatGPTBot
-    | BingWebBot
-    | GeminiBot
-    | ClaudeBot
-    | XunfeiBot
-    | LMSYSBot
-    | PiBot
-    | GeminiProBot
-    | QianwenWebBot
-    | BaichuanWebBot
-    | PerplexityBot
-    | GrokWebBot
-  agentId: string | null
-  messages: ChatMessageModel[]
-  generatingMessageId: string
-  abortController: AbortController | undefined
-  conversationId: string
-  isSetup: boolean
-}
-
 const atomWithLocalStorage = (key: string, initialValue: OriginalChatState) => {
   const getInitialValue = (): OriginalChatState => {
     const serializeChatState = getNestedLocalStorage<ChatState>({ mainKey: CHAT_STATE_STORAGE, subKey: key })

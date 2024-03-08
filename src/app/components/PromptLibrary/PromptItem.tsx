@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import closeIcon from '~/assets/icons/close.svg'
-import { agents } from '~app/hooks/agents'
+
 import { BotId } from '~app/bots'
 import Select from '../Select'
 import { CHATBOTS } from '~app/consts'
@@ -29,11 +29,7 @@ export const PromptItem = (props: {
   return (
     <div className="group relative flex flex-col space-y-4 rounded-lg border border-primary-border bg-primary-background px-5 py-4 shadow-sm transition duration-200 ease-in-out hover:border-gray-400 hover:shadow-md ">
       <div className="flex flex-row space-x-4 items-start">
-        <img
-          src={agents[props.agentId]?.avatar ?? premiumIcon}
-          alt="Agent Avatar"
-          className="w-24 h-24 rounded-full object-cover"
-        />
+        <img src={premiumIcon} alt="Agent Avatar" className="w-24 h-24 rounded-full object-cover" />
         <div className="flex-1 max-w-96">
           <p className="w-full truncate text-sm font-semibold text-primary-text">{props.title}</p>
           <p className="mt-1 text-xs text-primary-text line-clamp-5">{props.prompt}</p>
