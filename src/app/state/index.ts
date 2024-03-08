@@ -1,4 +1,4 @@
-import { atom } from 'jotai'
+import { SetStateAction, atom } from 'jotai'
 import { withImmer } from 'jotai-immer'
 import { atomFamily, atomWithStorage } from 'jotai/utils'
 import { BotId, createBotInstance } from '~app/bots'
@@ -54,10 +54,6 @@ const atomWithLocalStorage = (key: string, initialValue: OriginalChatState) => {
     const serializeChatState = getNestedLocalStorage<ChatState>({ mainKey: CHAT_STATE_STORAGE, subKey: key })
 
     if (serializeChatState) {
-      console.log(`==== serializeChatState ===`)
-      console.log(serializeChatState)
-      console.log('==== end log ===')
-
       initialValue.botId = serializeChatState.botId
       initialValue.messages = serializeChatState.messages.map((m) => ({
         id: m.id,
@@ -75,10 +71,10 @@ const atomWithLocalStorage = (key: string, initialValue: OriginalChatState) => {
     return initialValue
   }
   const baseAtom = atom<OriginalChatState>(getInitialValue())
-  const derivedAtom = atom(
+  const derivedAtom = atom<OriginalChatState, [SetStateAction<OriginalChatState>], void>(
     (get) => get(baseAtom),
     (get, set, update) => {
-      const nextValue: OriginalChatState = typeof update === 'function' ? update(get(baseAtom)) : update
+      const nextValue = typeof update === 'function' ? update(get(baseAtom)) : update
       set(baseAtom, nextValue)
 
       const messages = nextValue.messages.map((m) => ({
@@ -98,9 +94,7 @@ const atomWithLocalStorage = (key: string, initialValue: OriginalChatState) => {
         conversationContext: nextValue.bot.contextIds,
         agentId: nextValue.agentId,
       }
-      console.log(`==== nextValue ===`)
-      console.log(nextValue)
-      console.log('==== end log ===')
+
       setNestedLocalStorage({ mainKey: CHAT_STATE_STORAGE, subKey: key, value: serializeChatState })
     },
   )
