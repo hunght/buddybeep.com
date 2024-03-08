@@ -67,11 +67,11 @@ export class GeminiBot extends AbstractBot {
     this.conversationContext = undefined
   }
 
-  get contextIds() {
+  get getConversationContext() {
     return this.conversationContext ?? { contextIds: ['', '', ''], requestParams: { atValue: '' } }
   }
 
-  set setcontextIds(conversationContext: ConversationContext) {
+  set setConversationContext(conversationContext: ConversationContext) {
     this.conversationContext = conversationContext
   }
 

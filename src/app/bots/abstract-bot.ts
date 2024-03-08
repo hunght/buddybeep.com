@@ -83,10 +83,10 @@ export abstract class AbstractBot {
   get supportsImageInput() {
     return false
   }
-  get contextIds(): { contextIds: [string, string, string]; requestParams: { atValue: string } } {
+  get getConversationContext(): { contextIds: [string, string, string]; requestParams: { atValue: string } } {
     return { contextIds: ['', '', ''], requestParams: { atValue: '' } }
   }
-  set setcontextIds(contextIds: { contextIds: [string, string, string]; requestParams: { atValue: string } }) {
+  set setConversationContext(contextIds: { contextIds: [string, string, string]; requestParams: { atValue: string } }) {
     // dummy
   }
 
