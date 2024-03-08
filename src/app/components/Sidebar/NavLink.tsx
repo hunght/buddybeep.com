@@ -1,10 +1,10 @@
 import { Link } from '@tanstack/react-router'
 import { cx } from '~/utils'
-import { agents } from '~app/hooks/agents'
+import { AgentType } from '~app/types/agent'
 
-function NavLink(props: { botId: string; agentId: string | null; iconOnly?: boolean }) {
-  const { botId, agentId, iconOnly } = props
-  const agent = agents[agentId ?? '']
+function NavLink(props: { botId: string; agent: AgentType | null; iconOnly?: boolean }) {
+  const { botId, agent, iconOnly } = props
+
   if (!agent) {
     return null
   }
@@ -20,7 +20,7 @@ function NavLink(props: { botId: string; agentId: string | null; iconOnly?: bool
         className: 'bg-secondary bg-opacity-20 text-primary-text opacity-80 hover:opacity-100',
       }}
       title={agent.name}
-      params={{ botId, agentId: agentId ?? '' }}
+      params={{ botId, agentId: agent.agentId ?? '' }}
       to="/chat-agent/$agentId/$botId"
     >
       <img src={agent.avatar ?? ''} className="w-5 h-5" />
