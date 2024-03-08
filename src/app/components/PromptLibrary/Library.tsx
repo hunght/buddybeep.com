@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useEffect, useState } from 'react'
+import { Suspense, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BeatLoader } from 'react-spinners'
 import useSWR from 'swr'
@@ -6,11 +6,12 @@ import { trackEvent } from '~app/plausible'
 import { Prompt, loadLocalPrompts, removeLocalPrompt, saveLocalPrompt } from '~services/prompts'
 import { uuid } from '~utils'
 import Button from '../Button'
-import { agents } from '~app/hooks/agents'
+
 import { BotId } from '~app/bots'
 import { PromptItem } from './PromptItem'
 import { PromptForm } from './PromptForm'
 import Sidebar from './Sidebar'
+import { agents } from '~app/state/agentAtom'
 
 function CommunityPrompts(props: {
   insertPrompt: ({ botId, agentId }: { botId: BotId; agentId: string | null }) => void
