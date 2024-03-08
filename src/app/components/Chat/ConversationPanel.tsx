@@ -18,7 +18,7 @@ import ChatMessageInput from './ChatMessageInput'
 import ChatMessageList from './ChatMessageList'
 import ChatbotName from './ChatbotName'
 import WebAccessCheckbox from './WebAccessCheckbox'
-import { agents } from '~app/hooks/agents'
+import { agents } from '~app/state/agentAtom'
 
 interface Props {
   botId: BotId

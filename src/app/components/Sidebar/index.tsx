@@ -29,6 +29,7 @@ import { trackEvent } from '~app/plausible'
 
 import { getBotSlug } from '~app/utils/slug'
 import { atomChatStateLocalStorage, chatStatesArrayAtomValue } from '~app/state/atomWithLocalStorage'
+import { agents } from '~app/state/agentAtom'
 
 function IconButton(props: { icon: string; onClick?: () => void }) {
   return (
@@ -127,7 +128,14 @@ function Sidebar() {
       </div>
       <div className="flex flex-col gap-[13px] mt-10 overflow-y-auto scrollbar-none">
         {chatStatesArray.map(({ botId, agentId }) => {
-          return <NavLink key={getBotSlug({ botId, agentId })} botId={botId} agentId={agentId} iconOnly={collapsed} />
+          return (
+            <NavLink
+              key={getBotSlug({ botId, agentId })}
+              botId={botId}
+              agent={agents[agentId ?? '']}
+              iconOnly={collapsed}
+            />
+          )
         })}
       </div>
       <div className="mt-auto pt-2">
