@@ -62,7 +62,7 @@ const atomWithLocalStorage = (key: string, initialValue: OriginalChatState) => {
         author: m.author,
       }))
 
-      initialValue.bot.setcontextIds = serializeChatState.conversationContext
+      initialValue.bot.setConversationContext = serializeChatState.conversationContext
       initialValue.isSetup = serializeChatState.isSetup
       initialValue.generatingMessageId = serializeChatState.generatingMessageId
       initialValue.conversationId = serializeChatState.conversationId
@@ -91,7 +91,7 @@ const atomWithLocalStorage = (key: string, initialValue: OriginalChatState) => {
         isSetup: nextValue.isSetup,
         generatingMessageId: nextValue.generatingMessageId,
         conversationId: nextValue.conversationId,
-        conversationContext: nextValue.bot.contextIds,
+        conversationContext: nextValue.bot.getConversationContext,
         agentId: nextValue.agentId,
       }
 
