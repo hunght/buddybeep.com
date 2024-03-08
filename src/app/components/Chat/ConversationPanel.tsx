@@ -18,7 +18,7 @@ import ChatMessageInput from './ChatMessageInput'
 import ChatMessageList from './ChatMessageList'
 import ChatbotName from './ChatbotName'
 import WebAccessCheckbox from './WebAccessCheckbox'
-import { agents } from '~app/state/agentAtom'
+import { allAgents } from '~app/state/agentAtom'
 
 interface Props {
   botId: BotId
@@ -82,7 +82,7 @@ const ConversationPanel: FC<Props> = (props) => {
       </div>
     )
   }
-  const avatar = props.agentId ? agents[props.agentId].avatar : botInfo.avatar
+  const avatar = props.agentId ? allAgents[props.agentId].avatar : botInfo.avatar
   return (
     <ConversationContext.Provider value={context}>
       <div className={cx('flex flex-col overflow-hidden bg-primary-background h-full rounded-2xl')}>

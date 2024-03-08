@@ -1,14 +1,14 @@
 import { useAtom } from 'jotai'
 import { useCallback, useEffect, useMemo } from 'react'
 import { trackEvent } from '~app/plausible'
-import { chatFamily } from '~app/state'
+import { chatFamily } from '~app/state/chatFamily'
 import { compressImageFile } from '~app/utils/image-compression'
 import { setConversationMessages } from '~services/chat-history'
 import { ChatMessageModel } from '~types'
 import { uuid } from '~utils'
 import { ChatError } from '~utils/errors'
 import { BotId } from '../bots'
-import { agents } from '~app/state/agentAtom'
+import { allAgents } from '~app/state/agentAtom'
 
 export function useChat(botId: BotId, agentId: string | null) {
   const chatAtom = useMemo(() => chatFamily({ botId, agentId }), [botId, agentId])
@@ -85,7 +85,7 @@ export function useChat(botId: BotId, agentId: string | null) {
     [botId, chatState.bot, setChatState, updateMessage],
   )
   useEffect(() => {
-    const prompt = agentId ? agents[agentId]?.prompt : undefined
+    const prompt = agentId ? allAgents[agentId]?.prompt : undefined
     if (prompt && !chatState.isSetup) {
       sendMessage(prompt)
       setChatState((draft) => {
