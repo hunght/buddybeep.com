@@ -8,8 +8,7 @@ type AgentType = {
   agentId: string
   name: string
   prompt: string
-  category: string
-  subcategory: string | null
+
   avatar: string | null
 }
 
@@ -17,7 +16,7 @@ export const categoryAtom = atom<{ category: string | null; subcategory: string 
   category: null,
   subcategory: null,
 })
-
+export const searchQueryAtom = atom<string>('')
 export const allAgents: Record<string, AgentType> = jsonData as unknown as Record<string, AgentType>
 
 export const agentsByCategoryAtom = atom<AgentType[]>((get) => {
@@ -25,26 +24,38 @@ export const agentsByCategoryAtom = atom<AgentType[]>((get) => {
   console.log(`==== cat ===`)
   console.log(cat)
   console.log('==== end log ===')
+  const searchQuery = get(searchQueryAtom)
+  console.log(`==== searchQuery ===`)
+  console.log(searchQuery)
+  console.log('==== end log ===')
 
   const category = cat.category
   const subcategory = cat.subcategory
+  let results: AgentType[] = []
   if (category === null) {
-    return Object.values(allAgents)
-  }
-  if (subcategory === null) {
+    results = Object.values(allAgents)
+  } else if (subcategory === null) {
     const filteredAgents = agentsCategorization.filter((agent) => agent.category === category)
     console.log(`==== filteredAgents ===`)
     console.log(filteredAgents)
     console.log('==== end log ===')
 
-    return filteredAgents.map((agent) => allAgents[agent.agentId])
+    results = filteredAgents.map((agent) => allAgents[agent.agentId])
+  } else {
+    const filteredAgents = agentsCategorization.filter(
+      (agent) => agent.category === category && agent.subCategory === subcategory,
+    )
+    console.log(`==== filteredAgents ===`)
+    console.log(filteredAgents)
+    console.log('==== end log ===')
+    results = filteredAgents.map((agent) => allAgents[agent.agentId])
   }
-
-  const filteredAgents = agentsCategorization.filter(
-    (agent) => agent.category === category && agent.subCategory === subcategory,
-  )
-  console.log(`==== filteredAgents ===`)
-  console.log(filteredAgents)
-  console.log('==== end log ===')
-  return filteredAgents.map((agent) => allAgents[agent.agentId])
+  if (searchQuery.length > 0) {
+    results = results.filter(
+      (agent) =>
+        agent.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        agent.prompt.toLowerCase().includes(searchQuery.toLowerCase()),
+    )
+  }
+  return results
 })
