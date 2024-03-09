@@ -13,6 +13,7 @@ import { PromptForm } from './PromptForm'
 import Sidebar from './Sidebar'
 import { agentsByCategoryAtom, categoryAtom } from '~app/state/agentAtom'
 import { useAtom, useAtomValue } from 'jotai'
+import { SearchInput } from './SearchInput'
 
 function CommunityPrompts(props: {
   insertPrompt: ({ botId, agentId }: { botId: BotId; agentId: string | null }) => void
@@ -22,6 +23,7 @@ function CommunityPrompts(props: {
   }, [])
   const agentsArray = useAtomValue(agentsByCategoryAtom)
   const [category, setCategory] = useAtom(categoryAtom)
+
   const { t } = useTranslation()
   const [formData, setFormData] = useState<Prompt | null>(null)
   const localPromptsQuery = useSWR('local-prompts', () => loadLocalPrompts(), { suspense: true })
@@ -51,34 +53,39 @@ function CommunityPrompts(props: {
   if (category.category !== null || category.subcategory !== null) {
     return (
       <div>
-        <div className="flex flex-row text-2xl ">
-          <h2
-            className="font-bold text-primary-text mb-3 hover:text-blue-500 cursor-pointer"
-            onClick={() => {
-              setCategory({ category: null, subcategory: null })
-            }}
-          >
-            All
-          </h2>
-          {category.category && (
-            <>
-              <h2 className="font-bold text-secondary-text px-4 ">{'/'}</h2>
-              <h2
-                className="font-bold text-primary-text mb-3 hover:text-blue-500 cursor-pointer"
-                onClick={() => {
-                  setCategory({ category: category.category, subcategory: null })
-                }}
-              >
-                {category.category}
-              </h2>
-            </>
-          )}
-          {category.subcategory && (
-            <>
-              <h2 className="font-bold text-secondary-text px-4">{'/'}</h2>
-              <h2 className="font-bold text-primary-text mb-3 ">{category.subcategory}</h2>
-            </>
-          )}
+        <div className="flex flex-row justify-between">
+          <div className="flex flex-row text-2xl ">
+            <h2
+              className="font-bold text-primary-text mb-3 hover:text-blue-500 cursor-pointer"
+              onClick={() => {
+                setCategory({ category: null, subcategory: null })
+              }}
+            >
+              All
+            </h2>
+            {category.category && (
+              <>
+                <h2 className="font-bold text-secondary-text px-4 ">{'/'}</h2>
+                <h2
+                  className="font-bold text-primary-text mb-3 hover:text-blue-500 cursor-pointer"
+                  onClick={() => {
+                    setCategory({ category: category.category, subcategory: null })
+                  }}
+                >
+                  {category.category}
+                </h2>
+              </>
+            )}
+            {category.subcategory && (
+              <>
+                <h2 className="font-bold text-secondary-text px-4">{'/'}</h2>
+                <h2 className="font-bold text-primary-text mb-3 ">{category.subcategory}</h2>
+              </>
+            )}
+          </div>
+          {/* search bar */}
+
+          <SearchInput />
         </div>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 pt-2">
           {agentsArray.map((prompt) => (
@@ -97,7 +104,33 @@ function CommunityPrompts(props: {
   }
   return (
     <>
-      <h2 className="text-2xl font-bold text-primary-text mb-3">All</h2>
+      <h2 className="text-2xl font-bold text-primary-text mb-3">Your custom prompt</h2>
+      {localPromptsQuery.data.length ? (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 pt-2">
+          {localPromptsQuery.data.map((prompt) => (
+            <PromptItem
+              agentId={prompt.agentId}
+              key={prompt.agentId}
+              title={prompt.name}
+              prompt={prompt.prompt}
+              edit={() => !formData && setFormData(prompt)}
+              remove={() => removePrompt(prompt.agentId)}
+              insertPrompt={props.insertPrompt}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-3 text-center text-sm mt-5 text-primary-text">
+          You have no prompts.
+        </div>
+      )}
+      <div className="mt-5">
+        {formData ? (
+          <PromptForm initialData={formData} onSubmit={savePrompt} onClose={() => setFormData(null)} />
+        ) : (
+          <Button text={t('Create new prompt')} size="small" onClick={create} />
+        )}
+      </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 pt-2">
         {agentsArray.map((prompt) => (
           <PromptItem
@@ -125,32 +158,6 @@ function CommunityPrompts(props: {
           OpenPrompt
         </a>
       </span>
-      {localPromptsQuery.data.length ? (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 pt-2">
-          {localPromptsQuery.data.map((prompt) => (
-            <PromptItem
-              agentId={prompt.agentId}
-              key={prompt.agentId}
-              title={prompt.name}
-              prompt={prompt.prompt}
-              edit={() => !formData && setFormData(prompt)}
-              remove={() => removePrompt(prompt.agentId)}
-              insertPrompt={props.insertPrompt}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-3 text-center text-sm mt-5 text-primary-text">
-          You have no prompts.
-        </div>
-      )}
-      <div className="mt-5">
-        {formData ? (
-          <PromptForm initialData={formData} onSubmit={savePrompt} onClose={() => setFormData(null)} />
-        ) : (
-          <Button text={t('Create new prompt')} size="small" onClick={create} />
-        )}
-      </div>
     </>
   )
 }
