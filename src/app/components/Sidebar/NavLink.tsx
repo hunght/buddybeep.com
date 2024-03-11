@@ -1,8 +1,9 @@
 import { Link } from '@tanstack/react-router'
+import { capitalize } from 'lodash-es'
 import { cx } from '~/utils'
 import { AgentType } from '~app/types/agent'
 
-function NavLink(props: { botId: string; agent: AgentType | null; iconOnly?: boolean }) {
+function NavLink(props: { botId: string; agent?: AgentType; iconOnly?: boolean }) {
   const { botId, agent, iconOnly } = props
 
   if (!agent) {
@@ -11,7 +12,7 @@ function NavLink(props: { botId: string; agent: AgentType | null; iconOnly?: boo
   return (
     <Link
       className={cx(
-        'rounded-[10px] w-full pl-3 flex flex-row gap-3 items-center shrink-0 py-[11px]',
+        'rounded-[10px] w-full pl-1 flex flex-row gap-2 items-center shrink-0 py-1',
         iconOnly && 'justify-center',
       )}
       activeOptions={{ exact: true }}
@@ -23,8 +24,16 @@ function NavLink(props: { botId: string; agent: AgentType | null; iconOnly?: boo
       params={{ botId, agentId: agent.agentId ?? '' }}
       to="/chat-agent/$agentId/$botId"
     >
-      <img src={agent.avatar ?? ''} className="w-5 h-5" />
-      {<span className="font-medium text-sm">{iconOnly ? '' : agent.name}</span>}
+      <div>
+        {agent.avatar ? (
+          <img src={agent.avatar} className="w-10 h-10" />
+        ) : (
+          <div className="w-10 h-10 bg-gray-300 rounded-full flex justify-center items-center">
+            <span className="text-primary-text text-lg font-bold">{agent.name.slice(0, 2)}</span>
+          </div>
+        )}
+      </div>
+      {<span className="font-medium text-sm w-full">{iconOnly ? '' : agent.name + '-' + capitalize(botId)}</span>}
     </Link>
   )
 }
