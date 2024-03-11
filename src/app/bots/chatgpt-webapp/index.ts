@@ -139,8 +139,9 @@ export class ChatGPTWebBot extends AbstractBot {
       onMessage(message: string) {
         console.debug('ChatGPTProvider:generateAnswerBySSE:message', message)
         if (message.includes('wss_url')) {
-          params.onEvent({ type: 'ERROR', error: new ChatError(message, ErrorCode.UNKOWN_ERROR) })
-          cleanup()
+          // params.onEvent({ type: 'ERROR', error: new ChatError(message, ErrorCode.UNKOWN_ERROR) })
+          // cleanup()
+          console.error('ChatGPTProvider:generateAnswerBySSE:message', message)
           return
         }
         if (message === '[DONE]') {
@@ -166,6 +167,10 @@ export class ChatGPTWebBot extends AbstractBot {
               })
             }
           }
+          console.log(`==== text ===`)
+          console.log(text)
+          console.log('==== end log ===')
+
           params.onEvent({
             type: 'UPDATE_ANSWER',
             data: {
@@ -218,7 +223,7 @@ export class ChatGPTWebBot extends AbstractBot {
         try {
           if ((parent_message['data' as keyof typeof parent_message] as string) === '[DONE]') {
             console.log('ChatGPTProvider:setupWSS:createParser:returning DONE to frontend2')
-            params.onEvent({ type: 'done' })
+            params.onEvent({ type: 'DONE' })
             wsp.close()
             return
           } else if (parent_message['data' as keyof typeof parent_message]) {
@@ -227,14 +232,14 @@ export class ChatGPTWebBot extends AbstractBot {
           }
         } catch (err) {
           console.log('ChatGPTProvider:setupWSS:createParser:Error', err)
-          params.onEvent({ type: 'error', message: (err as any)?.message })
+          params.onEvent({ type: 'ERROR', error: (err as any)?.message })
           wsp.close()
           return
         }
         const content = data?.message?.content as ResponseContent | undefined
         if (!content) {
           console.log('ChatGPTProvider:returning DONE to frontend3')
-          params.onEvent({ type: 'done' })
+          params.onEvent({ type: 'DONE' })
           wsp.close()
           return
         }
@@ -246,7 +251,7 @@ export class ChatGPTWebBot extends AbstractBot {
           text = '_' + content.text + '_'
         } else {
           console.log('ChatGPTProvider:returning DONE to frontend4')
-          params.onEvent({ type: 'done' })
+          params.onEvent({ type: 'DONE' })
           wsp.close()
           return
         }
@@ -257,8 +262,22 @@ export class ChatGPTWebBot extends AbstractBot {
               renameConversationTitle({ convId: data.conversation_id, prompt: params.prompt, accessToken })
             }
           }
+          console.log(`==== {
+              text,
+              messageId: data.message.id,
+              parentMessageId: data.parent_message_id,
+              conversationId: data.conversation_id,
+            } ===`)
+          console.log({
+            text,
+            messageId: data.message.id,
+            parentMessageId: data.parent_message_id,
+            conversationId: data.conversation_id,
+          })
+          console.log('==== end log ===')
+
           params.onEvent({
-            type: 'answer',
+            type: 'UPDATE_ANSWER',
             data: {
               text,
               messageId: data.message.id,
