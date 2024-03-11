@@ -8,33 +8,18 @@ import { cx } from '~/utils'
 import { CHATBOTS } from '~app/consts'
 import { ConversationContext, ConversationContextValue } from '~app/context'
 import { trackEvent } from '~app/plausible'
-import { ChatMessageModel } from '~types'
-import { BotId, BotInstance } from '../../bots'
 import Button from '../Button'
 import HistoryDialog from '../History/Dialog'
 import ShareDialog from '../Share/Dialog'
 import Tooltip from '../Tooltip'
 import ChatMessageInput from './ChatMessageInput'
 import ChatMessageList from './ChatMessageList'
-import ChatbotName from './ChatbotName'
 import WebAccessCheckbox from './WebAccessCheckbox'
 import { allAgents } from '~app/state/agentAtom'
 import { capitalize } from 'lodash-es'
+import { Props } from './ConversationPanel'
 
-interface Props {
-  botId: BotId
-  agentId: string | null
-  bot: BotInstance
-  messages: ChatMessageModel[]
-  onUserSendMessage: (input: string, image?: File) => void
-  resetConversation: () => void
-  generating: boolean
-  stopGenerating: () => void
-  mode?: 'full' | 'compact'
-  onSwitchBot?: (botId: BotId) => void
-}
-
-const ConversationPanel: FC<Props> = (props) => {
+export const ConversationPanel: FC<Props> = (props) => {
   const { t } = useTranslation()
   const botInfo = CHATBOTS[props.botId]
   const mode = props.mode || 'full'
@@ -98,22 +83,18 @@ const ConversationPanel: FC<Props> = (props) => {
             marginClass,
           )}
         >
-          {agent ? (
-            <div className="flex flex-row items-center gap-1">
-              <div>
-                {agent.avatar ? (
-                  <img src={agent.avatar} className="w-10 h-10" />
-                ) : (
-                  <div className="w-10 h-10 bg-gray-300 rounded-full flex justify-center items-center">
-                    <span className="text-primary-text text-lg font-bold">{agent.name.slice(0, 2)}</span>
-                  </div>
-                )}
-              </div>
-              <span className="font-medium text-sm w-full">{agent.name + '-' + capitalize(botInfo.name)}</span>
+          <div className="flex flex-row items-center gap-1">
+            <div>
+              {agent.avatar ? (
+                <img src={agent.avatar} className="w-10 h-10" />
+              ) : (
+                <div className="w-10 h-10 bg-gray-300 rounded-full flex justify-center items-center">
+                  <span className="text-primary-text text-lg font-bold">{agent.name.slice(0, 2)}</span>
+                </div>
+              )}
             </div>
-          ) : (
-            <ChatbotName name={props.bot.name ?? ''} botId={props.botId} />
-          )}
+            <span className="font-medium text-sm w-full">{agent.name + '-' + capitalize(botInfo.name)}</span>
+          </div>
           <WebAccessCheckbox botId={props.botId} />
           <div className="flex flex-row items-center gap-3">
             <Tooltip content={t('Share conversation')}>
@@ -168,5 +149,3 @@ const ConversationPanel: FC<Props> = (props) => {
     </ConversationContext.Provider>
   )
 }
-
-export default ConversationPanel
