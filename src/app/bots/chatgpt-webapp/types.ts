@@ -43,3 +43,15 @@ export interface ImageContent {
   width: number
   height: number
 }
+
+export interface GenerateAnswerParams {
+  prompt: string
+  onEvent: (event: Event) => void
+  signal?: AbortSignal
+  conversationId?: string
+  parentMessageId?: string
+}
+
+export interface Provider {
+  generateAnswer(params: GenerateAnswerParams): Promise<{ cleanup?: () => void }>
+}
