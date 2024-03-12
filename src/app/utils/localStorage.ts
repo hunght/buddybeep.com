@@ -1,3 +1,4 @@
+import { uuid } from '~utils'
 export function setNestedLocalStorage<T>({
   mainKey,
   subKey,
@@ -25,4 +26,16 @@ export function getNestedLocalStorage<T>({ mainKey, subKey }: { mainKey: string;
   const parsedData = JSON.parse(storageData)
 
   return parsedData[subKey] as T // Return the value associated with the subkey
+}
+
+export function getOrGenerateUserUUID(): string {
+  // Check if a UUID is already stored
+  let userUUID = localStorage.getItem('userUUID')
+  if (!userUUID) {
+    // Generate a new UUID
+    userUUID = uuid()
+    // Store the UUID in localStorage
+    localStorage.setItem('userUUID', userUUID)
+  }
+  return userUUID
 }
