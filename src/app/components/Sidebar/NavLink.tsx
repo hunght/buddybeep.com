@@ -2,17 +2,27 @@ import { Link } from '@tanstack/react-router'
 import { capitalize } from 'lodash-es'
 import { cx } from '~/utils'
 import { AgentType } from '~app/types/agent'
+import { LastMessageType } from '~app/types/chatState'
+import { formatTimestamp } from '~app/utils/time'
 
-function NavLink(props: { botId: string; agent?: AgentType; iconOnly?: boolean }) {
-  const { botId, agent, iconOnly } = props
+function NavLink(props: {
+  botId: string
+  agent?: AgentType
+  iconOnly?: boolean
+  lastMessage: LastMessageType
+  icon?: string
+  botName?: string
+}) {
+  const { botId, agent, iconOnly, icon, botName } = props
 
-  if (!agent) {
+  const title = agent ? `${agent.name} - ${capitalize(botId)}` : botName
+  if (!title) {
     return null
   }
   return (
     <Link
       className={cx(
-        'rounded-[10px] w-full pl-1 flex flex-row gap-2 items-center shrink-0 py-1',
+        'rounded-[10px] w-full pl-2 flex flex-row gap-2 items-center shrink-0 py-2 ',
         iconOnly && 'justify-center',
       )}
       activeOptions={{ exact: true }}
@@ -20,20 +30,35 @@ function NavLink(props: { botId: string; agent?: AgentType; iconOnly?: boolean }
       inactiveProps={{
         className: 'bg-secondary bg-opacity-20 text-primary-text opacity-80 hover:opacity-100',
       }}
-      title={agent.name}
-      params={{ botId, agentId: agent.agentId ?? '' }}
-      to="/chat-agent/$agentId/$botId"
+      title={agent ? agent.name : botId}
+      params={{ botId, agentId: agent ? agent.agentId : undefined }}
+      to={agent ? '/chat-agent/$agentId/$botId' : '/chat/$botId'}
     >
-      <div>
-        {agent.avatar ? (
-          <img src={agent.avatar} className="w-10 h-10" />
-        ) : (
-          <div className="w-10 h-10 bg-gray-300 rounded-full flex justify-center items-center">
-            <span className="text-primary-text text-lg font-bold">{agent.name.slice(0, 2)}</span>
+      {agent ? (
+        <div>
+          {agent.avatar ? (
+            <img src={agent.avatar} className="w-10 h-10" />
+          ) : (
+            <div className="w-10 h-10 bg-gray-300 rounded-full flex justify-center items-center">
+              <span className="text-primary-text text-lg font-bold">{agent.name.slice(0, 2)}</span>
+            </div>
+          )}
+        </div>
+      ) : (
+        <img src={icon} className="w-10 h-10" />
+      )}
+
+      <div className="w-full">
+        <span className="font-medium text-sm w-full line-clamp-1">{iconOnly ? '' : title}</span>
+        {props.lastMessage ? (
+          <div className="flex flex-row w-full pr-1">
+            <span className="text-sm w-full line-clamp-1">{iconOnly ? '' : props.lastMessage.text}</span>
+            <span className="text-sm  text-right">{iconOnly ? '' : formatTimestamp(props.lastMessage.time)}</span>
           </div>
+        ) : (
+          <span> ... </span>
         )}
       </div>
-      {<span className="font-medium text-sm w-full">{iconOnly ? '' : agent.name + '-' + capitalize(botId)}</span>}
     </Link>
   )
 }

@@ -31,6 +31,7 @@ import { getBotSlug } from '~app/utils/slug'
 import { atomChatStateLocalStorage, chatStatesArrayAtomValue } from '~app/state/atomWithLocalStorage'
 import { allAgents } from '~app/state/agentAtom'
 import { InsertPropmtType } from '~app/types/InsertPropmtType'
+import { useEnabledBots } from '~app/hooks/use-enabled-bots'
 
 function IconButton(props: { icon: string; onClick?: () => void }) {
   return (
@@ -92,6 +93,7 @@ function Sidebar() {
             isSetup: false,
             generatingMessageId: '',
             conversationId: '',
+            lastMessage: null,
           },
         }
       })
@@ -105,30 +107,30 @@ function Sidebar() {
     }
     setIsPromptLibraryDialogOpen(false)
   }
-
+  const enabledBots = useEnabledBots()
   return (
     <motion.aside
       className={cx(
         'flex flex-col bg-primary-background bg-opacity-40 overflow-hidden',
-        collapsed ? 'items-center px-[15px]' : 'w-[230px] px-4',
+        collapsed ? 'items-center px-[15px]' : 'w-96 px-4',
       )}
     >
       <div className={cx('flex mt-8 gap-3 items-center', collapsed ? 'flex-col' : 'flex-row justify-between')}>
         {collapsed ? <img src={minimalLogo} className="w-[30px]" /> : <img src={logo} className="w-[100px] ml-2" />}
-        <motion.img
-          src={collapseIcon}
-          className={cx('w-6 h-6 cursor-pointer')}
-          animate={{ rotate: collapsed ? 180 : 0 }}
-          onClick={() => setCollapsed((c) => !c)}
-        />
-        <FaRegEdit
-          size={22}
-          color="#ffffffb3"
-          className="cursor-pointer"
-          onClick={openPromptLibrary}
-          title="Prompt library"
-        />
-
+        <div className="flex flex-row justify-center items-center gap-2">
+          {/* <Tooltip content={t('Settings')}>
+            <Link to="/setting">
+              <IconButton icon={settingIcon} />
+            </Link>
+          </Tooltip> */}
+          <FaRegEdit
+            size={34}
+            color="#ffffffb3"
+            className="cursor-pointer p-[6px] rounded-[10px] w-fit  hover:opacity-80 bg-secondary bg-opacity-20"
+            onClick={openPromptLibrary}
+            title="Prompt library"
+          />
+        </div>
         {isPromptLibraryDialogOpen && (
           <PromptLibraryDialog
             isOpen={true}
@@ -138,53 +140,35 @@ function Sidebar() {
         )}
       </div>
       <div className="flex flex-col gap-[13px] mt-10 overflow-y-auto scrollbar-none">
-        {chatStatesArray.map(({ botId, agentId }) => {
+        <span>Original bots</span>
+        {enabledBots.map(({ botId, bot }) => {
+          return (
+            <NavLink
+              key={botId}
+              botId={botId}
+              botName={bot.name}
+              icon={bot.avatar}
+              iconOnly={collapsed}
+              lastMessage={chatStateLocalStorage[getBotSlug({ botId, agentId: null })]?.lastMessage ?? null}
+            />
+          )
+        })}
+        <span>Prompt bots</span>
+        {chatStatesArray.map(({ botId, agentId, lastMessage }) => {
+          const agent = allAgents[agentId ?? '']
+
           return (
             <NavLink
               key={getBotSlug({ botId, agentId })}
               botId={botId}
-              agent={allAgents[agentId ?? '']}
+              agent={agent}
+              lastMessage={lastMessage}
               iconOnly={collapsed}
             />
           )
         })}
       </div>
-      <div className="mt-auto pt-2">
-        {!collapsed && <hr className="border-[#ffffff4d]" />}
-        {!collapsed && (
-          <div className="my-5">
-            <PremiumEntry text={t('Premium')} />
-          </div>
-        )}
-        <div className={cx('flex mt-5 gap-[10px] mb-4', collapsed ? 'flex-col' : 'flex-row ')}>
-          {!collapsed && (
-            <Tooltip content={t('GitHub')}>
-              <a href="https://github.com/chathub-dev/chathub?utm_source=extension" target="_blank" rel="noreferrer">
-                <IconButton icon={githubIcon} />
-              </a>
-            </Tooltip>
-          )}
-          {!collapsed && (
-            <Tooltip content={t('Feedback')}>
-              <a href="https://github.com/chathub-dev/chathub/issues" target="_blank" rel="noreferrer">
-                <IconButton icon={feedbackIcon} />
-              </a>
-            </Tooltip>
-          )}
-          {!collapsed && (
-            <Tooltip content={t('Display')}>
-              <a onClick={() => setThemeSettingModalOpen(true)}>
-                <IconButton icon={themeIcon} />
-              </a>
-            </Tooltip>
-          )}
-          <Tooltip content={t('Settings')}>
-            <Link to="/setting">
-              <IconButton icon={settingIcon} />
-            </Link>
-          </Tooltip>
-        </div>
-      </div>
+      <div className="mt-auto pt-2">{!collapsed && <hr className="border-[#ffffff4d]" />}</div>
       <GuideModal />
       <ThemeSettingModal open={themeSettingModalOpen} onClose={() => setThemeSettingModalOpen(false)} />
     </motion.aside>

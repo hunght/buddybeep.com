@@ -167,9 +167,6 @@ export class ChatGPTWebBot extends AbstractBot {
               })
             }
           }
-          console.log(`==== text ===`)
-          console.log(text)
-          console.log('==== end log ===')
 
           params.onEvent({
             type: 'UPDATE_ANSWER',
@@ -190,10 +187,6 @@ export class ChatGPTWebBot extends AbstractBot {
 
     const wsp: WebSocketAsPromised = new WebSocketAsPromised(wsAddress, {
       createWebSocket: (url) => {
-        console.log(`==== url ===`)
-        console.log(url)
-        console.log('==== end log ===')
-
         const ws = new WebSocket(wsAddress, ['Sec-Websocket-Protocol', 'json.reliable.webpubsub.azure.v1'])
         ws.binaryType = 'arraybuffer'
         return ws
@@ -207,12 +200,10 @@ export class ChatGPTWebBot extends AbstractBot {
     }
 
     let next_check_seqid = Math.round(Math.random() * 50)
-    const messageListener = (message: any) => {
-      console.log('ChatGPTProvider:setupWebsocket:wsp.onMessage:', message)
+    const messageListener = (message: string) => {
       const jjws = JSON.parse(message)
-      console.log('ChatGPTProvider:setupWSS:messageListener:jjws:', jjws)
+
       const rawMessage = jjws['data'] ? jjws['data']['body'] : ''
-      console.log('ChatGPTProvider:setupWSS:wsp.onMessage:rawMessage:', rawMessage)
 
       const finalMessageStr = atob(rawMessage)
       console.log('ChatGPTProvider:setupWebsocket:wsp.onMessage:finalMessage:', finalMessageStr)
@@ -262,19 +253,6 @@ export class ChatGPTWebBot extends AbstractBot {
               renameConversationTitle({ convId: data.conversation_id, prompt: params.prompt, accessToken })
             }
           }
-          console.log(`==== {
-              text,
-              messageId: data.message.id,
-              parentMessageId: data.parent_message_id,
-              conversationId: data.conversation_id,
-            } ===`)
-          console.log({
-            text,
-            messageId: data.message.id,
-            parentMessageId: data.parent_message_id,
-            conversationId: data.conversation_id,
-          })
-          console.log('==== end log ===')
 
           params.onEvent({
             type: 'UPDATE_ANSWER',
@@ -332,7 +310,7 @@ export class ChatGPTWebBot extends AbstractBot {
     if (this.model === ChatGPTWebModel['GPT-4']) {
       return 'gpt-4'
     }
-    return 'gpt-4' //gpt-3.5
+    return 'gpt-3.5' //gpt-3.5
   }
 
   private async uploadImage(image: File): Promise<ImageContent> {
