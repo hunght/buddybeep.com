@@ -95,19 +95,6 @@ function SettingPage() {
   return (
     <PagePanel title={`${t('Settings')} (v${getVersion()})`}>
       <div className="flex flex-col gap-5 mt-3 mb-10 px-10">
-        <div>
-          <p className="font-bold mb-2 text-lg">{t('Startup page')}</p>
-          <div className="w-[200px]">
-            <Select
-              options={[
-                { name: 'All-In-One', value: ALL_IN_ONE_PAGE_ID },
-                ...Object.entries(CHATBOTS).map(([botId, bot]) => ({ name: bot.name, value: botId })),
-              ]}
-              value={userConfig.startupPage}
-              onChange={(v) => updateConfigValue({ startupPage: v })}
-            />
-          </div>
-        </div>
         <div className="flex flex-col gap-2 max-w-[700px]">
           <p className="font-bold text-lg">{t('Chatbots')}</p>
           <EnabledBotsSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
@@ -131,22 +118,7 @@ function SettingPage() {
               <ChatGPWebSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
             )}
           </ChatBotSettingPanel>
-          <ChatBotSettingPanel title="Claude">
-            <RadioGroup
-              options={Object.entries(ClaudeMode).map(([k, v]) => ({ label: `${k} ${t('Mode')}`, value: v }))}
-              value={userConfig.claudeMode}
-              onChange={(v) => updateConfigValue({ claudeMode: v as ClaudeMode })}
-            />
-            {userConfig.claudeMode === ClaudeMode.API ? (
-              <ClaudeAPISettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
-            ) : userConfig.claudeMode === ClaudeMode.Webapp ? (
-              <ClaudeWebappSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
-            ) : userConfig.claudeMode === ClaudeMode.OpenRouter ? (
-              <ClaudeOpenRouterSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
-            ) : (
-              <ClaudePoeSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
-            )}
-          </ChatBotSettingPanel>
+
           <ChatBotSettingPanel title="Gemini Pro">
             <div className="flex flex-col gap-1">
               <p className="font-medium text-sm">
@@ -184,7 +156,7 @@ function SettingPage() {
               </div>
             </div>
           </ChatBotSettingPanel>
-          <ChatBotSettingPanel title="Perplexity">
+          {/* <ChatBotSettingPanel title="Perplexity">
             <RadioGroup
               options={Object.entries(PerplexityMode).map(([k, v]) => ({ label: `${k} ${t('Mode')}`, value: v }))}
               value={userConfig.perplexityMode}
@@ -193,7 +165,7 @@ function SettingPage() {
             {userConfig.perplexityMode === PerplexityMode.API && (
               <PerplexityAPISettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
             )}
-          </ChatBotSettingPanel>
+          </ChatBotSettingPanel> */}
         </div>
         <ShortcutPanel />
         <ExportDataPanel />
