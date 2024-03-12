@@ -39,7 +39,7 @@ export async function removeLocalPrompt(id: string) {
 }
 
 export async function loadRemotePrompts() {
-  return ofetch<Prompt[]>('https://chathub.gg/api/community-prompts', {
+  return ofetch<Prompt[]>('https://buddybeep.com/api/community-prompts', {
     params: { language: i18next.language, languages: i18next.languages },
   }).catch((err) => {
     console.error('Failed to load remote prompts', err)
