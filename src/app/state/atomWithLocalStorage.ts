@@ -15,5 +15,10 @@ export const chatStatesArrayAtomValue = atom((get) => {
       result.push(chatState)
     }
   })
-  return result
+  // sort by last message time
+  return result.sort((a, b) => {
+    const aTime = a.lastMessage?.time ? Number(a.lastMessage.time) : 0
+    const bTime = b.lastMessage?.time ? Number(b.lastMessage.time) : 0
+    return bTime - aTime
+  })
 })

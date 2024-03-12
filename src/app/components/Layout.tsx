@@ -9,9 +9,6 @@ import Sidebar from './Sidebar'
 function Layout() {
   const themeColor = useAtomValue(themeColorAtom)
   const followArcTheme = useAtomValue(followArcThemeAtom)
-  console.log(`==== followArcTheme ===`)
-  console.log(followArcTheme)
-  console.log('==== end log ===')
 
   return (
     <main

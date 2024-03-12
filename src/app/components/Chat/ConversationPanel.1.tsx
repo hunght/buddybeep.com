@@ -70,9 +70,6 @@ export const ConversationPanel: FC<Props> = (props) => {
   }
   const agent = allAgents[props.agentId ?? '']
   const avatar = agent ? agent.avatar ?? agent.name.slice(0, 2) : botInfo.avatar
-  console.log(`==== avatar ===`)
-  console.log(avatar)
-  console.log('==== end log ===')
 
   return (
     <ConversationContext.Provider value={context}>

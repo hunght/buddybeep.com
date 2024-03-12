@@ -21,13 +21,8 @@ export const allAgents: Record<string, AgentType> = jsonData as unknown as Recor
 
 export const agentsByCategoryAtom = atom<AgentType[]>((get) => {
   const cat = get(categoryAtom)
-  console.log(`==== cat ===`)
-  console.log(cat)
-  console.log('==== end log ===')
+
   const searchQuery = get(searchQueryAtom)
-  console.log(`==== searchQuery ===`)
-  console.log(searchQuery)
-  console.log('==== end log ===')
 
   const category = cat.category
   const subcategory = cat.subcategory
@@ -36,18 +31,13 @@ export const agentsByCategoryAtom = atom<AgentType[]>((get) => {
     results = Object.values(allAgents)
   } else if (subcategory === null) {
     const filteredAgents = agentsCategorization.filter((agent) => agent.category === category)
-    console.log(`==== filteredAgents ===`)
-    console.log(filteredAgents)
-    console.log('==== end log ===')
 
     results = filteredAgents.map((agent) => allAgents[agent.agentId])
   } else {
     const filteredAgents = agentsCategorization.filter(
       (agent) => agent.category === category && agent.subCategory === subcategory,
     )
-    console.log(`==== filteredAgents ===`)
-    console.log(filteredAgents)
-    console.log('==== end log ===')
+
     results = filteredAgents.map((agent) => allAgents[agent.agentId])
   }
   if (searchQuery.length > 0) {

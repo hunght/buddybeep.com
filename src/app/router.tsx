@@ -1,10 +1,19 @@
-import { createHashHistory, createRoute, useParams, createRouter, createRootRoute } from '@tanstack/react-router'
+import {
+  createHashHistory,
+  createRoute,
+  useParams,
+  createRouter,
+  createRootRoute,
+  Navigate,
+} from '@tanstack/react-router'
 import { BotId } from './bots'
 import Layout from './components/Layout'
 import MultiBotChatPanel from './pages/MultiBotChatPanel'
 import PremiumPage from './pages/PremiumPage'
 import SettingPage from './pages/SettingPage'
 import SingleBotChatPanel from './pages/SingleBotChatPanel'
+import { useEnabledBots } from './hooks/use-enabled-bots'
+import { first } from 'lodash-es'
 
 const rootRoute = createRootRoute()
 
@@ -17,13 +26,21 @@ const layoutRoute = createRoute({
 const indexRoute = createRoute({
   getParentRoute: () => layoutRoute,
   path: '/',
-  component: MultiBotChatPanel,
+  component: ChatRoute,
 })
 
 function ChatRoute() {
   const { botId } = useParams({ from: chatRoute.id })
+  const bots = useEnabledBots()
 
-  return <SingleBotChatPanel botId={botId as BotId} agentId={null} />
+  if (!botId && bots.length > 0) {
+    const fistBot = first(bots)?.botId
+    if (fistBot) {
+      return <Navigate to="/chat/$botId" params={{ botId: fistBot }} />
+    }
+  } else if (botId) {
+    return <SingleBotChatPanel botId={botId as BotId} agentId={null} />
+  }
 }
 
 function AgentChatRoute() {
