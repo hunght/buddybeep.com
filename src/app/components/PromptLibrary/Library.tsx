@@ -104,8 +104,11 @@ function CommunityPrompts(props: {
   }
   return (
     <>
-      <h2 className="text-2xl font-bold text-primary-text mb-3">Your custom prompt</h2>
-      {localPromptsQuery.data.length ? (
+      <div className="flex flex-row justify-between">
+        <h2 className="text-2xl font-bold text-primary-text mb-3">All</h2>
+        <SearchInput />
+      </div>
+      {/* {localPromptsQuery.data.length ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 pt-2">
           {localPromptsQuery.data.map((prompt) => (
             <PromptItem
@@ -130,7 +133,7 @@ function CommunityPrompts(props: {
         ) : (
           <Button text={t('Create new prompt')} size="small" onClick={create} />
         )}
-      </div>
+      </div> */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 pt-2">
         {agentsArray.map((prompt) => (
           <PromptItem
