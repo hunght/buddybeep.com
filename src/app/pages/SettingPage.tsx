@@ -21,7 +21,7 @@ import EnabledBotsSettings from '~app/components/Settings/EnabledBotsSettings'
 import ExportDataPanel from '~app/components/Settings/ExportDataPanel'
 import PerplexityAPISettings from '~app/components/Settings/PerplexityAPISettings'
 import ShortcutPanel from '~app/components/Settings/ShortcutPanel'
-import { ALL_IN_ONE_PAGE_ID, CHATBOTS } from '~app/consts'
+import themeIcon from '~/assets/icons/theme.svg'
 import {
   BingConversationStyle,
   ChatGPTMode,
@@ -33,6 +33,9 @@ import {
 } from '~services/user-config'
 import { getVersion } from '~utils'
 import PagePanel from '../components/Page'
+import Tooltip from '~app/components/Tooltip'
+import ThemeSettingModal from '~app/components/ThemeSettingModal'
+import { IconButton } from '~app/components/Sidebar/IconButton'
 
 const BING_STYLE_OPTIONS = [
   { name: 'Precise', value: BingConversationStyle.Precise },
@@ -53,6 +56,7 @@ function SettingPage() {
   const { t } = useTranslation()
   const [userConfig, setUserConfig] = useState<UserConfig | undefined>(undefined)
   const [dirty, setDirty] = useState(false)
+  const [themeSettingModalOpen, setThemeSettingModalOpen] = useState(false)
 
   useEffect(() => {
     getUserConfig().then((config) => setUserConfig(config))
@@ -169,6 +173,10 @@ function SettingPage() {
         </div>
         <ShortcutPanel />
         <ExportDataPanel />
+
+        <a onClick={() => setThemeSettingModalOpen(true)}>
+          <IconButton className="bg-black" icon={themeIcon} />
+        </a>
       </div>
       {dirty && (
         <motion.div
@@ -181,6 +189,8 @@ function SettingPage() {
         </motion.div>
       )}
       <Toaster position="bottom-center" />
+
+      <ThemeSettingModal open={themeSettingModalOpen} onClose={() => setThemeSettingModalOpen(false)} />
     </PagePanel>
   )
 }
