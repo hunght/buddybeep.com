@@ -32,6 +32,7 @@ const Sidebar: React.FC = () => {
               }}
             >
               {item.category}
+              {isMainCategorySelected ? ' -' : ' +'}
             </h3>
             {category.category === item.category && (
               <ul className="list-none mt-2">

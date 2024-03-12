@@ -34,10 +34,16 @@ export const PromptItem = (props: {
         <div className="flex-1 max-w-96">
           <p className="w-full truncate text-sm font-semibold text-primary-text">{props.title}</p>
           <p className="mt-1 text-xs text-primary-text line-clamp-5">{props.prompt}</p>
-          <div className="flex flex-row gap-2 items-center mt-2">
-            {props.edit && <ActionButton text={t('Edit')} onClick={props.edit} />}
-            {props.copyToLocal && <ActionButton text={t(saved ? 'Saved' : 'Save')} onClick={copyToLocal} />}
-            <ActionButton text={t('Use')} onClick={() => props.insertPrompt({ botId, agentId: props.agentId })} />
+          <div className="flex flex-row gap-2 items-center mt-2 justify-between">
+            <div className="flex flex-row gap-2">
+              {props.edit && <ActionButton text={t('Edit')} onClick={props.edit} />}
+              {/* {props.copyToLocal && <ActionButton text={t(saved ? 'Saved' : 'Save')} onClick={copyToLocal} />} */}
+              <ActionButton
+                className="bg-primary-blue text-primary-text px-4 py-2"
+                text={t('Use')}
+                onClick={() => props.insertPrompt({ botId, agentId: props.agentId })}
+              />
+            </div>
             <div className="w-[120px]">
               <Select
                 options={[...bots.map(({ bot, botId }) => ({ name: bot.name, value: botId }))]}
