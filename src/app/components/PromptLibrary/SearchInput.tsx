@@ -36,7 +36,13 @@ export const SearchInput: React.FC = () => {
   return (
     <form onSubmit={handleSubmit} className="flex items-center space-x-2">
       <div className="border rounded shadow focus:outline-none focus:border-blue-500 flex flex-row items-center py-2 px-1">
-        <input type="text" value={query} onChange={handleInputChange} placeholder="Search..." className="w-full" />
+        <input
+          type="text"
+          value={query}
+          onChange={handleInputChange}
+          placeholder="Search Prompts"
+          className="w-full bg-transparent"
+        />
         {query ? (
           <img src={closeIcon} className="w-4 h-4 cursor-pointer" onClick={handleClearSearch} />
         ) : (
