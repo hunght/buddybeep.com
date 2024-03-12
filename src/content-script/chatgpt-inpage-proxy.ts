@@ -3,7 +3,7 @@ import { setupProxyExecutor } from '~services/proxy-fetch'
 
 function injectTip() {
   const div = document.createElement('div')
-  div.innerText = 'Please keep this tab open, now you can go back to ChatHub'
+  div.innerText = 'Please keep this tab open, now you can go back to BuddyBeep'
   div.style.position = 'fixed'
   // put the div at right top of page
   div.style.top = '0'

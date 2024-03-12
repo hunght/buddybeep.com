@@ -50,7 +50,7 @@ const FeatureList: FC<{ highlightFeature?: FeatureId }> = (props) => {
         id: 'web-access',
         title: t('Web Access'),
         desc: t('Improving accuracy by searching up-to-date information from the internet'),
-        link: 'https://github.com/chathub-dev/chathub/wiki/Web-Access',
+        link: 'https://github.com/buddybeep-dev/buddybeep/wiki/Web-Access',
       },
       {
         title: t('Full-text search for chat history'),
@@ -60,7 +60,7 @@ const FeatureList: FC<{ highlightFeature?: FeatureId }> = (props) => {
       },
       {
         title: t('Quick access in Chrome side bar'),
-        link: 'https://github.com/chathub-dev/chathub/wiki/Access-from-Chrome-side-panel',
+        link: 'https://github.com/buddybeep-dev/buddybeep/wiki/Access-from-Chrome-side-panel',
       },
       {
         title: t('Compare with image input'),
@@ -69,7 +69,7 @@ const FeatureList: FC<{ highlightFeature?: FeatureId }> = (props) => {
         title: t('Activate up to 5 devices'),
       },
       {
-        title: t('Support the development of ChatHub'),
+        title: t('Support the development of BuddyBeep'),
       },
     ]
   }, [t])
@@ -84,7 +84,7 @@ const FeatureList: FC<{ highlightFeature?: FeatureId }> = (props) => {
         />
       ))}
       {i18n.language === 'zh-CN' && (
-        <span className="text-sm text-secondary-text">请注意：ChatHub会员并不为您提供ChatGPT账号或API key</span>
+        <span className="text-sm text-secondary-text">请注意：BuddyBeep会员并不为您提供ChatGPT账号或API key</span>
       )}
     </div>
   )

@@ -50,7 +50,7 @@ const PremiumModal: FC = () => {
           <FeatureList highlightFeature={feature} />
         </div>
         <a
-          href={`https://chathub.gg/api/premium/redirect?source=${feature || ''}&discountCode=${discountCode || ''}`}
+          href={`https://buddybeep.com/api/premium/redirect?source=${feature || ''}&discountCode=${discountCode || ''}`}
           target="_blank"
           rel="noreferrer"
           onClick={onClickBuy}

@@ -2,11 +2,11 @@
     <img src="./src/assets/icon.png" width="150">
 </p>
 
-<h1 align="center">ChatHub</h1>
+<h1 align="center">BuddyBeep</h1>
 
 <div align="center">
 
-### ChatHub 是款全能聊天机器人客户端
+### BuddyBeep 是款全能聊天机器人客户端
 
 [![作者][作者-image]][作者-url]
 [![许可证][许可证-image]][许可证-url]
@@ -19,8 +19,8 @@
 
 ### 安装
 
-<a href="https://chrome.google.com/webstore/detail/chathub-all-in-one-chatbo/iaakpnchhognanibcahlpcplchdfmgma?utm_source=website"><img src="https://user-images.githubusercontent.com/64502893/231991498-8df6dd63-727c-41d0-916f-c90c15127de3.png" width="200" alt="获取 Chromium 版 ChatHub"></a>&nbsp;&nbsp;
-<a href="https://microsoftedge.microsoft.com/addons/detail/chathub-allinone-chat/kdlmggoacmfoombiokflpeompajfljga"><img src="https://user-images.githubusercontent.com/64502893/231991158-1b54f831-2fdc-43b6-bf9a-f894000e5aa8.png" width="160" alt="获取 Microsoft Edge 版 ChatHub"></a>
+<a href="https://chrome.google.com/webstore/detail/buddybeep-all-in-one-chatbo/iaakpnchhognanibcahlpcplchdfmgma?utm_source=website"><img src="https://user-images.githubusercontent.com/64502893/231991498-8df6dd63-727c-41d0-916f-c90c15127de3.png" width="200" alt="获取 Chromium 版 BuddyBeep"></a>&nbsp;&nbsp;
+<a href="https://microsoftedge.microsoft.com/addons/detail/buddybeep-allinone-chat/kdlmggoacmfoombiokflpeompajfljga"><img src="https://user-images.githubusercontent.com/64502893/231991158-1b54f831-2fdc-43b6-bf9a-f894000e5aa8.png" width="160" alt="获取 Microsoft Edge 版 BuddyBeep"></a>
 
 ##
 
@@ -28,12 +28,12 @@
 
 [作者-image]: https://img.shields.io/badge/author-wong2-blue.svg
 [作者-url]: https://github.com/wong2
-[许可证-image]: https://img.shields.io/github/license/chathub-dev/chathub?color=blue
-[许可证-url]: https://github.com/chathub-dev/chathub/blob/main/LICENSE
-[发布-image]: https://img.shields.io/github/v/release/chathub-dev/chathub?color=blue
-[发布-url]: https://github.com/chathub-dev/chathub/releases/latest
-[最后提交-image]: https://img.shields.io/github/last-commit/chathub-dev/chathub?label=last%20commit
-[最后提交-url]: https://github.com/chathub-dev/chathub/commits
+[许可证-image]: https://img.shields.io/github/license/buddybeep-dev/buddybeep?color=blue
+[许可证-url]: https://github.com/buddybeep-dev/buddybeep/blob/main/LICENSE
+[发布-image]: https://img.shields.io/github/v/release/buddybeep-dev/buddybeep?color=blue
+[发布-url]: https://github.com/buddybeep-dev/buddybeep/releases/latest
+[最后提交-image]: https://img.shields.io/github/last-commit/buddybeep-dev/buddybeep?label=last%20commit
+[最后提交-url]: https://github.com/buddybeep-dev/buddybeep/commits
 
 </div>
 
@@ -78,7 +78,7 @@
 
 ## 🔧 手动安装
 
-- 从 [Releases](https://github.com/chathub-dev/chathub/releases) 下载 chathub.zip
+- 从 [Releases](https://github.com/buddybeep-dev/buddybeep/releases) 下载 buddybeep.zip
 - 解压文件
 - 在 Chrome/Edge 中进入扩展页面 (chrome://extensions 或 edge://extensions)
 - 启用开发者模式

@@ -84,7 +84,7 @@ function PremiumPage() {
         ) : (
           <>
             <a
-              href={`https://chathub.gg/api/premium/redirect?source=${source || ''}&discountCode=${discountCode || ''}`}
+              href={`https://buddybeep.com/api/premium/redirect?source=${source || ''}&discountCode=${discountCode || ''}`}
               target="_blank"
               rel="noreferrer"
               onClick={() => trackEvent('click_buy_premium', { source: 'premium_page' })}

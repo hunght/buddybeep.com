@@ -146,7 +146,7 @@ function CommunityPrompts(props: {
       <span className="text-sm mt-5 block text-primary-text">
         Contribute on{' '}
         <a
-          href="https://github.com/chathub-dev/community-prompts"
+          href="https://github.com/buddybeep-dev/community-prompts"
           target="_blank"
           rel="noreferrer"
           className="underline"
@@ -154,7 +154,7 @@ function CommunityPrompts(props: {
           GitHub
         </a>{' '}
         or{' '}
-        <a href="https://openprompt.co/?utm_source=chathub" target="_blank" rel="noreferrer" className="underline">
+        <a href="https://openprompt.co/?utm_source=buddybeep" target="_blank" rel="noreferrer" className="underline">
           OpenPrompt
         </a>
       </span>

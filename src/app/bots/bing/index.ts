@@ -255,8 +255,8 @@ export class BingWebBot extends AbstractBot {
 
   private buildWssUrl(encryptedConversationSignature: string | undefined) {
     if (!encryptedConversationSignature) {
-      return 'wss://sydney.bing.com/sydney/ChatHub'
+      return 'wss://sydney.bing.com/sydney/BuddyBeep'
     }
-    return `wss://sydney.bing.com/sydney/ChatHub?sec_access_token=${encodeURIComponent(encryptedConversationSignature)}`
+    return `wss://sydney.bing.com/sydney/BuddyBeep?sec_access_token=${encodeURIComponent(encryptedConversationSignature)}`
   }
 }

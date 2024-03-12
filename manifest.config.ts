@@ -22,7 +22,7 @@ export default defineManifest(async () => {
       'https://*.bing.com/',
       'https://*.openai.com/',
       'https://gemini.google.com/',
-      'https://*.chathub.gg/',
+      'https://*.buddybeep.com/',
       'https://*.duckduckgo.com/',
       'https://*.poe.com/',
       'https://*.anthropic.com/',
@@ -39,12 +39,12 @@ export default defineManifest(async () => {
     commands: {
       'open-app': {
         suggested_key: {
-          default: 'Alt+J',
-          windows: 'Alt+J',
-          linux: 'Alt+J',
-          mac: 'Command+J',
+          default: 'Alt+B',
+          windows: 'Alt+B',
+          linux: 'Alt+B',
+          mac: 'Command+B',
         },
-        description: 'Open ChatHub app',
+        description: 'Open BuddyBeep app',
       },
     },
     side_panel: {

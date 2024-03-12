@@ -9,7 +9,7 @@ async function trackEvent(name: string, props: object) {
 }
 
 export async function trackInstallSource() {
-  const { source } = await ofetch('https://chathub.gg/api/user/source', {
+  const { source } = await ofetch('https://buddybeep.com/api/user/source', {
     credentials: 'include',
   })
   trackEvent('install', { source, language: navigator.language })
