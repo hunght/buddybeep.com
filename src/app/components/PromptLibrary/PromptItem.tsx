@@ -5,9 +5,9 @@ import closeIcon from '~/assets/icons/close.svg'
 import { BotId } from '~app/bots'
 import Select from '../Select'
 
-import premiumIcon from '~/assets/icons/premium.svg'
 import { ActionButton } from './ActionButton'
 import { useEnabledBots } from '~app/hooks/use-enabled-bots'
+import { allAgents } from '~app/state/agentAtom'
 
 export const PromptItem = (props: {
   agentId: string
@@ -26,11 +26,20 @@ export const PromptItem = (props: {
     props.copyToLocal?.(botId)
     setSaved(true)
   }, [botId, props])
-
+  const agent = allAgents[props.agentId]
   return (
     <div className="group relative flex flex-col space-y-4 rounded-lg border border-primary-border bg-secondary px-5 py-4 shadow-sm transition duration-200 ease-in-out hover:border-gray-400 hover:shadow-md ">
       <div className="flex flex-row space-x-4 items-start">
-        <img src={premiumIcon} alt="Agent Avatar" className="w-24 h-24 rounded-full object-cover" />
+        <div>
+          {agent?.avatar ? (
+            <img src={agent.avatar} className="w-24 h-24 rounded-full object-cover" />
+          ) : (
+            <div className="w-24 h-24  object-cover bg-primary-background rounded-full flex justify-center items-center">
+              <span className="text-primary-text text-4xl font-bold">{agent?.name?.slice(0, 2)}</span>
+            </div>
+          )}
+        </div>
+
         <div className="flex-1 max-w-96">
           <p className="w-full truncate text-sm font-semibold text-primary-text">{props.title}</p>
           <p className="mt-1 text-xs text-primary-text line-clamp-5">{props.prompt}</p>

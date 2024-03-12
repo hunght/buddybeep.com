@@ -10,6 +10,7 @@ import portuguese from './locales/portuguese.json'
 import simplifiedChinese from './locales/simplified-chinese.json'
 import spanish from './locales/spanish.json'
 import thai from './locales/thai.json'
+import vietnamese from './locales/vietnamese.json'
 import traditionalChinese from './locales/traditional-chinese.json'
 
 const resources: Resource = {
@@ -22,6 +23,7 @@ const resources: Resource = {
   fr: { translation: french },
   in: { translation: indonesia },
   th: { translation: thai },
+  vi: { translation: vietnamese },
 }
 
 export const languageCodes = Object.keys(resources)
@@ -39,6 +41,7 @@ i18n
     detection: {
       order: ['navigator'],
       caches: [],
+      convertDetectedLanguage: 'Iso15897',
     },
   })
 

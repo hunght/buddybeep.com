@@ -101,7 +101,7 @@ const ConversationPanel: FC<Props> = (props) => {
                 {agent.avatar ? (
                   <img src={agent.avatar} className="w-10 h-10" />
                 ) : (
-                  <div className="w-10 h-10 bg-gray-300 rounded-full flex justify-center items-center">
+                  <div className="w-10 h-10 bg-secondary rounded-full flex justify-center items-center">
                     <span className="text-primary-text text-lg font-bold">{agent.name.slice(0, 2)}</span>
                   </div>
                 )}
