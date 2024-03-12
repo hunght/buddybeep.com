@@ -4,9 +4,10 @@ import closeIcon from '~/assets/icons/close.svg'
 
 import { BotId } from '~app/bots'
 import Select from '../Select'
-import { CHATBOTS } from '~app/consts'
+
 import premiumIcon from '~/assets/icons/premium.svg'
 import { ActionButton } from './ActionButton'
+import { useEnabledBots } from '~app/hooks/use-enabled-bots'
 
 export const PromptItem = (props: {
   agentId: string
@@ -20,7 +21,7 @@ export const PromptItem = (props: {
   const { t } = useTranslation()
   const [saved, setSaved] = useState(false)
   const [botId, setBotId] = useState<BotId>('gemini')
-
+  const bots = useEnabledBots()
   const copyToLocal = useCallback(() => {
     props.copyToLocal?.(botId)
     setSaved(true)
@@ -39,7 +40,7 @@ export const PromptItem = (props: {
             <ActionButton text={t('Use')} onClick={() => props.insertPrompt({ botId, agentId: props.agentId })} />
             <div className="w-[120px]">
               <Select
-                options={[...Object.entries(CHATBOTS).map(([botId, bot]) => ({ name: bot.name, value: botId }))]}
+                options={[...bots.map(({ bot, botId }) => ({ name: bot.name, value: botId }))]}
                 value={botId}
                 onChange={(v) => setBotId(v as BotId)}
               />

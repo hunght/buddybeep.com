@@ -19,9 +19,9 @@ function Layout() {
       <div className="px-[15px] py-3 h-full overflow-hidden">
         <Outlet />
       </div>
-      <DiscountModal />
+      {/* <DiscountModal />
       <PremiumModal />
-      <ReleaseNotesModal />
+      <ReleaseNotesModal /> */}
     </main>
   )
 }

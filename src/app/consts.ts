@@ -23,10 +23,10 @@ export const CHATBOTS: Record<BotId, { name: string; avatar: string }> = {
     name: 'ChatGPT',
     avatar: chatgptLogo,
   },
-  claude: {
-    name: 'Claude',
-    avatar: claudeLogo,
-  },
+  // claude: {
+  //   name: 'Claude',
+  //   avatar: claudeLogo,
+  // },
   gemini: {
     name: 'Gemini',
     avatar: geminiLogo,
@@ -35,62 +35,62 @@ export const CHATBOTS: Record<BotId, { name: string; avatar: string }> = {
     name: 'Bing',
     avatar: bingLogo,
   },
-  perplexity: {
-    name: 'Perplexity',
-    avatar: pplxLogo,
-  },
-  llama: {
-    name: 'Llama 2',
-    avatar: llamaLogo,
-  },
+  // perplexity: {
+  //   name: 'Perplexity',
+  //   avatar: pplxLogo,
+  // },
+  // llama: {
+  //   name: 'Llama 2',
+  //   avatar: llamaLogo,
+  // },
   geminiPro: {
     name: 'Gemini Pro',
     avatar: geminiLogo,
   },
-  mistral: {
-    name: 'Mixtral',
-    avatar: mistralLogo,
-  },
-  vicuna: {
-    name: 'Vicuna',
-    avatar: vicunaLogo,
-  },
-  falcon: {
-    name: 'Falcon',
-    avatar: falconLogo,
-  },
-  grok: {
-    name: 'Grok',
-    avatar: grokLogo,
-  },
-  pi: {
-    name: 'Pi',
-    avatar: piLogo,
-  },
-  wizardlm: {
-    name: 'WizardLM',
-    avatar: wizardlmLogo,
-  },
-  chatglm: {
-    name: 'ChatGLM2',
-    avatar: chatglmLogo,
-  },
-  xunfei: {
-    name: 'iFlytek Spark',
-    avatar: xunfeiLogo,
-  },
-  qianwen: {
-    name: 'Qianwen',
-    avatar: qianwenLogo,
-  },
-  baichuan: {
-    name: 'Baichuan',
-    avatar: baichuanLogo,
-  },
-  yi: {
-    name: 'Yi-Chat',
-    avatar: yiLogo,
-  },
+  // mistral: {
+  //   name: 'Mixtral',
+  //   avatar: mistralLogo,
+  // },
+  // vicuna: {
+  //   name: 'Vicuna',
+  //   avatar: vicunaLogo,
+  // },
+  // falcon: {
+  //   name: 'Falcon',
+  //   avatar: falconLogo,
+  // },
+  // grok: {
+  //   name: 'Grok',
+  //   avatar: grokLogo,
+  // },
+  // pi: {
+  //   name: 'Pi',
+  //   avatar: piLogo,
+  // },
+  // wizardlm: {
+  //   name: 'WizardLM',
+  //   avatar: wizardlmLogo,
+  // },
+  // chatglm: {
+  //   name: 'ChatGLM2',
+  //   avatar: chatglmLogo,
+  // },
+  // xunfei: {
+  //   name: 'iFlytek Spark',
+  //   avatar: xunfeiLogo,
+  // },
+  // qianwen: {
+  //   name: 'Qianwen',
+  //   avatar: qianwenLogo,
+  // },
+  // baichuan: {
+  //   name: 'Baichuan',
+  //   avatar: baichuanLogo,
+  // },
+  // yi: {
+  //   name: 'Yi-Chat',
+  //   avatar: yiLogo,
+  // },
 }
 
 export const CHATGPT_HOME_URL = 'https://chat.openai.com'
