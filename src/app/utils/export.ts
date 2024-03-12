@@ -10,7 +10,7 @@ export async function exportData() {
     localStorage: { ...localStorage },
   }
   const blob = new Blob([JSON.stringify(data)], { type: 'application/json' })
-  await fileSave(blob, { fileName: 'chathub.json' })
+  await fileSave(blob, { fileName: 'buddybeep.json' })
   trackEvent('export_data')
 }
 

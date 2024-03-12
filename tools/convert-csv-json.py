@@ -5,7 +5,7 @@ import os
 import requests
 
 # File paths
-csv_file_path = '/Users/owner/source/extentions/chathub/tools/prompts.csv'
+csv_file_path = '/Users/owner/source/extentions/buddybeep/tools/prompts.csv'
 
 # Initialize an empty dictionary to hold the converted data
 data = {}
