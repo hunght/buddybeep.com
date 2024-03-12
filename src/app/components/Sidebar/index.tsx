@@ -118,11 +118,11 @@ function Sidebar() {
       <div className={cx('flex mt-8 gap-3 items-center', collapsed ? 'flex-col' : 'flex-row justify-between')}>
         {collapsed ? <img src={minimalLogo} className="w-[30px]" /> : <img src={logo} className="w-[100px] ml-2" />}
         <div className="flex flex-row justify-center items-center gap-2">
-          {/* <Tooltip content={t('Settings')}>
+          <Tooltip content={t('Settings')}>
             <Link to="/setting">
               <IconButton icon={settingIcon} />
             </Link>
-          </Tooltip> */}
+          </Tooltip>
           <FaRegEdit
             size={34}
             color="#ffffffb3"
