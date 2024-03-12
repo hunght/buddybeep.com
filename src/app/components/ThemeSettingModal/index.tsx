@@ -10,9 +10,9 @@ import { trackEvent } from '~app/plausible'
 import { followArcThemeAtom, themeColorAtom } from '~app/state'
 import { applyThemeMode } from '~app/utils/color-scheme'
 import { isArcBrowser } from '~app/utils/env'
-import { getLanguage, setLanguage } from '~services/storage/language'
+
 import { ThemeMode, getUserThemeMode, setUserThemeMode } from '~services/theme'
-import { languageCodes } from '../../i18n'
+
 import Dialog from '../Dialog'
 import Select from '../Select'
 
@@ -55,22 +55,6 @@ const ThemeSettingModal: FC<Props> = (props) => {
   const premiumState = usePremium()
   const [followArcTheme, setFollowArcTheme] = useAtom(followArcThemeAtom)
   const [zoomLevel, setZoomLevel] = useState<number | null>(null)
-  const [lang, setLang] = useState(() => getLanguage() || 'auto')
-
-  const languageOptions = useMemo(() => {
-    const nameGenerator = new Intl.DisplayNames('en', { type: 'language' })
-    return languageCodes.map((code) => {
-      let name: string
-      if (code === 'zh-CN') {
-        name = '简体中文'
-      } else if (code === 'zh-TW') {
-        name = '繁體中文'
-      } else {
-        name = nameGenerator.of(code) || code
-      }
-      return { name, value: code }
-    })
-  }, [])
 
   useEffect(() => {
     Browser.tabs.getZoom().then((zoom) => setZoomLevel(zoom))
@@ -105,16 +89,6 @@ const ThemeSettingModal: FC<Props> = (props) => {
       trackEvent('change_theme_color', { color: color.hex })
     },
     [setThemeColor],
-  )
-
-  const onLanguageChange = useCallback(
-    (lang: string) => {
-      setLang(lang)
-      setLanguage(lang === 'auto' ? undefined : lang)
-      i18n.changeLanguage(lang === 'auto' ? undefined : lang)
-      trackEvent('change_language', { lang })
-    },
-    [i18n],
   )
 
   return (
@@ -186,15 +160,6 @@ const ThemeSettingModal: FC<Props> = (props) => {
               +
             </Button>
           </span>
-        </div>
-        <div className="w-[300px]">
-          <p className="font-bold text-lg mb-3">{t('Language')}</p>
-          <Select
-            options={[{ name: t('Auto'), value: 'auto' }, { name: 'English', value: 'en' }, ...languageOptions]}
-            value={lang}
-            onChange={onLanguageChange}
-            position="top"
-          />
         </div>
       </div>
     </Dialog>

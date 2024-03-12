@@ -44,7 +44,7 @@ const ChatMessageCard: FC<Props> = ({ message, className, avatar }) => {
     >
       {message.author !== 'user' &&
         (avatar && avatar.length === 2 ? (
-          <div className="w-10 h-10 bg-gray-300 rounded-full flex justify-center items-center">
+          <div className="w-10 h-10 bg-secondary rounded-full flex justify-center items-center">
             <span className="text-primary-text text-lg font-bold">{avatar}</span>
           </div>
         ) : (

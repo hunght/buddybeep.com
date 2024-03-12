@@ -99,7 +99,7 @@ function Sidebar() {
             color="#ffffffb3"
             className="cursor-pointer p-[6px] rounded-[10px] w-fit  hover:opacity-80 bg-secondary bg-opacity-20"
             onClick={openPromptLibrary}
-            title="Prompt library"
+            title={t('Prompt Library')}
           />
         </div>
         {isPromptLibraryDialogOpen && (
@@ -111,7 +111,7 @@ function Sidebar() {
         )}
       </div>
       <div className="flex flex-col gap-[13px] mt-10 overflow-y-auto scrollbar-none">
-        <span>Original bots</span>
+        <span>{t('Original bots')}</span>
         {enabledBots.map(({ botId, bot }) => {
           return (
             <NavLink
@@ -124,7 +124,7 @@ function Sidebar() {
             />
           )
         })}
-        <span>Prompt bots</span>
+        <span>{t('Prompt bots')}</span>
         {chatStatesArray.map(({ botId, agentId, lastMessage }) => {
           const agent = allAgents[agentId ?? '']
 

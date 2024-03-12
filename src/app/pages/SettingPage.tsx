@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react'
+import { FC, PropsWithChildren, useCallback, useEffect, useMemo, useState } from 'react'
 import toast, { Toaster } from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 import Browser from 'webextension-polyfill'
@@ -22,6 +22,7 @@ import ExportDataPanel from '~app/components/Settings/ExportDataPanel'
 import PerplexityAPISettings from '~app/components/Settings/PerplexityAPISettings'
 import ShortcutPanel from '~app/components/Settings/ShortcutPanel'
 import themeIcon from '~/assets/icons/theme.svg'
+
 import {
   BingConversationStyle,
   ChatGPTMode,
@@ -36,6 +37,9 @@ import PagePanel from '../components/Page'
 import Tooltip from '~app/components/Tooltip'
 import ThemeSettingModal from '~app/components/ThemeSettingModal'
 import { IconButton } from '~app/components/Sidebar/IconButton'
+import { getLanguage, setLanguage } from '~services/storage/language'
+import i18n, { languageCodes } from '~app/i18n'
+import { trackEvent } from '~app/plausible'
 
 const BING_STYLE_OPTIONS = [
   { name: 'Precise', value: BingConversationStyle.Precise },
@@ -57,6 +61,31 @@ function SettingPage() {
   const [userConfig, setUserConfig] = useState<UserConfig | undefined>(undefined)
   const [dirty, setDirty] = useState(false)
   const [themeSettingModalOpen, setThemeSettingModalOpen] = useState(false)
+  const [lang, setLang] = useState(() => getLanguage() || 'auto')
+
+  const languageOptions = useMemo(() => {
+    const nameGenerator = new Intl.DisplayNames('en', { type: 'language' })
+    return languageCodes.map((code) => {
+      let name: string
+      if (code === 'zh-CN') {
+        name = '简体中文'
+      } else if (code === 'zh-TW') {
+        name = '繁體中文'
+      } else {
+        name = nameGenerator.of(code) || code
+      }
+      return { name, value: code }
+    })
+  }, [])
+  const onLanguageChange = useCallback(
+    (lang: string) => {
+      setLang(lang)
+      setLanguage(lang === 'auto' ? undefined : lang)
+      i18n.changeLanguage(lang === 'auto' ? undefined : lang)
+      trackEvent('change_language', { lang })
+    },
+    [i18n],
+  )
 
   useEffect(() => {
     getUserConfig().then((config) => setUserConfig(config))
@@ -173,7 +202,15 @@ function SettingPage() {
         </div>
         <ShortcutPanel />
         <ExportDataPanel />
-
+        <div className="w-[300px]">
+          <p className="font-bold text-lg mb-3">{t('Language')}</p>
+          <Select
+            options={[{ name: t('Auto'), value: 'auto' }, { name: 'English', value: 'en' }, ...languageOptions]}
+            value={lang}
+            onChange={onLanguageChange}
+            position="top"
+          />
+        </div>
         <a onClick={() => setThemeSettingModalOpen(true)}>
           <IconButton className="bg-black" icon={themeIcon} />
         </a>
