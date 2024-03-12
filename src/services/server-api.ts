@@ -35,9 +35,9 @@ export async function fetchPremiumProduct() {
 }
 
 export async function createDiscount() {
-  return ofetch<{ code: string; startTime: number }>('https://buddybeep.com/api/premium/discount/create', {
-    method: 'POST',
-  })
+  // return ofetch<{ code: string; startTime: number }>('https://buddybeep.com/api/premium/discount/create', {
+  //   method: 'POST',
+  // })
 }
 
 export interface Discount {
@@ -64,5 +64,5 @@ export async function fetchPurchaseInfo() {
 }
 
 export async function checkDiscount(params: { appOpenTimes: number; premiumModalOpenTimes: number }) {
-  return ofetch<{ show: boolean; campaign?: Campaign }>('https://buddybeep.com/api/premium/discount/check', { params })
+  // return ofetch<{ show: boolean; campaign?: Campaign }>('https://buddybeep.com/api/premium/discount/check', { params })
 }

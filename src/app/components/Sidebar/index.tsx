@@ -8,7 +8,7 @@ import collapseIcon from '~/assets/icons/collapse.svg'
 import feedbackIcon from '~/assets/icons/feedback.svg'
 import githubIcon from '~/assets/icons/github.svg'
 import settingIcon from '~/assets/icons/setting.svg'
-import themeIcon from '~/assets/icons/theme.svg'
+
 import minimalLogo from '~/assets/minimal-logo.svg'
 import logo from '~/assets/santa-logo.png'
 import { cx } from '~/utils'
@@ -32,47 +32,18 @@ import { atomChatStateLocalStorage, chatStatesArrayAtomValue } from '~app/state/
 import { allAgents } from '~app/state/agentAtom'
 import { InsertPropmtType } from '~app/types/InsertPropmtType'
 import { useEnabledBots } from '~app/hooks/use-enabled-bots'
-
-function IconButton(props: { icon: string; onClick?: () => void }) {
-  return (
-    <div
-      className="p-[6px] rounded-[10px] w-fit cursor-pointer hover:opacity-80 bg-secondary bg-opacity-20"
-      onClick={props.onClick}
-    >
-      <img src={props.icon} className="w-6 h-6" />
-    </div>
-  )
-}
+import { IconButton } from './IconButton'
 
 function Sidebar() {
   const { t } = useTranslation()
   const [collapsed, setCollapsed] = useAtom(sidebarCollapsedAtom)
-  const [themeSettingModalOpen, setThemeSettingModalOpen] = useState(false)
+
   const chatStatesArray = useAtomValue(chatStatesArrayAtomValue)
 
   const [chatStateLocalStorage, setChatStateLocalStorage] = useAtom(atomChatStateLocalStorage)
-  const setShowDiscountModal = useSetAtom(showDiscountModalAtom)
-  const setReleaseNotes = useSetAtom(releaseNotesAtom)
+
   const [isPromptLibraryDialogOpen, setIsPromptLibraryDialogOpen] = useState(false)
   const navigate = useNavigate()
-  useEffect(() => {
-    Promise.all([getAppOpenTimes(), getPremiumModalOpenTimes(), checkReleaseNotes()]).then(
-      async ([appOpenTimes, premiumModalOpenTimes, releaseNotes]) => {
-        if (!getPremiumActivation()) {
-          const { show, campaign } = await api.checkDiscount({ appOpenTimes, premiumModalOpenTimes })
-          if (show) {
-            setShowDiscountModal(true)
-            return
-          }
-          if (campaign) {
-            setShowDiscountModal(campaign)
-            return
-          }
-        }
-        setReleaseNotes(releaseNotes)
-      },
-    )
-  }, [])
 
   const openPromptLibrary = useCallback(() => {
     setIsPromptLibraryDialogOpen(true)
@@ -116,7 +87,7 @@ function Sidebar() {
       )}
     >
       <div className={cx('flex mt-8 gap-3 items-center', collapsed ? 'flex-col' : 'flex-row justify-between')}>
-        {collapsed ? <img src={minimalLogo} className="w-[30px]" /> : <img src={logo} className="w-[100px] ml-2" />}
+        {collapsed ? <img src={minimalLogo} className="w-[30px]" /> : <img src={logo} className="w-[50px] ml-2" />}
         <div className="flex flex-row justify-center items-center gap-2">
           <Tooltip content={t('Settings')}>
             <Link to="/setting">
@@ -168,9 +139,9 @@ function Sidebar() {
           )
         })}
       </div>
+
       <div className="mt-auto pt-2">{!collapsed && <hr className="border-[#ffffff4d]" />}</div>
       <GuideModal />
-      <ThemeSettingModal open={themeSettingModalOpen} onClose={() => setThemeSettingModalOpen(false)} />
     </motion.aside>
   )
 }

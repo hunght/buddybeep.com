@@ -9,7 +9,7 @@ const Sidebar: React.FC = () => {
   const [category, setCategory] = useAtom(categoryAtom)
 
   return (
-    <div className="w-64 h-full overflow-y-auto bg-gray-100 p-5">
+    <div className="w-64 h-full overflow-y-auto bg-secondary p-5 rounded-lg">
       {categories.map((item: Category, index: number) => {
         const isMainCategorySelected = category.category === item.category && category.subcategory === null
         return (
@@ -17,8 +17,8 @@ const Sidebar: React.FC = () => {
             <h3
               className={cx(
                 'font-bold text-lg',
-                'mt-1 hover:text-blue-500 cursor-pointer',
-                isMainCategorySelected && 'text-blue-500',
+                'mt-1 hover:text-primary-blue cursor-pointer',
+                isMainCategorySelected && 'text-primary-blue',
               )}
               onClick={() => {
                 setCategory((prev) => {
@@ -39,8 +39,8 @@ const Sidebar: React.FC = () => {
                   <li
                     key={subIndex}
                     className={cx(
-                      'ml-4 mt-1 hover:text-blue-500 cursor-pointer',
-                      category.subcategory === sub && 'text-blue-500',
+                      'ml-4 mt-1 hover:text-primary-blue cursor-pointer',
+                      category.subcategory === sub && 'text-primary-blue',
                     )}
                     onClick={() => {
                       setCategory((prev) =>
