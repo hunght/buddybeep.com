@@ -36,7 +36,7 @@ export const SearchInput: React.FC = () => {
 
   return (
     <form onSubmit={handleSubmit} className="flex items-center space-x-2">
-      <div className="border rounded shadow focus:outline-none focus:border-blue-500 flex flex-row items-center py-2 px-1">
+      <div className="border rounded shadow focus:outline-none focus:border-blue-500 flex flex-row items-center py-1 px-1">
         <input
           type="text"
           value={query}
@@ -50,9 +50,10 @@ export const SearchInput: React.FC = () => {
           <div className="w-4" />
         )}
       </div>
+
       <button
-        type="submit"
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+        type="button"
+        className="rounded bg-indigo-500 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
       >
         {t('Search')}
       </button>

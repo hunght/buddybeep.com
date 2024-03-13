@@ -28,7 +28,7 @@ export const PromptItem = (props: {
   }, [botId, props])
   const agent = getAllAgents()[props.agentId]
   return (
-    <div className="group relative flex flex-col space-y-4 rounded-lg border border-primary-border bg-secondary px-5 py-4 shadow-sm transition duration-200 ease-in-out hover:border-gray-400 hover:shadow-md ">
+    <div className="group relative flex flex-col space-y-4 rounded-lg border border-primary-border dark:bg-gray-800 px-5 py-4 shadow-sm transition duration-200 ease-in-out hover:border-gray-400 hover:shadow-md ">
       <div className="flex flex-row space-x-4 items-start">
         <div>
           {agent?.avatar ? (
@@ -42,16 +42,19 @@ export const PromptItem = (props: {
 
         <div className="flex-1 max-w-96">
           <p className="w-full truncate text-sm font-semibold text-primary-text">{props.title}</p>
-          <p className="mt-1 text-xs text-primary-text line-clamp-5">{props.prompt}</p>
+          <p className="mt-1 text-xs dark:text-gray-400 line-clamp-5">{props.prompt}</p>
           <div className="flex flex-row gap-2 items-center mt-2 justify-between">
             <div className="flex flex-row gap-2">
               {props.edit && <ActionButton text={t('Edit')} onClick={props.edit} />}
               {/* {props.copyToLocal && <ActionButton text={t(saved ? 'Saved' : 'Save')} onClick={copyToLocal} />} */}
-              <ActionButton
-                className="bg-primary-blue text-primary-text px-4 py-2"
-                text={t('Use')}
+
+              <button
+                type="button"
+                className="rounded bg-indigo-500 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
                 onClick={() => props.insertPrompt({ botId, agentId: props.agentId })}
-              />
+              >
+                {t('Use')}
+              </button>
             </div>
             <div className="w-[120px]">
               <Select

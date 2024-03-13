@@ -2,7 +2,7 @@
 import { t } from 'i18next'
 import { useAtom } from 'jotai'
 import React from 'react'
-import { LanguageSelection } from '~app/pages/LanguageSelection'
+
 import { categoryAtom } from '~app/state/agentAtom'
 import { Category, categories } from '~app/state/data/categoriesData'
 import { cx } from '~utils'
@@ -11,16 +11,16 @@ const Sidebar: React.FC = () => {
   const [category, setCategory] = useAtom(categoryAtom)
 
   return (
-    <div className="w-64 h-full overflow-y-auto bg-secondary p-5 rounded-lg">
+    <div className="w-64 h-full overflow-y-auto dark:text-gray-400  p-5 rounded-lg">
       {categories.map((item: Category, index: number) => {
         const isMainCategorySelected = category.category === item.category && category.subcategory === null
         return (
           <div key={index} className="mb-4">
             <h3
               className={cx(
-                'font-bold text-lg',
-                'mt-1 hover:text-primary-blue cursor-pointer',
-                isMainCategorySelected && 'text-primary-blue',
+                'font-semibold text-lg rounded-sm',
+                'mt-1 hover:text-primary-text cursor-pointer hover:underline',
+                isMainCategorySelected && 'text-primary-text font-bold',
               )}
               onClick={() => {
                 setCategory((prev) => {
@@ -34,7 +34,6 @@ const Sidebar: React.FC = () => {
               }}
             >
               {t(item.category)}
-              {isMainCategorySelected ? ' -' : ' +'}
             </h3>
             {category.category === item.category && (
               <ul className="list-none mt-2">
@@ -42,8 +41,8 @@ const Sidebar: React.FC = () => {
                   <li
                     key={subIndex}
                     className={cx(
-                      'ml-4 mt-1 hover:text-primary-blue cursor-pointer',
-                      category.subcategory === sub && 'text-primary-blue',
+                      'ml-4 mt-1 hover:text-primary-text cursor-pointer hover:underline',
+                      category.subcategory === sub && 'text-primary-text font-semibold',
                     )}
                     onClick={() => {
                       setCategory((prev) =>

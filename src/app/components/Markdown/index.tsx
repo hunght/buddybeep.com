@@ -46,7 +46,7 @@ const Markdown: FC<{ children: string }> = ({ children }) => {
     <ReactMarkdown
       remarkPlugins={[remarkMath, supersub, remarkBreaks, remarkGfm]}
       rehypePlugins={[[rehypeHighlight, { detect: true, ignoreMissing: true }]]}
-      className={`markdown-body markdown-custom-styles !text-base font-normal`}
+      className={`markdown-body markdown-custom-styles !text-base font-normal !bg-transparent`}
       linkTarget="_blank"
       components={{
         a: ({ node, ...props }) => {

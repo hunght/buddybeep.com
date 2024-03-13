@@ -22,7 +22,7 @@ function Select<T extends string>(props: Props<T>) {
           <div className="relative">
             <Listbox.Button
               className={cx(
-                'relative w-full cursor-default rounded-md bg-white pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none leading-6',
+                'relative w-full cursor-default rounded-md bg-white dark:bg-gray-800 pl-3 pr-10 text-left text-gray-900 dark:text-white shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none leading-6',
                 size === 'normal' ? 'text-sm py-1.5' : 'text-xs py-1',
                 disabled && 'cursor-not-allowed opacity-50',
               )}
@@ -41,7 +41,7 @@ function Select<T extends string>(props: Props<T>) {
             >
               <Listbox.Options
                 className={cx(
-                  'absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none',
+                  'absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white  dark:bg-gray-800 py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none',
                   size === 'normal' ? 'text-sm' : 'text-xs',
                   position === 'top' && 'bottom-full',
                 )}
@@ -51,7 +51,7 @@ function Select<T extends string>(props: Props<T>) {
                     key={option.value}
                     className={({ active }) =>
                       cx(
-                        active ? 'bg-primary-blue text-white' : 'text-[#303030]',
+                        active ? 'bg-primary-blue text-white' : 'dark:text-white',
                         'relative cursor-default select-none py-2 pl-3 pr-9',
                       )
                     }
@@ -65,7 +65,7 @@ function Select<T extends string>(props: Props<T>) {
                         {selected ? (
                           <span
                             className={cx(
-                              active ? 'text-white' : 'text-[#303030]',
+                              active ? 'text-white' : 'dark:text-white',
                               'absolute inset-y-0 right-0 flex items-center pr-4',
                             )}
                           >
