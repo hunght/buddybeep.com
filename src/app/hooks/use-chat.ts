@@ -8,7 +8,7 @@ import { ChatMessageModel } from '~types'
 import { uuid } from '~utils'
 import { ChatError } from '~utils/errors'
 import { BotId } from '../bots'
-import { allAgents } from '~app/state/agentAtom'
+import { getAllAgents } from '~app/state/agentAtom'
 
 import { buildPromptWithLang } from '~app/utils/lang'
 
@@ -88,7 +88,7 @@ export function useChat(botId: BotId, agentId: string | null) {
   )
 
   useEffect(() => {
-    const prompt = agentId ? allAgents[agentId]?.prompt : undefined
+    const prompt = agentId ? getAllAgents()[agentId]?.prompt : undefined
     if (prompt && !chatState.isSetup) {
       sendMessage(buildPromptWithLang(prompt))
       setChatState((draft) => {

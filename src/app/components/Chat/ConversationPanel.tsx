@@ -18,7 +18,7 @@ import ChatMessageInput from './ChatMessageInput'
 import ChatMessageList from './ChatMessageList'
 import ChatbotName from './ChatbotName'
 import WebAccessCheckbox from './WebAccessCheckbox'
-import { allAgents } from '~app/state/agentAtom'
+import { getAllAgents } from '~app/state/agentAtom'
 import { capitalize } from 'lodash-es'
 
 interface Props {
@@ -83,7 +83,7 @@ const ConversationPanel: FC<Props> = (props) => {
       </div>
     )
   }
-  const agent = allAgents[props.agentId ?? '']
+  const agent = getAllAgents()[props.agentId ?? '']
   const avatar = agent ? agent.avatar ?? agent.name.slice(0, 2) : botInfo.avatar
 
   return (

@@ -7,7 +7,7 @@ import Select from '../Select'
 
 import { ActionButton } from './ActionButton'
 import { useEnabledBots } from '~app/hooks/use-enabled-bots'
-import { allAgents } from '~app/state/agentAtom'
+import { getAllAgents } from '~app/state/agentAtom'
 
 export const PromptItem = (props: {
   agentId: string
@@ -26,7 +26,7 @@ export const PromptItem = (props: {
     props.copyToLocal?.(botId)
     setSaved(true)
   }, [botId, props])
-  const agent = allAgents[props.agentId]
+  const agent = getAllAgents()[props.agentId]
   return (
     <div className="group relative flex flex-col space-y-4 rounded-lg border border-primary-border bg-secondary px-5 py-4 shadow-sm transition duration-200 ease-in-out hover:border-gray-400 hover:shadow-md ">
       <div className="flex flex-row space-x-4 items-start">

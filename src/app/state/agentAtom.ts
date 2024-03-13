@@ -1,9 +1,9 @@
-import chandler_bing from '~/assets/avatar/chandler_bing.png'
-import business_conference from '~/assets/avatar/business_conference.png'
-import seo from '~/assets/avatar/seo.png'
 import jsonData from '~/assets/prompts.json'
+import vnJsonData from '~/assets/prompts.vn.json'
 import { atom } from 'jotai'
 import { agentsCategorization } from './data/categoriesData'
+import i18n from '~app/i18n'
+
 type AgentType = {
   agentId: string
   name: string
@@ -17,7 +17,41 @@ export const categoryAtom = atom<{ category: string | null; subcategory: string 
   subcategory: null,
 })
 export const searchQueryAtom = atom<string>('')
-export const allAgents: Record<string, AgentType> = jsonData as unknown as Record<string, AgentType>
+
+export const getAllAgents = (): Record<string, AgentType> => {
+  const allAgents = jsonData as unknown as Record<string, AgentType>
+  const lang = i18n.language
+  console.log(`==== lang ===`)
+  console.log(lang)
+  console.log('==== end log ===')
+
+  if (lang === 'en') {
+    return allAgents
+  }
+  let array: { agentId: string; name: string }[] = []
+
+  switch (lang) {
+    case 'vi':
+      array = vnJsonData as unknown as { agentId: string; name: string }[]
+      break
+  }
+  console.log(`==== array ===`)
+  console.log(array)
+  console.log('==== end log ===')
+
+  const result: Record<string, AgentType> = {}
+  array.forEach((agent) => {
+    result[agent.agentId] = {
+      ...allAgents[agent.agentId],
+      name: agent.name,
+    }
+  })
+  console.log(`==== result ===`)
+  console.log(result)
+  console.log('==== end log ===')
+
+  return result
+}
 
 export const agentsByCategoryAtom = atom<AgentType[]>((get) => {
   const cat = get(categoryAtom)
@@ -28,17 +62,17 @@ export const agentsByCategoryAtom = atom<AgentType[]>((get) => {
   const subcategory = cat.subcategory
   let results: AgentType[] = []
   if (category === null) {
-    results = Object.values(allAgents)
+    results = Object.values(getAllAgents())
   } else if (subcategory === null) {
     const filteredAgents = agentsCategorization.filter((agent) => agent.category === category)
 
-    results = filteredAgents.map((agent) => allAgents[agent.agentId])
+    results = filteredAgents.map((agent) => getAllAgents()[agent.agentId])
   } else {
     const filteredAgents = agentsCategorization.filter(
       (agent) => agent.category === category && agent.subCategory === subcategory,
     )
 
-    results = filteredAgents.map((agent) => allAgents[agent.agentId])
+    results = filteredAgents.map((agent) => getAllAgents()[agent.agentId])
   }
   if (searchQuery.length > 0) {
     results = results.filter(
