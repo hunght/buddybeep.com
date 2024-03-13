@@ -2,7 +2,7 @@ import { motion } from 'framer-motion'
 import { FC, ReactNode, useCallback, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import clearIcon from '~/assets/icons/clear.svg'
-import historyIcon from '~/assets/icons/history.svg'
+
 import shareIcon from '~/assets/icons/share.svg'
 import { cx } from '~/utils'
 import { CHATBOTS } from '~app/consts'
@@ -126,14 +126,6 @@ const ConversationPanel: FC<Props> = (props) => {
                 src={clearIcon}
                 className={cx('w-5 h-5', props.generating ? 'cursor-not-allowed' : 'cursor-pointer')}
                 onClick={resetConversation}
-                whileHover={{ scale: 1.1 }}
-              />
-            </Tooltip>
-            <Tooltip content={t('View history')}>
-              <motion.img
-                src={historyIcon}
-                className="w-5 h-5 cursor-pointer"
-                onClick={openHistoryDialog}
                 whileHover={{ scale: 1.1 }}
               />
             </Tooltip>

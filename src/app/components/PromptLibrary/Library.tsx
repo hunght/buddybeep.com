@@ -14,6 +14,7 @@ import Sidebar from './Sidebar'
 import { agentsByCategoryAtom, categoryAtom } from '~app/state/agentAtom'
 import { useAtom, useAtomValue } from 'jotai'
 import { SearchInput } from './SearchInput'
+import { LanguageSelection } from '~app/pages/LanguageSelection'
 
 function CommunityPrompts(props: {
   insertPrompt: ({ botId, agentId }: { botId: BotId; agentId: string | null }) => void
@@ -72,14 +73,14 @@ function CommunityPrompts(props: {
                     setCategory({ category: category.category, subcategory: null })
                   }}
                 >
-                  {category.category}
+                  {t(category.category)}
                 </h2>
               </>
             )}
             {category.subcategory && (
               <>
                 <h2 className="font-bold text-secondary-text px-4">{'/'}</h2>
-                <h2 className="font-bold text-primary-text mb-3 ">{category.subcategory}</h2>
+                <h2 className="font-bold text-primary-text mb-3 ">{t(category.subcategory)}</h2>
               </>
             )}
           </div>

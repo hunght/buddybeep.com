@@ -1,6 +1,8 @@
 // Sidebar.tsx
+import { t } from 'i18next'
 import { useAtom } from 'jotai'
 import React from 'react'
+import { LanguageSelection } from '~app/pages/LanguageSelection'
 import { categoryAtom } from '~app/state/agentAtom'
 import { Category, categories } from '~app/state/data/categoriesData'
 import { cx } from '~utils'
@@ -31,7 +33,7 @@ const Sidebar: React.FC = () => {
                 })
               }}
             >
-              {item.category}
+              {t(item.category)}
               {isMainCategorySelected ? ' -' : ' +'}
             </h3>
             {category.category === item.category && (
@@ -51,7 +53,7 @@ const Sidebar: React.FC = () => {
                       )
                     }}
                   >
-                    {sub}
+                    {t(sub)}
                   </li>
                 ))}
               </ul>
