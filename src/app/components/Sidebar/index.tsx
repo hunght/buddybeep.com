@@ -9,7 +9,6 @@ import feedbackIcon from '~/assets/icons/feedback.svg'
 import githubIcon from '~/assets/icons/github.svg'
 import settingIcon from '~/assets/icons/setting.svg'
 
-import minimalLogo from '~/assets/minimal-logo.svg'
 import logo from '~/assets/santa-logo.png'
 import { cx } from '~/utils'
 import { FaRegEdit } from 'react-icons/fa'
@@ -87,7 +86,7 @@ function Sidebar() {
       )}
     >
       <div className={cx('flex mt-8 gap-3 items-center', collapsed ? 'flex-col' : 'flex-row justify-between')}>
-        {collapsed ? <img src={minimalLogo} className="w-[30px]" /> : <img src={logo} className="w-[50px] ml-2" />}
+        {collapsed ? <img src={logo} className="w-[30px]" /> : <img src={logo} className="w-[50px] ml-2" />}
         <div className="flex flex-row justify-center items-center gap-2">
           <Tooltip content={t('Settings')}>
             <Link to="/setting">
