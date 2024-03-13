@@ -6,6 +6,7 @@ import Button from '../Button'
 import Dialog from '../Dialog'
 import MarkdownView from './MarkdownView'
 import ShareGPTView from './ShareGPTView'
+import { t } from 'i18next'
 
 interface Props {
   open: boolean
@@ -17,7 +18,7 @@ const ShareDialog = (props: Props) => {
   const [mode, setMode] = useState<'markdown' | 'sharegpt' | undefined>()
   return (
     <Dialog
-      title="Share Chat"
+      title={t('Share Chat')}
       open={props.open}
       onClose={props.onClose}
       className={cx('rounded-xl', mode ? 'w-[800px] h-[400px]' : 'w-[600px] h-[250px]')}

@@ -9,12 +9,12 @@ function randomIP() {
   return `13.${random(104, 107)}.${random(0, 255)}.${random(0, 255)}`
 }
 
-const API_ENDPOINT = 'https://www.bing.com/turing/conversation/create'
+const API_ENDPOINT = 'https://www.bing.com/turing/conversation/create?bundleVersion=1.1600.1'
 
 export async function createConversation(): Promise<ConversationResponse> {
   const headers = {
     'x-ms-client-request-id': uuid(),
-    'x-ms-useragent': 'azsdk-js-api-client-factory/1.0.0-beta.1 core-rest-pipeline/1.10.3 OS/macOS',
+    'x-ms-useragent': 'azsdk-js-api-client-factory/1.0.0-beta.1 core-rest-pipeline/1.12.3 OS/macOS',
   }
 
   let rawResponse: FetchResponse<ConversationResponse>
