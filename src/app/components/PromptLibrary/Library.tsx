@@ -62,7 +62,7 @@ function CommunityPrompts(props: {
                 setCategory({ category: null, subcategory: null })
               }}
             >
-              All
+              {t('All')}
             </h2>
             {category.category && (
               <>
@@ -106,7 +106,7 @@ function CommunityPrompts(props: {
   return (
     <>
       <div className="flex flex-row justify-between">
-        <h2 className="text-2xl font-bold text-primary-text mb-3">All</h2>
+        <h2 className="text-2xl font-bold text-primary-text mb-3">{t('All')}</h2>
         <SearchInput />
       </div>
       {/* {localPromptsQuery.data.length ? (
