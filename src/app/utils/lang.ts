@@ -6,7 +6,7 @@ export const buildPromptWithLang = (prompt: string): string => {
   console.log(lang)
   console.log('==== end log ===')
   if (lang !== 'en') {
-    return prompt + ` [lang:${lang}]`
+    return prompt + `.Pls reponse in "${lang}" language.`
   }
   return prompt
 }
