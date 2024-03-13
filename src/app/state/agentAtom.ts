@@ -1,5 +1,15 @@
 import jsonData from '~/assets/prompts.json'
 import vnJsonData from '~/assets/prompts.vn.json'
+import thJsonData from '~/assets/prompts.th.json'
+import inJsonData from '~/assets/prompts.in.json'
+import jaJsonData from '~/assets/prompts.jp.json'
+import zhJsonData from '~/assets/prompts.zh.json'
+import zhtwJsonData from '~/assets/prompts.zh-tw.json'
+import ptJsonData from '~/assets/prompts.pt.json'
+import esJsonData from '~/assets/prompts.es.json'
+import deJsonData from '~/assets/prompts.de.json'
+import frJsonData from '~/assets/prompts.fr.json'
+
 import { atom } from 'jotai'
 import { agentsCategorization } from './data/categoriesData'
 import i18n from '~app/i18n'
@@ -21,34 +31,58 @@ export const searchQueryAtom = atom<string>('')
 export const getAllAgents = (): Record<string, AgentType> => {
   const allAgents = jsonData as unknown as Record<string, AgentType>
   const lang = i18n.language
-  console.log(`==== lang ===`)
-  console.log(lang)
-  console.log('==== end log ===')
 
   if (lang === 'en') {
     return allAgents
   }
-  let array: { agentId: string; name: string }[] = []
+  let object: Record<string, string> = {}
 
   switch (lang) {
     case 'vi':
-      array = vnJsonData as unknown as { agentId: string; name: string }[]
+      object = vnJsonData as unknown as Record<string, string>
       break
+    case 'zh-CN':
+      object = zhJsonData as unknown as Record<string, string>
+      break
+    case 'zh-TW':
+      object = zhtwJsonData as unknown as Record<string, string>
+      break
+    case 'pt':
+      object = ptJsonData as unknown as Record<string, string>
+      break
+    case 'es':
+      object = esJsonData as unknown as Record<string, string>
+      break
+    case 'de':
+      object = deJsonData as unknown as Record<string, string>
+      break
+    case 'fr':
+      object = frJsonData as unknown as Record<string, string>
+      break
+    case 'ja':
+      object = jaJsonData as unknown as Record<string, string>
+      break
+    case 'th':
+      object = thJsonData as unknown as Record<string, string>
+      break
+
+    case 'in':
+      object = inJsonData as unknown as Record<string, string>
+      break
+    default:
+      return allAgents
   }
-  console.log(`==== array ===`)
-  console.log(array)
-  console.log('==== end log ===')
 
   const result: Record<string, AgentType> = {}
-  array.forEach((agent) => {
-    result[agent.agentId] = {
-      ...allAgents[agent.agentId],
-      name: agent.name,
+
+  // foreach key value of object
+
+  Object.entries(object).forEach(([key, value]) => {
+    result[key] = {
+      ...allAgents[key],
+      name: value,
     }
   })
-  console.log(`==== result ===`)
-  console.log(result)
-  console.log('==== end log ===')
 
   return result
 }

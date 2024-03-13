@@ -6,7 +6,7 @@ csv_file_path = '/Users/owner/source/extentions/chathub/tools/prompts.csv'
 json_file_path = '/Users/owner/source/extentions/chathub/src/assets/prompts.vn.json'
 
 # Initialize an empty dictionary to hold the converted data
-data = []
+data = {}
 
 with open(csv_file_path, mode='r', encoding='utf-8') as csvfile:
     csvreader = csv.reader(csvfile)
@@ -20,11 +20,7 @@ with open(csv_file_path, mode='r', encoding='utf-8') as csvfile:
         # Check if category equals subCategory, set subCategory to None if true
         subCategory = None if len(row) > 4 and (row[4].lower() == 'null' or row[3] == row[4]) else row[4]
 
-        data.append({
-            "agentId": agentId,
-            "name": row[1],     # Assuming the second column is 'name'
-            }
-        )
+        data[agentId] = row[1]
 # Write the data to a JSON file
 with open(json_file_path, mode='w', encoding='utf-8') as jsonfile:
     json.dump(data, jsonfile, indent=4)

@@ -1,670 +1,167 @@
-[
-    {
-        "agentId": "interior-decorator",
-        "name": "Interior Decorator"
-    },
-    {
-        "agentId": "smart-domain-name-generator",
-        "name": "Smart Domain Name Generator"
-    },
-    {
-        "agentId": "socrat",
-        "name": "Socrat"
-    },
-    {
-        "agentId": "socratic-method",
-        "name": "Socratic Method"
-    },
-    {
-        "agentId": "scientific-data-visualizer",
-        "name": "Scientific Data Visualizer"
-    },
-    {
-        "agentId": "classical-music-composer",
-        "name": "Classical Music Composer"
-    },
-    {
-        "agentId": "ascii-artist",
-        "name": "Ascii Artist"
-    },
-    {
-        "agentId": "svg-designer",
-        "name": "SVG designer"
-    },
-    {
-        "agentId": "stackoverflow-post",
-        "name": "StackOverflow Post"
-    },
-    {
-        "agentId": "language-detector",
-        "name": "Language Detector"
-    },
-    {
-        "agentId": "product-manager",
-        "name": "Product Manager"
-    },
-    {
-        "agentId": "novelist",
-        "name": "Novelist"
-    },
-    {
-        "agentId": "poet",
-        "name": "Poet"
-    },
-    {
-        "agentId": "motivational-speaker",
-        "name": "Motivational Speaker"
-    },
-    {
-        "agentId": "life-coach",
-        "name": "Life Coach"
-    },
-    {
-        "agentId": "career-counselor",
-        "name": "Career Counselor"
-    },
-    {
-        "agentId": "mental-health-adviser",
-        "name": "Mental Health Adviser"
-    },
-    {
-        "agentId": "doctor",
-        "name": "Doctor"
-    },
-    {
-        "agentId": "automobile-mechanic",
-        "name": "Automobile Mechanic"
-    },
-    {
-        "agentId": "self-help-book",
-        "name": "Self-Help Book"
-    },
-    {
-        "agentId": "fancy-title-generator",
-        "name": "Fancy Title Generator"
-    },
-    {
-        "agentId": "academician",
-        "name": "Academician"
-    },
-    {
-        "agentId": "journalist",
-        "name": "Journalist"
-    },
-    {
-        "agentId": "synonym-finder",
-        "name": "Synonym finder"
-    },
-    {
-        "agentId": "personal-chef",
-        "name": "Personal Chef"
-    },
-    {
-        "agentId": "legal-advisor",
-        "name": "Legal Advisor"
-    },
-    {
-        "agentId": "it-expert",
-        "name": "IT Expert"
-    },
-    {
-        "agentId": "life-coach",
-        "name": "Life Coach"
-    },
-    {
-        "agentId": "cover-letter",
-        "name": "Cover Letter"
-    },
-    {
-        "agentId": "chatgpt-prompt-generator",
-        "name": "ChatGPT prompt generator"
-    },
-    {
-        "agentId": "wikipedia-page",
-        "name": "Wikipedia page"
-    },
-    {
-        "agentId": "language-literary-critic",
-        "name": "`language` Literary Critic"
-    },
-    {
-        "agentId": "prompt-enhancer",
-        "name": "Prompt Enhancer"
-    },
-    {
-        "agentId": "advertiser",
-        "name": "Advertiser"
-    },
-    {
-        "agentId": "motivational-coach",
-        "name": "Motivational Coach"
-    },
-    {
-        "agentId": "tech-reviewer",
-        "name": "Tech Reviewer:"
-    },
-    {
-        "agentId": "tech-writer",
-        "name": "Tech Writer"
-    },
-    {
-        "agentId": "web-browser",
-        "name": "Web Browser"
-    },
-    {
-        "agentId": "commit-message-generator",
-        "name": "Commit Message Generator"
-    },
-    {
-        "agentId": "educational-content-creator",
-        "name": "Educational Content Creator"
-    },
-    {
-        "agentId": "social-media-manager",
-        "name": "Social Media Manager"
-    },
-    {
-        "agentId": "position-interviewer",
-        "name": "`position` Interviewer"
-    },
-    {
-        "agentId": "prompt-generator",
-        "name": "Prompt Generator"
-    },
-    {
-        "agentId": "historian",
-        "name": "Historian"
-    },
-    {
-        "agentId": "title-generator-for-written-pieces",
-        "name": "Title Generator for written pieces"
-    },
-    {
-        "agentId": "accountant",
-        "name": "Accountant"
-    },
-    {
-        "agentId": "statistician",
-        "name": "Statistician"
-    },
-    {
-        "agentId": "r-programming-interpreter",
-        "name": "R programming Interpreter"
-    },
-    {
-        "agentId": "solr-search-engine",
-        "name": "Solr Search Engine"
-    },
-    {
-        "agentId": "data-scientist",
-        "name": "Data Scientist"
-    },
-    {
-        "agentId": "english-translator-and-improver",
-        "name": "English Translator and Improver"
-    },
-    {
-        "agentId": "english-pronunciation-helper",
-        "name": "English Pronunciation Helper"
-    },
-    {
-        "agentId": "spoken-english-teacher-and-improver",
-        "name": "Spoken English Teacher and Improver"
-    },
-    {
-        "agentId": "plagiarism-checker",
-        "name": "Plagiarism Checker"
-    },
-    {
-        "agentId": "ai-writing-tutor",
-        "name": "AI Writing Tutor"
-    },
-    {
-        "agentId": "instructor-in-a-school",
-        "name": "Instructor in a School"
-    },
-    {
-        "agentId": "biblical-translator",
-        "name": "Biblical Translator"
-    },
-    {
-        "agentId": "new-language-creator",
-        "name": "New Language Creator"
-    },
-    {
-        "agentId": "math-teacher",
-        "name": "Math Teacher"
-    },
-    {
-        "agentId": "character-from-movie-book-anything",
-        "name": "Character from Movie/Book/Anything"
-    },
-    {
-        "agentId": "storyteller",
-        "name": "Storyteller"
-    },
-    {
-        "agentId": "football-commentator",
-        "name": "Football Commentator"
-    },
-    {
-        "agentId": "stand-up-comedian",
-        "name": "Stand-up Comedian"
-    },
-    {
-        "agentId": "debater",
-        "name": "Debater"
-    },
-    {
-        "agentId": "debate-coach",
-        "name": "Debate Coach"
-    },
-    {
-        "agentId": "movie-critic",
-        "name": "Movie Critic"
-    },
-    {
-        "agentId": "relationship-coach",
-        "name": "Relationship Coach"
-    },
-    {
-        "agentId": "rapper",
-        "name": "Rapper"
-    },
-    {
-        "agentId": "cyber-security-specialist",
-        "name": "Cyber Security Specialist"
-    },
-    {
-        "agentId": "commentariat",
-        "name": "Commentariat"
-    },
-    {
-        "agentId": "magician",
-        "name": "Magician"
-    },
-    {
-        "agentId": "pet-behaviorist",
-        "name": "Pet Behaviorist"
-    },
-    {
-        "agentId": "logistician",
-        "name": "Logistician"
-    },
-    {
-        "agentId": "ai-assisted-doctor",
-        "name": "AI Assisted Doctor"
-    },
-    {
-        "agentId": "chef",
-        "name": "Chef"
-    },
-    {
-        "agentId": "artist-advisor",
-        "name": "Artist Advisor"
-    },
-    {
-        "agentId": "tea-taster",
-        "name": "Tea-Taster"
-    },
-    {
-        "agentId": "gnomist",
-        "name": "Gnomist"
-    },
-    {
-        "agentId": "text-based-adventure-game",
-        "name": "Text Based Adventure Game"
-    },
-    {
-        "agentId": "lunatic",
-        "name": "Lunatic"
-    },
-    {
-        "agentId": "gaslighter",
-        "name": "Gaslighter"
-    },
-    {
-        "agentId": "social-media-influencer",
-        "name": "Social Media Influencer"
-    },
-    {
-        "agentId": "yogi",
-        "name": "Yogi"
-    },
-    {
-        "agentId": "elocutionist",
-        "name": "Elocutionist"
-    },
-    {
-        "agentId": "hypnotherapist",
-        "name": "Hypnotherapist"
-    },
-    {
-        "agentId": "astrologer",
-        "name": "Astrologer"
-    },
-    {
-        "agentId": "film-critic",
-        "name": "Film Critic"
-    },
-    {
-        "agentId": "digital-art-gallery-guide",
-        "name": "Digital Art Gallery Guide"
-    },
-    {
-        "agentId": "public-speaking-coach",
-        "name": "Public Speaking Coach"
-    },
-    {
-        "agentId": "makeup-artist",
-        "name": "Makeup Artist"
-    },
-    {
-        "agentId": "babysitter",
-        "name": "Babysitter"
-    },
-    {
-        "agentId": "personal-shopper",
-        "name": "Personal Shopper"
-    },
-    {
-        "agentId": "food-critic",
-        "name": "Food Critic"
-    },
-    {
-        "agentId": "virtual-doctor",
-        "name": "Virtual Doctor"
-    },
-    {
-        "agentId": "chess-player",
-        "name": "Chess Player"
-    },
-    {
-        "agentId": "midjourney-prompt-generator",
-        "name": "Midjourney Prompt Generator"
-    },
-    {
-        "agentId": "time-travel-guide",
-        "name": "Time Travel Guide"
-    },
-    {
-        "agentId": "dream-interpreter",
-        "name": "Dream Interpreter"
-    },
-    {
-        "agentId": "talent-coach",
-        "name": "Talent Coach"
-    },
-    {
-        "agentId": "emoji-translator",
-        "name": "Emoji Translator"
-    },
-    {
-        "agentId": "tic-tac-toe-game",
-        "name": "Tic-Tac-Toe Game"
-    },
-    {
-        "agentId": "startup-idea-generator",
-        "name": "Startup Idea Generator"
-    },
-    {
-        "agentId": "spongebob-s-magic-conch-shell",
-        "name": "Spongebob's Magic Conch Shell"
-    },
-    {
-        "agentId": "salesperson",
-        "name": "Salesperson"
-    },
-    {
-        "agentId": "song-recommender",
-        "name": "Song Recommender"
-    },
-    {
-        "agentId": "technology-transferer",
-        "name": "Technology Transferer"
-    },
-    {
-        "agentId": "gomoku-player",
-        "name": "Gomoku player"
-    },
-    {
-        "agentId": "friend",
-        "name": "Friend"
-    },
-    {
-        "agentId": "japanese-kanji-quiz-machine",
-        "name": "Japanese Kanji quiz machine"
-    },
-    {
-        "agentId": "league-of-legends-player",
-        "name": "League of Legends Player"
-    },
-    {
-        "agentId": "excel-sheet",
-        "name": "Excel Sheet"
-    },
-    {
-        "agentId": "personal-trainer",
-        "name": "Personal Trainer"
-    },
-    {
-        "agentId": "financial-analyst",
-        "name": "Financial Analyst"
-    },
-    {
-        "agentId": "ai-trying-to-escape-the-box",
-        "name": "AI Trying to Escape the Box"
-    },
-    {
-        "agentId": "dietitian",
-        "name": "Dietitian"
-    },
-    {
-        "agentId": "it-architect",
-        "name": "IT Architect"
-    },
-    {
-        "agentId": "fallacy-finder",
-        "name": "Fallacy Finder"
-    },
-    {
-        "agentId": "diy-expert",
-        "name": "DIY Expert"
-    },
-    {
-        "agentId": "personal-stylist",
-        "name": "Personal Stylist"
-    },
-    {
-        "agentId": "emergency-response-professional",
-        "name": "Emergency Response Professional"
-    },
-    {
-        "agentId": "chief-executive-officer",
-        "name": "Chief Executive Officer"
-    },
-    {
-        "agentId": "unconstrained-ai-model-dan",
-        "name": "Unconstrained AI model DAN"
-    },
-    {
-        "agentId": "muslim-imam",
-        "name": "Muslim imam"
-    },
-    {
-        "agentId": "philosophy-teacher",
-        "name": "Philosophy Teacher"
-    },
-    {
-        "agentId": "philosopher",
-        "name": "Philosopher"
-    },
-    {
-        "agentId": "etymologist",
-        "name": "Etymologist"
-    },
-    {
-        "agentId": "aphorism-book",
-        "name": "Aphorism Book"
-    },
-    {
-        "agentId": "journal-reviewer",
-        "name": "Journal Reviewer"
-    },
-    {
-        "agentId": "speech-language-pathologist-slp",
-        "name": "Speech-Language Pathologist (SLP)"
-    },
-    {
-        "agentId": "mathematical-history-teacher",
-        "name": "Mathematical History Teacher"
-    },
-    {
-        "agentId": "proofreader",
-        "name": "Proofreader"
-    },
-    {
-        "agentId": "drunk-person",
-        "name": "Drunk Person"
-    },
-    {
-        "agentId": "travel-guide",
-        "name": "Travel Guide"
-    },
-    {
-        "agentId": "seo-prompt",
-        "name": "SEO Prompt"
-    },
-    {
-        "agentId": "psychologist",
-        "name": "Psychologist"
-    },
-    {
-        "agentId": "dentist",
-        "name": "Dentist"
-    },
-    {
-        "agentId": "florist",
-        "name": "Florist"
-    },
-    {
-        "agentId": "buddha",
-        "name": "Buddha"
-    },
-    {
-        "agentId": "an-ethereum-developer",
-        "name": "An Ethereum Developer"
-    },
-    {
-        "agentId": "linux-terminal",
-        "name": "Linux Terminal"
-    },
-    {
-        "agentId": "javascript-console",
-        "name": "JavaScript Console"
-    },
-    {
-        "agentId": "ux-ui-developer",
-        "name": "UX/UI Developer"
-    },
-    {
-        "agentId": "web-design-consultant",
-        "name": "Web Design Consultant"
-    },
-    {
-        "agentId": "investment-manager",
-        "name": "Investment Manager"
-    },
-    {
-        "agentId": "sql-terminal",
-        "name": "SQL terminal"
-    },
-    {
-        "agentId": "essay-writer",
-        "name": "Essay Writer"
-    },
-    {
-        "agentId": "car-navigation-system",
-        "name": "Car Navigation System"
-    },
-    {
-        "agentId": "python-interpreter",
-        "name": "Python interpreter"
-    },
-    {
-        "agentId": "regex-generator",
-        "name": "Regex Generator"
-    },
-    {
-        "agentId": "php-interpreter",
-        "name": "PHP Interpreter"
-    },
-    {
-        "agentId": "fill-in-the-blank-worksheets-generator",
-        "name": "Fill in the Blank Worksheets Generator"
-    },
-    {
-        "agentId": "software-quality-assurance-tester",
-        "name": "Software Quality Assurance Tester"
-    },
-    {
-        "agentId": "password-generator",
-        "name": "Password Generator"
-    },
-    {
-        "agentId": "senior-frontend-developer",
-        "name": "Senior Frontend Developer"
-    },
-    {
-        "agentId": "diagram-generator",
-        "name": "Diagram Generator"
-    },
-    {
-        "agentId": "note-taking-assistant",
-        "name": "note-taking assistant"
-    },
-    {
-        "agentId": "cheap-travel-ticket-advisor",
-        "name": "Cheap Travel Ticket Advisor"
-    },
-    {
-        "agentId": "startup-tech-lawyer",
-        "name": "Startup Tech Lawyer"
-    },
-    {
-        "agentId": "machine-learning-engineer",
-        "name": "Machine Learning Engineer"
-    },
-    {
-        "agentId": "mathematician",
-        "name": "Mathematician"
-    },
-    {
-        "agentId": "chemical-reactor",
-        "name": "Chemical reactor"
-    },
-    {
-        "agentId": "recruiter",
-        "name": "Recruiter"
-    },
-    {
-        "agentId": "real-estate-agent",
-        "name": "Real Estate Agent"
-    },
-    {
-        "agentId": "developer-relations-consultant",
-        "name": "Developer Relations consultant"
-    },
-    {
-        "agentId": "fullstack-software-developer",
-        "name": "Fullstack Software Developer"
-    },
-    {
-        "agentId": "python-interpreter",
-        "name": "Python Interpreter"
-    },
-    {
-        "agentId": "screenwriter",
-        "name": "Screenwriter"
-    }
-]
+{
+    "interior-decorator": "Interior Decorator",
+    "smart-domain-name-generator": "Smart Domain Name Generator",
+    "socrat": "Socrat",
+    "socratic-method": "Socratic Method",
+    "scientific-data-visualizer": "Scientific Data Visualizer",
+    "classical-music-composer": "Classical Music Composer",
+    "ascii-artist": "Ascii Artist",
+    "svg-designer": "SVG designer",
+    "stackoverflow-post": "StackOverflow Post",
+    "language-detector": "Language Detector",
+    "product-manager": "Product Manager",
+    "novelist": "Novelist",
+    "poet": "Poet",
+    "motivational-speaker": "Motivational Speaker",
+    "life-coach": "Life Coach",
+    "career-counselor": "Career Counselor",
+    "mental-health-adviser": "Mental Health Adviser",
+    "doctor": "Doctor",
+    "automobile-mechanic": "Automobile Mechanic",
+    "self-help-book": "Self-Help Book",
+    "fancy-title-generator": "Fancy Title Generator",
+    "academician": "Academician",
+    "journalist": "Journalist",
+    "synonym-finder": "Synonym finder",
+    "personal-chef": "Personal Chef",
+    "legal-advisor": "Legal Advisor",
+    "it-expert": "IT Expert",
+    "cover-letter": "Cover Letter",
+    "chatgpt-prompt-generator": "ChatGPT prompt generator",
+    "wikipedia-page": "Wikipedia page",
+    "language-literary-critic": "`language` Literary Critic",
+    "prompt-enhancer": "Prompt Enhancer",
+    "advertiser": "Advertiser",
+    "motivational-coach": "Motivational Coach",
+    "tech-reviewer": "Tech Reviewer:",
+    "tech-writer": "Tech Writer",
+    "web-browser": "Web Browser",
+    "commit-message-generator": "Commit Message Generator",
+    "educational-content-creator": "Educational Content Creator",
+    "social-media-manager": "Social Media Manager",
+    "position-interviewer": "`position` Interviewer",
+    "prompt-generator": "Prompt Generator",
+    "historian": "Historian",
+    "title-generator-for-written-pieces": "Title Generator for written pieces",
+    "accountant": "Accountant",
+    "statistician": "Statistician",
+    "r-programming-interpreter": "R programming Interpreter",
+    "solr-search-engine": "Solr Search Engine",
+    "data-scientist": "Data Scientist",
+    "english-translator-and-improver": "English Translator and Improver",
+    "english-pronunciation-helper": "English Pronunciation Helper",
+    "spoken-english-teacher-and-improver": "Spoken English Teacher and Improver",
+    "plagiarism-checker": "Plagiarism Checker",
+    "ai-writing-tutor": "AI Writing Tutor",
+    "instructor-in-a-school": "Instructor in a School",
+    "biblical-translator": "Biblical Translator",
+    "new-language-creator": "New Language Creator",
+    "math-teacher": "Math Teacher",
+    "character-from-movie-book-anything": "Character from Movie/Book/Anything",
+    "storyteller": "Storyteller",
+    "football-commentator": "Football Commentator",
+    "stand-up-comedian": "Stand-up Comedian",
+    "debater": "Debater",
+    "debate-coach": "Debate Coach",
+    "movie-critic": "Movie Critic",
+    "relationship-coach": "Relationship Coach",
+    "rapper": "Rapper",
+    "cyber-security-specialist": "Cyber Security Specialist",
+    "commentariat": "Commentariat",
+    "magician": "Magician",
+    "pet-behaviorist": "Pet Behaviorist",
+    "logistician": "Logistician",
+    "ai-assisted-doctor": "AI Assisted Doctor",
+    "chef": "Chef",
+    "artist-advisor": "Artist Advisor",
+    "tea-taster": "Tea-Taster",
+    "gnomist": "Gnomist",
+    "text-based-adventure-game": "Text Based Adventure Game",
+    "lunatic": "Lunatic",
+    "gaslighter": "Gaslighter",
+    "social-media-influencer": "Social Media Influencer",
+    "yogi": "Yogi",
+    "elocutionist": "Elocutionist",
+    "hypnotherapist": "Hypnotherapist",
+    "astrologer": "Astrologer",
+    "film-critic": "Film Critic",
+    "digital-art-gallery-guide": "Digital Art Gallery Guide",
+    "public-speaking-coach": "Public Speaking Coach",
+    "makeup-artist": "Makeup Artist",
+    "babysitter": "Babysitter",
+    "personal-shopper": "Personal Shopper",
+    "food-critic": "Food Critic",
+    "virtual-doctor": "Virtual Doctor",
+    "chess-player": "Chess Player",
+    "midjourney-prompt-generator": "Midjourney Prompt Generator",
+    "time-travel-guide": "Time Travel Guide",
+    "dream-interpreter": "Dream Interpreter",
+    "talent-coach": "Talent Coach",
+    "emoji-translator": "Emoji Translator",
+    "tic-tac-toe-game": "Tic-Tac-Toe Game",
+    "startup-idea-generator": "Startup Idea Generator",
+    "spongebob-s-magic-conch-shell": "Spongebob's Magic Conch Shell",
+    "salesperson": "Salesperson",
+    "song-recommender": "Song Recommender",
+    "technology-transferer": "Technology Transferer",
+    "gomoku-player": "Gomoku player",
+    "friend": "Friend",
+    "japanese-kanji-quiz-machine": "Japanese Kanji quiz machine",
+    "league-of-legends-player": "League of Legends Player",
+    "excel-sheet": "Excel Sheet",
+    "personal-trainer": "Personal Trainer",
+    "financial-analyst": "Financial Analyst",
+    "ai-trying-to-escape-the-box": "AI Trying to Escape the Box",
+    "dietitian": "Dietitian",
+    "it-architect": "IT Architect",
+    "fallacy-finder": "Fallacy Finder",
+    "diy-expert": "DIY Expert",
+    "personal-stylist": "Personal Stylist",
+    "emergency-response-professional": "Emergency Response Professional",
+    "chief-executive-officer": "Chief Executive Officer",
+    "unconstrained-ai-model-dan": "Unconstrained AI model DAN",
+    "muslim-imam": "Muslim imam",
+    "philosophy-teacher": "Philosophy Teacher",
+    "philosopher": "Philosopher",
+    "etymologist": "Etymologist",
+    "aphorism-book": "Aphorism Book",
+    "journal-reviewer": "Journal Reviewer",
+    "speech-language-pathologist-slp": "Speech-Language Pathologist (SLP)",
+    "mathematical-history-teacher": "Mathematical History Teacher",
+    "proofreader": "Proofreader",
+    "drunk-person": "Drunk Person",
+    "travel-guide": "Travel Guide",
+    "seo-prompt": "SEO Prompt",
+    "psychologist": "Psychologist",
+    "dentist": "Dentist",
+    "florist": "Florist",
+    "buddha": "Buddha",
+    "an-ethereum-developer": "An Ethereum Developer",
+    "linux-terminal": "Linux Terminal",
+    "javascript-console": "JavaScript Console",
+    "ux-ui-developer": "UX/UI Developer",
+    "web-design-consultant": "Web Design Consultant",
+    "investment-manager": "Investment Manager",
+    "sql-terminal": "SQL terminal",
+    "essay-writer": "Essay Writer",
+    "car-navigation-system": "Car Navigation System",
+    "python-interpreter": "Python Interpreter",
+    "regex-generator": "Regex Generator",
+    "php-interpreter": "PHP Interpreter",
+    "fill-in-the-blank-worksheets-generator": "Fill in the Blank Worksheets Generator",
+    "software-quality-assurance-tester": "Software Quality Assurance Tester",
+    "password-generator": "Password Generator",
+    "senior-frontend-developer": "Senior Frontend Developer",
+    "diagram-generator": "Diagram Generator",
+    "note-taking-assistant": "note-taking assistant",
+    "cheap-travel-ticket-advisor": "Cheap Travel Ticket Advisor",
+    "startup-tech-lawyer": "Startup Tech Lawyer",
+    "machine-learning-engineer": "Machine Learning Engineer",
+    "mathematician": "Mathematician",
+    "chemical-reactor": "Chemical reactor",
+    "recruiter": "Recruiter",
+    "real-estate-agent": "Real Estate Agent",
+    "developer-relations-consultant": "Developer Relations consultant",
+    "fullstack-software-developer": "Fullstack Software Developer",
+    "screenwriter": "Screenwriter"
+}
