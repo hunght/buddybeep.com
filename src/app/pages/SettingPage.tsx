@@ -140,7 +140,7 @@ function SettingPage() {
                 )
               </p>
               <Input
-                className="w-[400px]"
+                className="w-[400px] dark:bg-gray-800 dark:text-white"
                 placeholder="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
                 value={userConfig.geminiApiKey}
                 onChange={(e) => updateConfigValue({ geminiApiKey: e.currentTarget.value })}
