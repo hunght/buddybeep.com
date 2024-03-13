@@ -1,4 +1,4 @@
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { useCallback, useEffect, useMemo } from 'react'
 import { trackEvent } from '~app/plausible'
 import { chatFamily } from '~app/state/chatFamily'
@@ -8,13 +8,13 @@ import { ChatMessageModel } from '~types'
 import { uuid } from '~utils'
 import { ChatError } from '~utils/errors'
 import { BotId } from '../bots'
-import { getAllAgents } from '~app/state/agentAtom'
+import { getAllAgentsAtom } from '~app/state/agentAtom'
 
 import { buildPromptWithLang } from '~app/utils/lang'
 
 export function useChat(botId: BotId, agentId: string | null) {
   const chatAtom = useMemo(() => chatFamily({ botId, agentId }), [botId, agentId])
-
+  const allAgents = useAtomValue(getAllAgentsAtom)
   const [chatState, setChatState] = useAtom(chatAtom)
 
   const updateMessage = useCallback(
@@ -88,7 +88,7 @@ export function useChat(botId: BotId, agentId: string | null) {
   )
 
   useEffect(() => {
-    const prompt = agentId ? getAllAgents()[agentId]?.prompt : undefined
+    const prompt = agentId ? allAgents[agentId]?.prompt : undefined
     if (prompt && !chatState.isSetup) {
       sendMessage(buildPromptWithLang(prompt))
       setChatState((draft) => {

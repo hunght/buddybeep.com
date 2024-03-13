@@ -1,7 +1,7 @@
 import i18n, { Resource } from 'i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import { initReactI18next } from 'react-i18next'
-import { getLanguage } from '~services/storage/language'
+
 import french from './locales/french.json'
 import german from './locales/german.json'
 import indonesia from './locales/indonesia.json'
@@ -12,6 +12,7 @@ import spanish from './locales/spanish.json'
 import thai from './locales/thai.json'
 import vietnamese from './locales/vietnamese.json'
 import traditionalChinese from './locales/traditional-chinese.json'
+import { LANGUAGE_KEY } from '~app/state/langAtom'
 
 const resources: Resource = {
   'zh-CN': { translation: simplifiedChinese },
@@ -32,7 +33,7 @@ i18n
   .use(initReactI18next)
   .use(LanguageDetector)
   .init({
-    lng: getLanguage(),
+    lng: localStorage.getItem(LANGUAGE_KEY) || undefined,
     fallbackLng: 'en',
     resources,
     interpolation: {

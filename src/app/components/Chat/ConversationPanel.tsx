@@ -18,8 +18,9 @@ import ChatMessageInput from './ChatMessageInput'
 import ChatMessageList from './ChatMessageList'
 import ChatbotName from './ChatbotName'
 import WebAccessCheckbox from './WebAccessCheckbox'
-import { getAllAgents } from '~app/state/agentAtom'
+import { getAllAgentsAtom } from '~app/state/agentAtom'
 import { capitalize } from 'lodash-es'
+import { useAtom, useAtomValue } from 'jotai'
 
 interface Props {
   botId: BotId
@@ -41,7 +42,7 @@ const ConversationPanel: FC<Props> = (props) => {
   const marginClass = 'mx-5'
   const [showHistory, setShowHistory] = useState(false)
   const [showShareDialog, setShowShareDialog] = useState(false)
-
+  const allAgents = useAtomValue(getAllAgentsAtom)
   const context: ConversationContextValue = useMemo(() => {
     return {
       reset: props.resetConversation,
@@ -83,7 +84,7 @@ const ConversationPanel: FC<Props> = (props) => {
       </div>
     )
   }
-  const agent = getAllAgents()[props.agentId ?? '']
+  const agent = allAgents[props.agentId ?? '']
   const avatar = agent ? agent.avatar ?? agent.name.slice(0, 2) : botInfo.avatar
 
   return (

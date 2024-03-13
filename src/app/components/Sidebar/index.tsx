@@ -28,7 +28,7 @@ import { trackEvent } from '~app/plausible'
 
 import { getBotSlug } from '~app/utils/slug'
 import { atomChatStateLocalStorage, chatStatesArrayAtomValue } from '~app/state/atomWithLocalStorage'
-import { getAllAgents } from '~app/state/agentAtom'
+import { getAllAgentsAtom } from '~app/state/agentAtom'
 import { InsertPropmtType } from '~app/types/InsertPropmtType'
 import { useEnabledBots } from '~app/hooks/use-enabled-bots'
 import { IconButton } from './IconButton'
@@ -36,7 +36,7 @@ import { IconButton } from './IconButton'
 function Sidebar() {
   const { t } = useTranslation()
   const [collapsed, setCollapsed] = useAtom(sidebarCollapsedAtom)
-
+  const allAgents = useAtomValue(getAllAgentsAtom)
   const chatStatesArray = useAtomValue(chatStatesArrayAtomValue)
 
   const [chatStateLocalStorage, setChatStateLocalStorage] = useAtom(atomChatStateLocalStorage)
@@ -125,7 +125,7 @@ function Sidebar() {
         })}
         <span>{t('Prompt bots')}</span>
         {chatStatesArray.map(({ botId, agentId, lastMessage }) => {
-          const agent = getAllAgents()[agentId ?? '']
+          const agent = allAgents[agentId ?? '']
 
           return (
             <NavLink

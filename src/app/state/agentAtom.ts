@@ -12,7 +12,8 @@ import frJsonData from '~/assets/prompts.fr.json'
 
 import { atom } from 'jotai'
 import { agentsCategorization } from './data/categoriesData'
-import i18n from '~app/i18n'
+
+import { languageAtom } from './langAtom'
 
 type AgentType = {
   agentId: string
@@ -28,9 +29,12 @@ export const categoryAtom = atom<{ category: string | null; subcategory: string 
 })
 export const searchQueryAtom = atom<string>('')
 
-export const getAllAgents = (): Record<string, AgentType> => {
+export const getAllAgentsAtom = atom<Record<string, AgentType>>((get) => {
   const allAgents = jsonData as unknown as Record<string, AgentType>
-  const lang = i18n.language
+  const lang = get(languageAtom)
+  console.log(`==== lang ===`)
+  console.log(lang)
+  console.log('==== end log ===')
 
   if (lang === 'en') {
     return allAgents
@@ -85,28 +89,28 @@ export const getAllAgents = (): Record<string, AgentType> => {
   })
 
   return result
-}
+})
 
 export const agentsByCategoryAtom = atom<AgentType[]>((get) => {
   const cat = get(categoryAtom)
 
   const searchQuery = get(searchQueryAtom)
-
+  const allAgents = get(getAllAgentsAtom)
   const category = cat.category
   const subcategory = cat.subcategory
   let results: AgentType[] = []
   if (category === null) {
-    results = Object.values(getAllAgents())
+    results = Object.values(allAgents)
   } else if (subcategory === null) {
     const filteredAgents = agentsCategorization.filter((agent) => agent.category === category)
 
-    results = filteredAgents.map((agent) => getAllAgents()[agent.agentId])
+    results = filteredAgents.map((agent) => allAgents[agent.agentId])
   } else {
     const filteredAgents = agentsCategorization.filter(
       (agent) => agent.category === category && agent.subCategory === subcategory,
     )
 
-    results = filteredAgents.map((agent) => getAllAgents()[agent.agentId])
+    results = filteredAgents.map((agent) => allAgents[agent.agentId])
   }
   if (searchQuery.length > 0) {
     results = results.filter(

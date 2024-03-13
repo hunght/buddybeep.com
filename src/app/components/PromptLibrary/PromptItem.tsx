@@ -7,7 +7,8 @@ import Select from '../Select'
 
 import { ActionButton } from './ActionButton'
 import { useEnabledBots } from '~app/hooks/use-enabled-bots'
-import { getAllAgents } from '~app/state/agentAtom'
+import { getAllAgentsAtom } from '~app/state/agentAtom'
+import { useAtomValue } from 'jotai'
 
 export const PromptItem = (props: {
   agentId: string
@@ -21,12 +22,13 @@ export const PromptItem = (props: {
   const { t } = useTranslation()
   const [saved, setSaved] = useState(false)
   const [botId, setBotId] = useState<BotId>('gemini')
+  const allAgents = useAtomValue(getAllAgentsAtom)
   const bots = useEnabledBots()
   const copyToLocal = useCallback(() => {
     props.copyToLocal?.(botId)
     setSaved(true)
   }, [botId, props])
-  const agent = getAllAgents()[props.agentId]
+  const agent = allAgents[props.agentId]
   return (
     <div className="group relative flex flex-col space-y-4 rounded-lg border border-primary-border dark:bg-gray-800 px-5 py-4 shadow-sm transition duration-200 ease-in-out hover:border-gray-400 hover:shadow-md ">
       <div className="flex flex-row space-x-4 items-start">

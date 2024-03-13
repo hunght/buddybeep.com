@@ -1,13 +1,14 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import Select from '~app/components/Select'
-import { getLanguage, setLanguage } from '~services/storage/language'
+
 import i18n, { languageCodes } from '~app/i18n'
 import { trackEvent } from '~app/plausible'
 import { t } from 'i18next'
+import { useAtom } from 'jotai'
+import { languageAtom } from '~app/state/langAtom'
 
 export const LanguageSelection: React.FunctionComponent = () => {
-  const [lang, setLang] = useState(() => getLanguage() || 'auto')
-
+  const [lang, setLang] = useAtom(languageAtom)
   const languageOptions = useMemo(() => {
     const nameGenerator = new Intl.DisplayNames('en', { type: 'language' })
     return languageCodes.map((code) => {
@@ -25,7 +26,7 @@ export const LanguageSelection: React.FunctionComponent = () => {
   const onLanguageChange = useCallback(
     (lang: string) => {
       setLang(lang)
-      setLanguage(lang === 'auto' ? undefined : lang)
+
       i18n.changeLanguage(lang === 'auto' ? undefined : lang)
 
       trackEvent('change_language', { lang })
@@ -35,7 +36,7 @@ export const LanguageSelection: React.FunctionComponent = () => {
   return (
     <Select
       options={[{ name: t('Auto'), value: 'auto' }, { name: 'English', value: 'en' }, ...languageOptions]}
-      value={lang}
+      value={lang ?? 'auto'}
       onChange={onLanguageChange}
     />
   )
