@@ -8,7 +8,7 @@ import {
 } from '@tanstack/react-router'
 import { BotId } from './bots'
 import Layout from './components/Layout'
-import MultiBotChatPanel from './pages/MultiBotChatPanel'
+
 import PremiumPage from './pages/PremiumPage'
 import SettingPage from './pages/SettingPage'
 import SingleBotChatPanel from './pages/SingleBotChatPanel'

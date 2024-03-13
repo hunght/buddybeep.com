@@ -1,7 +1,9 @@
 import { Dialog as HeadlessDialog, Transition } from '@headlessui/react'
+import { t } from 'i18next'
 import { FC, Fragment, PropsWithChildren } from 'react'
 import closeIcon from '~/assets/icons/close.svg'
 import { cx } from '~/utils'
+import { LanguageSelection } from '~app/pages/LanguageSelection'
 
 interface Props {
   title?: string
@@ -51,11 +53,19 @@ const Dialog: FC<PropsWithChildren<Props>> = (props) => {
                 >
                   <span className="ml-auto" />
                   <span className="font-bold text-primary-text text-base">{props.title}</span>
-                  <img src={closeIcon} className="w-4 h-4 ml-auto mr-[10px] cursor-pointer" onClick={props.onClose} />
+                  <div className=" ml-auto mr-[10px] flex flex-row items-center gap-2">
+                    <p className="font-bold text-sm text-center">{t('Language')}</p>
+                    <div className="w-40">
+                      <LanguageSelection />
+                    </div>
+
+                    <img src={closeIcon} className="w-4 h-4 cursor-pointer ml-4" onClick={props.onClose} />
+                  </div>
                 </HeadlessDialog.Title>
               ) : (
                 <HeadlessDialog.Title></HeadlessDialog.Title>
               )}
+
               {props.children}
             </HeadlessDialog.Panel>
           </Transition.Child>

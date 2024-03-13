@@ -10,6 +10,8 @@ import { ChatError } from '~utils/errors'
 import { BotId } from '../bots'
 import { allAgents } from '~app/state/agentAtom'
 
+import { buildPromptWithLang } from '~app/utils/lang'
+
 export function useChat(botId: BotId, agentId: string | null) {
   const chatAtom = useMemo(() => chatFamily({ botId, agentId }), [botId, agentId])
 
@@ -84,10 +86,11 @@ export function useChat(botId: BotId, agentId: string | null) {
     },
     [botId, chatState.bot, setChatState, updateMessage],
   )
+
   useEffect(() => {
     const prompt = agentId ? allAgents[agentId]?.prompt : undefined
     if (prompt && !chatState.isSetup) {
-      sendMessage(prompt)
+      sendMessage(buildPromptWithLang(prompt))
       setChatState((draft) => {
         draft.isSetup = true
       })

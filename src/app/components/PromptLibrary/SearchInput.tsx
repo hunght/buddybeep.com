@@ -4,6 +4,7 @@ import { debounce } from 'lodash'
 import closeIcon from '~/assets/icons/close.svg'
 import { useAtom } from 'jotai'
 import { searchQueryAtom } from '~app/state/agentAtom'
+import { t } from 'i18next'
 export const SearchInput: React.FC = () => {
   const [query, setQuery] = useState('')
   const [, setSearchQuery] = useAtom(searchQueryAtom)
@@ -40,7 +41,7 @@ export const SearchInput: React.FC = () => {
           type="text"
           value={query}
           onChange={handleInputChange}
-          placeholder="Search Prompts"
+          placeholder={t('Search Prompts')}
           className="w-full bg-transparent"
         />
         {query ? (
@@ -53,7 +54,7 @@ export const SearchInput: React.FC = () => {
         type="submit"
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
       >
-        Search
+        {t('Search')}
       </button>
     </form>
   )
