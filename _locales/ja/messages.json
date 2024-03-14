@@ -1,8 +1,8 @@
 {
   "appName": {
-    "message": "BuddyBeep - オールインワンチャットボットクライアント"
+    "message": "BubbyBeep: あなたのAI探索コンパニオン"
   },
   "appDesc": {
-    "message": "ChatGPT、Bing、Gemini、およびClaudeを一つのプラットフォームで使用します"
+    "message": "AIによる要約、ビデオの洞察、キュレーションされたプロンプトライブラリ、カスタマイズ可能なクエリ、およびトップAIモデルとのダイレクトチャットでWebブラウジングを強化します。"
   }
 }
