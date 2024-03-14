@@ -162,7 +162,23 @@ function SettingPage() {
               </div>
             </div>
           </ChatBotSettingPanel>
-          {/* <ChatBotSettingPanel title="Perplexity">
+          {/* <ChatBotSettingPanel title="Claude">
+            <RadioGroup
+              options={Object.entries(ClaudeMode).map(([k, v]) => ({ label: `${k} ${t('Mode')}`, value: v }))}
+              value={userConfig.claudeMode}
+              onChange={(v) => updateConfigValue({ claudeMode: v as ClaudeMode })}
+            />
+            {userConfig.claudeMode === ClaudeMode.API ? (
+              <ClaudeAPISettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
+            ) : userConfig.claudeMode === ClaudeMode.Webapp ? (
+              <ClaudeWebappSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
+            ) : userConfig.claudeMode === ClaudeMode.OpenRouter ? (
+              <ClaudeOpenRouterSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
+            ) : (
+              <ClaudePoeSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
+            )}
+          </ChatBotSettingPanel>
+          <ChatBotSettingPanel title="Perplexity">
             <RadioGroup
               options={Object.entries(PerplexityMode).map(([k, v]) => ({ label: `${k} ${t('Mode')}`, value: v }))}
               value={userConfig.perplexityMode}

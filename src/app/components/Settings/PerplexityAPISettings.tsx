@@ -27,7 +27,7 @@ const PerplexityAPISettings: FC<Props> = ({ userConfig, updateConfigValue }) => 
           )
         </p>
         <Input
-          className="w-[300px]"
+          className="w-[300px] dark:bg-gray-800 dark:text-white"
           placeholder="pplx-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
           value={userConfig.perplexityApiKey}
           onChange={(e) => updateConfigValue({ perplexityApiKey: e.currentTarget.value })}

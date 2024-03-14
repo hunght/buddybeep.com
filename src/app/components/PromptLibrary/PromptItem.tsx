@@ -36,7 +36,7 @@ export const PromptItem = (props: {
           {agent?.avatar ? (
             <img src={agent.avatar} className="w-24 h-24 rounded-full object-cover" />
           ) : (
-            <div className="w-24 h-24  object-cover bg-primary-background rounded-full flex justify-center items-center">
+            <div className="w-24 h-24  object-cover bg-secondary rounded-full flex justify-center items-center">
               <span className="text-primary-text text-4xl font-bold">{agent?.name?.slice(0, 2)}</span>
             </div>
           )}

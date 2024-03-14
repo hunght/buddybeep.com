@@ -22,6 +22,7 @@ const ClaudeOpenRouterSettings: FC<Props> = ({ userConfig, updateConfigValue }) 
           )
         </p>
         <Input
+          className=" dark:bg-gray-800 dark:text-white"
           placeholder="sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
           value={userConfig.openrouterApiKey}
           onChange={(e) => updateConfigValue({ openrouterApiKey: e.currentTarget.value })}
