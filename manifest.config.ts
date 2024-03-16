@@ -29,11 +29,15 @@ export default defineManifest(async () => {
       'https://*.claude.ai/',
     ],
     optional_host_permissions: ['https://*/*', 'wss://*/*'],
-    permissions: ['storage', 'unlimitedStorage', 'sidePanel', 'declarativeNetRequestWithHostAccess', 'scripting'],
+    permissions: ['storage', 'unlimitedStorage', 'declarativeNetRequestWithHostAccess', 'scripting'],
     content_scripts: [
       {
         matches: ['https://chat.openai.com/*'],
         js: ['src/content-script/chatgpt-inpage-proxy.ts'],
+      },
+      {
+        matches: ['https://*/*'],
+        js: ['src/content-script/index.tsx'],
       },
     ],
     commands: {
@@ -47,9 +51,7 @@ export default defineManifest(async () => {
         description: 'Open BuddyBeep app',
       },
     },
-    side_panel: {
-      default_path: 'sidepanel.html',
-    },
+
     declarative_net_request: {
       rule_resources: [
         {
