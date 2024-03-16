@@ -4,18 +4,6 @@ import { createRoot } from 'react-dom/client'
 import GoogleSidebar from './side-bar/google-sidebar'
 import injectedStyle from './side-bar/google-sidebar.css?inline'
 
-// const container = document.createElement('div')
-// const shadowRoot = container.attachShadow({ mode: 'open' })
-
-// // Create a style element and inject the CSS
-// const style = document.createElement('style')
-// style.textContent = css
-// shadowRoot.appendChild(style)
-
-// const root = createRoot(shadowRoot)
-// root.render(<GoogleSidebar />)
-// document.body.appendChild(container)
-
 const root = document.createElement('div')
 root.id = 'plasmo-google-sidebar'
 
