@@ -39,8 +39,14 @@ Browser.commands.onCommand.addListener(async (command) => {
   }
 })
 
-Browser.runtime.onMessage.addListener(async (message, sender) => {
+Browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
   console.debug('onMessage', message, sender)
+
+  if (message.action === 'openSidePanel') {
+    const tabId = sender.tab?.id
+
+    chrome.sidePanel.open({ tabId })
+  }
   if (message.target !== 'background') {
     return
   }

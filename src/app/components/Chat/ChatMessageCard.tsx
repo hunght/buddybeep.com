@@ -20,7 +20,7 @@ const ChatMessageCard: FC<Props> = ({ message, className, avatar }) => {
   const [copied, setCopied] = useState(false)
 
   const imageUrl = useMemo(() => {
-    return message.image ? URL.createObjectURL(message.image) : ''
+    // return message.image ? URL.createObjectURL(message.image) : ''
   }, [message.image])
 
   const copyText = useMemo(() => {

@@ -11,34 +11,25 @@ import { trackEvent } from './plausible'
 import './base.scss'
 import './sidepanel.css'
 
-function PremiumOnly() {
-  const { t } = useTranslation()
-
-  const openPremiumPage = useCallback(() => {
-    trackEvent('open_premium_from_sidepanel')
-    window.open(Browser.runtime.getURL('app.html#/premium?source=sidepanel'), '_blank')
-  }, [])
-
-  return (
-    <div className="w-full h-full flex flex-col justify-center items-center gap-3">
-      <img src={premiumIcon} className="w-10 h-10" />
-      <div className="text-xl font-bold">{t('Premium Feature')}</div>
-      <Button text={t('Upgrade to unlock')} color="primary" onClick={openPremiumPage} />
-    </div>
-  )
-}
-
 function SidePanelApp() {
-  const premiumState = usePremium()
-  if (premiumState.isLoading) {
-    return null
-  }
-  if (premiumState.activated) {
-    return <SidePanelPage />
-  }
-  return <PremiumOnly />
+  return <SidePanelPage />
 }
 
 const container = document.getElementById('app')!
 const root = createRoot(container)
 root.render(<SidePanelApp />)
+let port
+
+// Listen for incoming connections
+chrome.runtime.onConnect.addListener((connectedPort) => {
+  if (connectedPort.name === 'contentScriptToSidePanel') {
+    port = connectedPort
+
+    // Listen for messages from the content script
+    port.onMessage.addListener((data) => {
+      // Handle the received data here
+      console.log('Received data from content script:', data)
+      // Update the side panel UI or perform other operations with the data
+    })
+  }
+})

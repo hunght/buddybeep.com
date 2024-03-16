@@ -29,7 +29,10 @@ export default defineManifest(async () => {
       'https://*.claude.ai/',
     ],
     optional_host_permissions: ['https://*/*', 'wss://*/*'],
-    permissions: ['storage', 'unlimitedStorage', 'declarativeNetRequestWithHostAccess', 'scripting'],
+    permissions: ['storage', 'unlimitedStorage', 'declarativeNetRequestWithHostAccess', 'sidePanel', 'scripting'],
+    side_panel: {
+      default_path: 'sidepanel.html',
+    },
     content_scripts: [
       {
         matches: ['https://chat.openai.com/*'],

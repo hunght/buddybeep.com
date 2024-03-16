@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import './google-sidebar-base.css'
 
 import { getDocumentTextFromDOM } from '~content-script/helper/dom'
+const port = chrome.runtime.connect(undefined, { name: 'contentScriptToSidePanel' })
 
 // Inject into the ShadowDOM
 
@@ -14,9 +15,6 @@ const GoogleSidebar: React.FC = () => {
     document.body.classList.toggle('plasmo-google-sidebar-show', !isOpen)
   }, [isOpen])
 
-  useEffect(() => {
-    const text = getDocumentTextFromDOM()
-  }, [])
   const isPrintLayout = document.body.id === 'print-layout'
   if (isPrintLayout) {
     return <div />
@@ -42,7 +40,16 @@ const GoogleSidebar: React.FC = () => {
             style={{ cursor: 'pointer' }}
             type="button"
             className="sidebar-toggle"
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={async () => {
+              const respone = await chrome.runtime.sendMessage({ action: 'openSidePanel' })
+
+              // Send data to the side panel
+              const dataToSend = {
+                /* your data here */
+                text: getDocumentTextFromDOM(),
+              }
+              port.postMessage(dataToSend)
+            }}
           >
             {isOpen ? '🟡 Đóng' : '🟣 Mở'}
           </button>
