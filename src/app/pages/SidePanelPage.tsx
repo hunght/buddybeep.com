@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import clearIcon from '~/assets/icons/clear.svg'
 import { cx } from '~/utils'
@@ -10,13 +10,24 @@ import ChatbotName from '~app/components/Chat/ChatbotName'
 import { CHATBOTS } from '~app/consts'
 import { ConversationContext, ConversationContextValue } from '~app/context'
 import { useChat } from '~app/hooks/use-chat'
-import { sidePanelBotAtom } from '~app/state'
+import { sidePanelBotAtom, sidePanelSummaryAtom } from '~app/state/sidePanelAtom'
+import { LanguageSelection } from './LanguageSelection'
 
 function SidePanelPage() {
   const { t } = useTranslation()
   const [botId, setBotId] = useAtom(sidePanelBotAtom)
+  const [summaryText, setSummaryText] = useAtom(sidePanelSummaryAtom)
   const botInfo = CHATBOTS[botId]
   const chat = useChat(botId, null)
+
+  useEffect(() => {
+    chrome.storage.local.get('sidePanelSummaryAtom').then((data) => {
+      if (data.sidePanelSummaryAtom) {
+        setSummaryText(data.sidePanelSummaryAtom)
+        chrome.storage.local.set({ sidePanelSummaryAtom: null })
+      }
+    })
+  }, [])
 
   const onSubmit = useCallback(
     async (input: string) => {
@@ -24,6 +35,12 @@ function SidePanelPage() {
     },
     [chat],
   )
+  useEffect(() => {
+    if (summaryText) {
+      chat.sendMessage(summaryText)
+      setSummaryText(null)
+    }
+  }, [chat, setSummaryText, summaryText])
 
   const resetConversation = useCallback(() => {
     if (!chat.generating) {
@@ -45,6 +62,7 @@ function SidePanelPage() {
             <img src={botInfo.avatar} className="w-4 h-4 object-contain rounded-full" />
             <ChatbotName botId={botId} name={botInfo.name} onSwitchBot={setBotId} />
           </div>
+          {/* <LanguageSelection /> */}
           <div className="flex flex-row items-center gap-3">
             <img
               src={clearIcon}
@@ -53,7 +71,7 @@ function SidePanelPage() {
             />
           </div>
         </div>
-        <ChatMessageList botId={botId} messages={chat.messages} className="mx-3" />
+        <ChatMessageList avatar={botInfo.avatar} botId={botId} messages={chat.messages} className="mx-3" />
         <div className="flex flex-col mx-3 my-3 gap-3">
           <hr className="grow border-primary-border" />
           <ChatMessageInput

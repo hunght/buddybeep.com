@@ -3,6 +3,8 @@ import { ALL_IN_ONE_PAGE_ID } from '~app/consts'
 import { getUserConfig } from '~services/user-config'
 import { trackInstallSource } from './source'
 import { readTwitterCsrfToken } from './twitter-cookie'
+import { myAtomStore } from '~app/state/store'
+import { sidePanelSummaryAtom } from '~app/state/sidePanelAtom'
 
 // expose storage.session to content scripts
 // using `chrome.*` API because `setAccessLevel` is not supported by `Browser.*` API
@@ -44,8 +46,12 @@ Browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   if (message.action === 'openSidePanel') {
     const tabId = sender.tab?.id
-
-    chrome.sidePanel.open({ tabId })
+    if (tabId) {
+      chrome.sidePanel.open({ tabId })
+      chrome.tabs.sendMessage(tabId, { type: 'sidePanelOpened', text: message.text })
+      myAtomStore.set(sidePanelSummaryAtom, message.text)
+      Browser.storage.local.set({ sidePanelSummaryAtom: message.text })
+    }
   }
   if (message.target !== 'background') {
     return

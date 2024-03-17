@@ -1,6 +1,6 @@
 import { atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
-import { BotId } from '~app/bots'
+
 import { FeatureId } from '~app/components/Premium/FeatureList'
 
 import { getDefaultThemeColor } from '~app/utils/color-scheme'
@@ -11,7 +11,7 @@ export const licenseKeyAtom = atomWithStorage('licenseKey', '', undefined, { get
 export const sidebarCollapsedAtom = atomWithStorage('sidebarCollapsed', false, undefined, { getOnInit: true })
 export const themeColorAtom = atomWithStorage('themeColor', getDefaultThemeColor())
 export const followArcThemeAtom = atomWithStorage('followArcTheme', false)
-export const sidePanelBotAtom = atomWithStorage<BotId>('sidePanelBot', 'chatgpt')
+
 export const showDiscountModalAtom = atom<false | true | Campaign>(false)
 export const showPremiumModalAtom = atom<false | true | FeatureId>(false)
 export const releaseNotesAtom = atom<string[]>([])

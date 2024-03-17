@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import './google-sidebar-base.css'
 
 import { getDocumentTextFromDOM } from '~content-script/helper/dom'
-const port = chrome.runtime.connect(undefined, { name: 'contentScriptToSidePanel' })
 
 // Inject into the ShadowDOM
 
@@ -41,17 +40,13 @@ const GoogleSidebar: React.FC = () => {
             type="button"
             className="sidebar-toggle"
             onClick={async () => {
-              const respone = await chrome.runtime.sendMessage({ action: 'openSidePanel' })
-
-              // Send data to the side panel
-              const dataToSend = {
-                /* your data here */
+              const respone = await chrome.runtime.sendMessage({
+                action: 'openSidePanel',
                 text: getDocumentTextFromDOM(),
-              }
-              port.postMessage(dataToSend)
+              })
             }}
           >
-            {isOpen ? '🟡 Đóng' : '🟣 Mở'}
+            {isOpen ? 'Sum' : '🟣 Mở'}
           </button>
         </div>
       </div>
