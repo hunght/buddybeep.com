@@ -40,7 +40,7 @@ export default defineManifest(async () => {
       },
       {
         matches: ['https://*/*'],
-        js: ['src/content-script/index.tsx'],
+        js: ['src/content-script/side-bar/index.tsx'],
       },
     ],
     commands: {
