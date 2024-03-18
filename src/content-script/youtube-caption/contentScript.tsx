@@ -18,7 +18,7 @@ import { convertIntToHms, getTYCurrentTime, getTYEndTime, pauseVideoToggle } fro
 import { getLangOptionsWithLink, getRawTranscript } from './helper/transcript'
 import { copyTranscriptAndPrompt } from './helper/youtube'
 import type { LangOption, TranscriptItem } from './type'
-
+import './base.css'
 export const ContentScript: React.FC = () => {
   const videoId = getSearchParam(window.location.href).v
   const documentTitle = document.title
@@ -75,6 +75,10 @@ export const ContentScript: React.FC = () => {
       style={{
         zIndex: 2147483647,
         position: 'relative',
+        backgroundColor: '#1b141d',
+        width: '420px',
+        height: open ? '28rem' : '4rem',
+        borderRadius: '1rem',
       }}
     >
       <div
@@ -83,35 +87,35 @@ export const ContentScript: React.FC = () => {
           position: 'absolute',
           top: '0px',
           left: '0px',
+          borderRadius: '1rem',
+          overflow: 'hidden',
         }}
       >
-        <Collapsible className="block w-full rounded z-10 bg-primary-blue" open={open} onOpenChange={setOpen}>
-          <div className="flex justify-between items-center text-white py-2 px-4 rounded">
-            Transcript & Learn new word
+        <Collapsible className="block w-full rounded z-10 bg-primary-background" open={open} onOpenChange={setOpen}>
+          <div className="flex self-end items-center text-white py-2 px-4 rounded w-full">
+            <img src={chrome.runtime.getURL('src/assets/icon.png')} style={{ width: 25, height: 25 }} />
+            <h1 className="text-lg font-bold line-clamp-1 ">Transcripts: {documentTitle}</h1>
             <div className="flex justify-between items-center gap-2 px-4 py-1">
-              <Tooltip text="Show full transcript of the video">
+              <Tooltip text="Summary video with BuddyBeep">
                 <button
-                  className="px-4 items-center justify-center py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
+                  className="px-4 items-center justify-center py-2 bg-indigo-500  hover:bg-blue-700 text-white font-bold rounded"
                   onClick={() => {
-                    setTab('transcipt')
-                    setOpen(true)
+                    const prompt = copyTranscriptAndPrompt(transcriptHTML, documentTitle)
+                    chrome.runtime.sendMessage({
+                      action: 'openSidePanel',
+                      content: prompt,
+                      link: window.location.href,
+                      title: document.title,
+                      type: 'summary-youtube-videos',
+                    })
                   }}
                 >
-                  <DocumentTextIcon className="h-6 w-6" />
+                  <div className="flex flex-row ">
+                    Summary <DocumentTextIcon className="h-6 w-6" />
+                  </div>
                 </button>
               </Tooltip>
 
-              <Tooltip text="Copy transcipt to clipboard and You can paste to ChatGPT to summary">
-                <button
-                  className="px-4 items-center justify-center py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
-                  onClick={() => {
-                    const prompt = copyTranscriptAndPrompt(transcriptHTML, documentTitle)
-                    copyTextToClipboard(prompt)
-                  }}
-                >
-                  <ClipboardDocumentIcon className="h-6 w-6" />
-                </button>
-              </Tooltip>
               <Tooltip text="Jump to current time">
                 <button
                   className="px-4 items-center justify-center py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
@@ -144,7 +148,7 @@ export const ContentScript: React.FC = () => {
               </Tooltip>
               <Tooltip text="Collap or Expand View">
                 <button
-                  className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
+                  className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded dark:bg-gray-900"
                   onClick={() => {
                     setOpen(!open)
                   }}
@@ -170,7 +174,7 @@ export const ContentScript: React.FC = () => {
             </div>
           )}
 
-          <CollapsibleContent className="bg-red-300 overflow-scroll h-96">
+          <CollapsibleContent className="overflow-scroll h-96 bg-white text-primary-text rounded-lg">
             {transcriptHTML.length > 0 && <Transcript videoId={videoId} transcriptHTML={transcriptHTML} />}
           </CollapsibleContent>
         </Collapsible>

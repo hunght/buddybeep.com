@@ -9,11 +9,7 @@ import { waitForElm } from './helper/transcipt'
 const root = document.createElement('div')
 root.id = 'plasmo-inline-example-unique-id'
 
-const rootIntoShadow = document.createElement('div')
-rootIntoShadow.id = 'shadow-root'
-
 const shadowRoot = root.attachShadow({ mode: 'open' })
-shadowRoot.appendChild(rootIntoShadow)
 
 /** Inject styles into shadow dom */
 const styleElement = document.createElement('style')
@@ -30,7 +26,7 @@ shadowRoot.appendChild(styleElement)
 waitForElm('#secondary.style-scope.ytd-watch-flexy')
   .then((element) => {
     element?.insertAdjacentElement('afterbegin', root)
-    createRoot(rootIntoShadow).render(<ContentScript />)
+    createRoot(shadowRoot).render(<ContentScript />)
   })
   .catch((error) => {
     console.error('Error fetching data:', error)

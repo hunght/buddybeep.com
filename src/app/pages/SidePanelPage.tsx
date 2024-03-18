@@ -19,8 +19,10 @@ function SidePanelPage() {
   const { t } = useTranslation()
   const [botId, setBotId] = useAtom(sidePanelBotAtom)
   const [summaryText, setSummaryText] = useAtom(sidePanelSummaryAtom)
+
   const botInfo = CHATBOTS[botId]
-  const agentId = 'summary-web-content'
+  const agentId = summaryText?.type ?? 'summary-web-content'
+
   const chat = useChat(botId, agentId)
   const allAgents = useAtomValue(getAllAgentsAtom)
   const agent = allAgents[agentId]
@@ -40,9 +42,9 @@ function SidePanelPage() {
     [chat],
   )
   useEffect(() => {
-    if (summaryText) {
+    if (summaryText?.content) {
       chat.sendMessage(summaryText.content, undefined, { link: summaryText.link, title: summaryText.title })
-      setSummaryText(null)
+      setSummaryText((prev) => (!prev ? null : { ...prev, content: null }))
     }
   }, [chat, setSummaryText, summaryText])
 

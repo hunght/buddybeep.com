@@ -72,6 +72,7 @@ const GoogleSidebar: React.FC = () => {
                     content: getDocumentTextFromDOM(),
                     link: window.location.href,
                     title: document.title,
+                    type: 'summary-web-content',
                   })
                   console.log(`==== window.location.href ===`)
                   console.log(window.location.href)
