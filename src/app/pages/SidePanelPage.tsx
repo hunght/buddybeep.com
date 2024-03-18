@@ -40,7 +40,7 @@ function SidePanelPage() {
   )
   useEffect(() => {
     if (summaryText) {
-      chat.sendMessage(summaryText)
+      chat.sendMessage(summaryText.content, undefined, { link: summaryText.link, title: summaryText.title })
       setSummaryText(null)
     }
   }, [chat, setSummaryText, summaryText])

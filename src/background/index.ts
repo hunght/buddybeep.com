@@ -48,9 +48,8 @@ Browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     const tabId = sender.tab?.id
     if (tabId) {
       chrome.sidePanel.open({ tabId })
-      chrome.tabs.sendMessage(tabId, { type: 'sidePanelOpened', text: message.text })
-      myAtomStore.set(sidePanelSummaryAtom, message.text)
-      Browser.storage.local.set({ sidePanelSummaryAtom: message.text })
+      myAtomStore.set(sidePanelSummaryAtom, message)
+      Browser.storage.local.set({ sidePanelSummaryAtom: message })
     }
   }
   if (message.target !== 'background') {

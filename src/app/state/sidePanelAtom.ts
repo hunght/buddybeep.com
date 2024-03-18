@@ -4,4 +4,4 @@ import { BotId } from '~app/bots'
 
 export const sidePanelBotAtom = atomWithStorage<BotId>('sidePanelBot', 'gemini')
 
-export const sidePanelSummaryAtom = atom<string | null>(null)
+export const sidePanelSummaryAtom = atom<{ content: string; link: string; title: string } | null>(null)

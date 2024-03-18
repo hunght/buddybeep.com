@@ -23,6 +23,10 @@ root.render(
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'openSidePanel') {
-    myAtomStore.set(sidePanelSummaryAtom, request.text)
+    console.log(`==== request ===`)
+    console.log(request)
+    console.log('==== end log ===')
+
+    myAtomStore.set(sidePanelSummaryAtom, { content: request.content, link: request.link, title: request.title })
   }
 })

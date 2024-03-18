@@ -30,13 +30,13 @@ export function useChat(botId: BotId, agentId: string | null) {
   )
 
   const sendMessage = useCallback(
-    async (input: string, image?: File) => {
+    async (input: string, image?: File, summary?: { link: string; title: string }): Promise<void> => {
       trackEvent('send_message', { botId, withImage: !!image, name: chatState.bot.name })
 
       const botMessageId = uuid()
       setChatState((draft) => {
         draft.messages.push(
-          { id: uuid(), text: input, image, author: 'user' },
+          { id: uuid(), text: summary ? `${summary.title}[${summary.link}]` : input, image, author: 'user' },
           { id: botMessageId, text: '', author: botId },
         )
       })

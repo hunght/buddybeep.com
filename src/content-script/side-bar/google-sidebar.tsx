@@ -69,8 +69,13 @@ const GoogleSidebar: React.FC = () => {
                 onClick={async () => {
                   await chrome.runtime.sendMessage({
                     action: 'openSidePanel',
-                    text: getDocumentTextFromDOM(),
+                    content: getDocumentTextFromDOM(),
+                    link: window.location.href,
+                    title: document.title,
                   })
+                  console.log(`==== window.location.href ===`)
+                  console.log(window.location.href)
+                  console.log('==== end log ===')
                 }}
               >
                 <div
