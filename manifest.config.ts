@@ -42,6 +42,10 @@ export default defineManifest(async () => {
         matches: ['https://*/*'],
         js: ['src/content-script/side-bar/index.tsx'],
       },
+      {
+        matches: ['https://www.youtube.com/*'],
+        js: ['src/content-script/youtube-caption/index.tsx'],
+      },
     ],
     commands: {
       'open-app': {
