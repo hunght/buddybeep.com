@@ -10,10 +10,6 @@ import { getDocumentTextFromDOM } from '~content-script/helper/dom'
 const GoogleSidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true)
 
-  useEffect(() => {
-    document.body.classList.toggle('plasmo-google-sidebar-show', !isOpen)
-  }, [isOpen])
-
   const isPrintLayout = document.body.id === 'print-layout'
   if (isPrintLayout) {
     return <div />
@@ -34,20 +30,66 @@ const GoogleSidebar: React.FC = () => {
           left: '0px',
         }}
       >
-        <div id="sidebar" className={isOpen ? 'open' : 'closed'}>
-          <button
-            style={{ cursor: 'pointer' }}
-            type="button"
-            className="sidebar-toggle"
-            onClick={async () => {
-              const respone = await chrome.runtime.sendMessage({
-                action: 'openSidePanel',
-                text: getDocumentTextFromDOM(),
-              })
-            }}
-          >
-            {isOpen ? 'Sum' : '🟣 Mở'}
-          </button>
+        <div id="sidebar">
+          {isOpen && (
+            <div className="sidebar-toggle">
+              <span
+                style={{
+                  color: 'white',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  transition: 'color 0.3s',
+                  backgroundColor: 'rgba(0, 0, 0,0.5)',
+                  position: 'absolute',
+                  top: '-7px',
+                  left: '-7px',
+                  borderRadius: '50%',
+                  width: '15px',
+                  height: '15px',
+                  alignItems: 'center',
+                  alignContent: 'center',
+                  textAlign: 'center',
+                }}
+                onClick={() => {
+                  setIsOpen(false)
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = 'rgb(255, 192, 203)' // Pink color on hover
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = 'white' // Reset to white
+                }}
+              >
+                X
+              </span>
+              <button
+                style={{ cursor: 'pointer', padding: 0 }}
+                type="button"
+                onClick={async () => {
+                  await chrome.runtime.sendMessage({
+                    action: 'openSidePanel',
+                    text: getDocumentTextFromDOM(),
+                  })
+                }}
+              >
+                <div
+                  style={{
+                    backgroundColor: 'rgb(99, 102, 241)',
+                    alignItems: 'center',
+                    textAlign: 'center',
+                    justifyContent: 'center',
+                    display: 'flex',
+                    padding: '0px 5px',
+                    flexDirection: 'row',
+                    gap: '5px',
+                  }}
+                >
+                  <span style={{ color: 'white' }}>BuddyBeep</span>
+                  <img src={chrome.runtime.getURL('src/assets/icon.png')} style={{ width: 25, height: 25 }} />
+                </div>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

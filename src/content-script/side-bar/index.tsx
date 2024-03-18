@@ -1,8 +1,9 @@
 import React from 'react'
 
 import { createRoot } from 'react-dom/client'
-import GoogleSidebar from './side-bar/google-sidebar'
-import injectedStyle from './side-bar/google-sidebar.css?inline'
+
+import injectedStyle from './google-sidebar.css?inline'
+import GoogleSidebar from './google-sidebar'
 
 const root = document.createElement('div')
 root.id = 'plasmo-google-sidebar'
