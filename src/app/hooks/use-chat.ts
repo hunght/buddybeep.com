@@ -95,7 +95,7 @@ export function useChat(botId: BotId, agentId: string | null) {
         draft.isSetup = true
       })
     }
-  }, [agentId, chatState.isSetup, sendMessage, setChatState])
+  }, [agentId, allAgents, chatState.isSetup, sendMessage, setChatState])
 
   const resetConversation = useCallback(() => {
     chatState.bot.resetConversation()

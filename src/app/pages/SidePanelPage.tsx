@@ -1,4 +1,4 @@
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import clearIcon from '~/assets/icons/clear.svg'
@@ -12,14 +12,17 @@ import { ConversationContext, ConversationContextValue } from '~app/context'
 import { useChat } from '~app/hooks/use-chat'
 import { sidePanelBotAtom, sidePanelSummaryAtom } from '~app/state/sidePanelAtom'
 import { LanguageSelection } from './LanguageSelection'
+import { getAllAgentsAtom } from '~app/state/agentAtom'
 
 function SidePanelPage() {
   const { t } = useTranslation()
   const [botId, setBotId] = useAtom(sidePanelBotAtom)
   const [summaryText, setSummaryText] = useAtom(sidePanelSummaryAtom)
   const botInfo = CHATBOTS[botId]
-  const chat = useChat(botId, null)
-
+  const agentId = 'summary-web-content'
+  const chat = useChat(botId, agentId)
+  const allAgents = useAtomValue(getAllAgentsAtom)
+  const agent = allAgents[agentId]
   useEffect(() => {
     chrome.storage.local.get('sidePanelSummaryAtom').then((data) => {
       if (data.sidePanelSummaryAtom) {
@@ -63,6 +66,7 @@ function SidePanelPage() {
             <ChatbotName botId={botId} name={botInfo.name} onSwitchBot={setBotId} />
           </div>
           {/* <LanguageSelection /> */}
+          {agent && <span className="text-primary-text">{agent.name}</span>}
           <div className="flex flex-row items-center gap-3">
             <img
               src={clearIcon}

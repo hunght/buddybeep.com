@@ -20,7 +20,7 @@ import ChatbotName from './ChatbotName'
 import WebAccessCheckbox from './WebAccessCheckbox'
 import { getAllAgentsAtom } from '~app/state/agentAtom'
 import { capitalize } from 'lodash-es'
-import { useAtom, useAtomValue } from 'jotai'
+import { useAtomValue } from 'jotai'
 
 interface Props {
   botId: BotId
@@ -61,11 +61,6 @@ const ConversationPanel: FC<Props> = (props) => {
       props.resetConversation()
     }
   }, [props])
-
-  const openHistoryDialog = useCallback(() => {
-    setShowHistory(true)
-    trackEvent('open_history_dialog', { botId: props.botId })
-  }, [props.botId])
 
   const openShareDialog = useCallback(() => {
     setShowShareDialog(true)

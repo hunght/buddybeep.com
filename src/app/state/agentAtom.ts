@@ -32,9 +32,6 @@ export const searchQueryAtom = atom<string>('')
 export const getAllAgentsAtom = atom<Record<string, AgentType>>((get) => {
   const allAgents = jsonData as unknown as Record<string, AgentType>
   const lang = get(languageAtom)
-  console.log(`==== lang ===`)
-  console.log(lang)
-  console.log('==== end log ===')
 
   if (lang === 'en') {
     return allAgents
@@ -81,10 +78,10 @@ export const getAllAgentsAtom = atom<Record<string, AgentType>>((get) => {
 
   // foreach key value of object
 
-  Object.entries(object).forEach(([key, value]) => {
+  Object.entries(allAgents).forEach(([key, value]) => {
     result[key] = {
-      ...allAgents[key],
-      name: value,
+      ...value,
+      name: object[key],
     }
   })
 
