@@ -87,7 +87,12 @@ export function useChat(botId: BotId, agentId: string | null) {
     [botId, chatState.bot, setChatState, updateMessage],
   )
 
+  // send the prompt to the bot when the agent is set
   useEffect(() => {
+    if (agentId === 'summary-web-content') {
+      // don't send prompt to summary-web-content agent
+      return
+    }
     const prompt = agentId ? allAgents[agentId]?.prompt : undefined
     if (prompt && !chatState.isSetup) {
       sendMessage(buildPromptWithLang(prompt))

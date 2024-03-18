@@ -52,6 +52,9 @@ Browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
       Browser.storage.local.set({ sidePanelSummaryAtom: message })
     }
   }
+  if (message.action === 'openMainApp') {
+    openAppPage()
+  }
   if (message.target !== 'background') {
     return
   }

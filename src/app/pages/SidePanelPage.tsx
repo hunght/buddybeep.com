@@ -13,6 +13,7 @@ import { useChat } from '~app/hooks/use-chat'
 import { sidePanelBotAtom, sidePanelSummaryAtom } from '~app/state/sidePanelAtom'
 import { LanguageSelection } from './LanguageSelection'
 import { getAllAgentsAtom } from '~app/state/agentAtom'
+import logo from '~/assets/santa-logo.png'
 
 function SidePanelPage() {
   const { t } = useTranslation()
@@ -61,12 +62,22 @@ function SidePanelPage() {
     <ConversationContext.Provider value={context}>
       <div className="flex flex-col overflow-hidden bg-primary-background h-full">
         <div className="border-b border-solid border-primary-border flex flex-row items-center justify-between gap-2 py-3 mx-3">
+          <img
+            src={logo}
+            className="w-[30px] cursor-pointer"
+            onClick={() => {
+              chrome.runtime.sendMessage({
+                action: 'openMainApp',
+              })
+            }}
+          />
+
+          {/* <LanguageSelection /> */}
+          {agent && <span className="text-primary-text">{agent.name}</span>}
           <div className="flex flex-row items-center gap-2">
             <img src={botInfo.avatar} className="w-4 h-4 object-contain rounded-full" />
             <ChatbotName botId={botId} name={botInfo.name} onSwitchBot={setBotId} />
           </div>
-          {/* <LanguageSelection /> */}
-          {agent && <span className="text-primary-text">{agent.name}</span>}
           <div className="flex flex-row items-center gap-3">
             <img
               src={clearIcon}
