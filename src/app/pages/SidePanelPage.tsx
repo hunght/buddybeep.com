@@ -88,7 +88,7 @@ function SidePanelPage() {
             />
           </div>
         </div>
-        <ChatMessageList avatar={botInfo.avatar} botId={botId} messages={chat.messages} className="mx-3" />
+        <ChatMessageList avatar={null} botId={botId} messages={chat.messages} className="mx-3" />
         <div className="flex flex-col mx-3 my-3 gap-3">
           <hr className="grow border-primary-border" />
           <ChatMessageInput

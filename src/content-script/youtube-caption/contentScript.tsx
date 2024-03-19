@@ -2,36 +2,47 @@ import {
   ArrowDownOnSquareStackIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-  ClipboardDocumentIcon,
   DocumentTextIcon,
   PlayPauseIcon,
 } from '@heroicons/react/24/outline'
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@radix-ui/react-collapsible'
-import React, { useEffect, useRef, useState } from 'react'
+import { Collapsible, CollapsibleContent } from '@radix-ui/react-collapsible'
+import React, { useEffect, useState } from 'react'
 
 import { Tooltip } from './component/Tooltip'
 import { Transcript } from './component/Transcript'
-import { copyTextToClipboard } from './helper/copy'
+
 import { getElementById } from './helper/htmlSelector'
-import { getSearchParam } from './helper/searchParam'
-import { convertIntToHms, getTYCurrentTime, getTYEndTime, pauseVideoToggle } from './helper/transcipt'
+
+import { getTYCurrentTime, pauseVideoToggle } from './helper/transcipt'
 import { getLangOptionsWithLink, getRawTranscript } from './helper/transcript'
 import { copyTranscriptAndPrompt } from './helper/youtube'
 import type { LangOption, TranscriptItem } from './type'
-import './base.css'
+
+import { useTranslation } from 'react-i18next'
+import { useAtomValue } from 'jotai'
+import { youtubeVideoDataAtom } from '~app/state/youtubeAtom'
+
 export const ContentScript: React.FC = () => {
-  const videoId = getSearchParam(window.location.href).v
-  const documentTitle = document.title
+  const youtubeVideoData = useAtomValue(youtubeVideoDataAtom)
+  const videoId = youtubeVideoData?.url
+
   const [transcriptHTML, setTranscriptHTML] = useState<TranscriptItem[]>([])
-  const [tab, setTab] = useState<'transcipt' | 'summary'>('transcipt')
+
   const [open, setOpen] = React.useState(true)
   const [langOptions, setLangOptions] = useState<LangOption[]>([])
   const [currentLangOption, setCurrentLangOption] = useState<LangOption>()
+  const { t } = useTranslation()
+  console.log(`==== videoId ===`)
+  console.log(videoId)
+  console.log('==== end log ===')
 
   // make useEffect to get langOptions  when videoId changes
   useEffect(() => {
     async function fetchTranscript() {
       try {
+        if (!videoId) {
+          return
+        }
         // Get Transcript Language Options & Create Language Select Btns
         const langOptionsWithLink = await getLangOptionsWithLink(videoId)
         if (!langOptionsWithLink) {
@@ -70,6 +81,9 @@ export const ContentScript: React.FC = () => {
     fetchTranscript()
   }, [currentLangOption])
 
+  if (!videoId) {
+    return <div></div>
+  }
   return (
     <div
       style={{
@@ -89,18 +103,31 @@ export const ContentScript: React.FC = () => {
           left: '0px',
           borderRadius: '1rem',
           overflow: 'hidden',
+          width: '420px',
         }}
       >
-        <Collapsible className="block w-full rounded z-10 bg-primary-background" open={open} onOpenChange={setOpen}>
-          <div className="flex self-end items-center text-white py-2 px-4 rounded w-full">
-            <img src={chrome.runtime.getURL('src/assets/icon.png')} style={{ width: 25, height: 25 }} />
-            <h1 className="text-lg font-bold line-clamp-1 ">Transcripts: {documentTitle}</h1>
+        <Collapsible
+          className="w-full rounded z-10 bg-primary-background flex flex-col"
+          open={open}
+          onOpenChange={setOpen}
+        >
+          <div className="flex items-center flex-1 text-white py-2 px-4 rounded w-full">
+            <img
+              src={chrome.runtime.getURL('src/assets/icon.png')}
+              style={{ width: 25, height: 25, cursor: 'pointer' }}
+              onClick={() => {
+                chrome.runtime.sendMessage({
+                  action: 'openMainApp',
+                })
+              }}
+            />
+            <div className="text-lg font-bold px-1 flex-1">{t('Transcripts')} </div>
             <div className="flex justify-between items-center gap-2 px-4 py-1">
               <Tooltip text="Summary video with BuddyBeep">
                 <button
-                  className="px-4 items-center justify-center py-2 bg-indigo-500  hover:bg-blue-700 text-white font-bold rounded"
+                  className="px-4 items-center justify-center py-2 bg-indigo-500  hover:bg-blue-700 text-white font-bold rounded-xl"
                   onClick={() => {
-                    const prompt = copyTranscriptAndPrompt(transcriptHTML, documentTitle)
+                    const prompt = copyTranscriptAndPrompt(transcriptHTML, document.title)
                     chrome.runtime.sendMessage({
                       action: 'openSidePanel',
                       content: prompt,
@@ -111,14 +138,14 @@ export const ContentScript: React.FC = () => {
                   }}
                 >
                   <div className="flex flex-row ">
-                    Summary <DocumentTextIcon className="h-6 w-6" />
+                    {t('Summary')} <DocumentTextIcon className="h-6 w-6" />
                   </div>
                 </button>
               </Tooltip>
 
               <Tooltip text="Jump to current time">
                 <button
-                  className="px-4 items-center justify-center py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
+                  className="px-4 items-center justify-center py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-xl"
                   onClick={() => {
                     if (!open) {
                       setOpen(true)
@@ -138,7 +165,7 @@ export const ContentScript: React.FC = () => {
               </Tooltip>
               <Tooltip text="Play or Pause Video">
                 <button
-                  className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
+                  className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-xl"
                   onClick={() => {
                     pauseVideoToggle()
                   }}
@@ -148,7 +175,7 @@ export const ContentScript: React.FC = () => {
               </Tooltip>
               <Tooltip text="Collap or Expand View">
                 <button
-                  className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded dark:bg-gray-900"
+                  className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-xl dark:bg-gray-900"
                   onClick={() => {
                     setOpen(!open)
                   }}
@@ -175,7 +202,7 @@ export const ContentScript: React.FC = () => {
           )}
 
           <CollapsibleContent className="overflow-scroll h-96 bg-white text-primary-text rounded-lg">
-            {transcriptHTML.length > 0 && <Transcript videoId={videoId} transcriptHTML={transcriptHTML} />}
+            {transcriptHTML.length > 0 && videoId && <Transcript videoId={videoId} transcriptHTML={transcriptHTML} />}
           </CollapsibleContent>
         </Collapsible>
       </div>

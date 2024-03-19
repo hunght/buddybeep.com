@@ -1,109 +1,96 @@
 export function getSummaryPrompt(transcript: any, documentTitle: string) {
-  return `Title: "${documentTitle
+  return `Title: "${documentTitle.replace(/\n+/g, ' ').trim()}"\nVideo Transcript: "${truncateTranscript(transcript)
     .replace(/\n+/g, ' ')
-    .trim()}"\nVideo Transcript: "${truncateTranscript(transcript)
-    .replace(/\n+/g, ' ')
-    .trim()}"\nVideo Summary:`;
+    .trim()}"\nVideo Summary:`
 }
 
 // Seems like 15,000 bytes is the limit for the prompt
-const limit = 14000; // 1000 is a buffer
+const limit = 14000 // 1000 is a buffer
 
 type TextData = {
-  text: string;
-  index: number;
-};
+  text: string
+  index: number
+}
 
-export function getChunckedTranscripts(
-  textData: TextData[],
-  textDataOriginal: TextData[]
-): string {
+export function getChunckedTranscripts(textData: TextData[], textDataOriginal: TextData[]): string {
   // [Thought Process]
   // (1) If text is longer than limit, then split it into chunks (even numbered chunks)
   // (2) Repeat until it's under limit
   // (3) Then, try to fill the remaining space with some text
   // (eg. 15,000 => 7,500 is too much chuncked, so fill the rest with some text)
 
-  let result = '';
+  let result = ''
   const text = textData
     .sort((a: { index: number }, b: { index: number }) => a.index - b.index)
     .map((t: { text: any }) => t.text)
-    .join(' ');
+    .join(' ')
 
-  const bytes = textToBinaryString(text).length;
+  const bytes = textToBinaryString(text).length
 
   if (bytes > limit) {
     // Get only even numbered chunks from textArr
-    const evenTextData = textData.filter((t: any, i: number) => i % 2 === 0);
-    result = getChunckedTranscripts(evenTextData, textDataOriginal);
+    const evenTextData = textData.filter((t: any, i: number) => i % 2 === 0)
+    result = getChunckedTranscripts(evenTextData, textDataOriginal)
   } else {
     // Check if any array items can be added to result to make it under limit but really close to it
     if (textDataOriginal.length !== textData.length) {
       textDataOriginal.forEach((obj, i: number) => {
         if (textData.some((t: { text: any }) => t.text === obj.text)) {
-          return;
+          return
         }
 
-        textData.push(obj);
+        textData.push(obj)
 
         const newText = textData
-          .sort(
-            (a: { index: number }, b: { index: number }) => a.index - b.index
-          )
+          .sort((a: { index: number }, b: { index: number }) => a.index - b.index)
           .map((t: { text: any }) => t.text)
-          .join(' ');
-        const newBytes = textToBinaryString(newText).length;
+          .join(' ')
+        const newBytes = textToBinaryString(newText).length
 
         if (newBytes < limit) {
-          const nextText = textDataOriginal[i + 1];
-          const nextTextBytes = textToBinaryString(nextText.text).length;
+          const nextText = textDataOriginal[i + 1]
+          const nextTextBytes = textToBinaryString(nextText.text).length
 
           if (newBytes + nextTextBytes > limit) {
-            const overRate = (newBytes + nextTextBytes - limit) / nextTextBytes;
-            const chunkedText = nextText.text.substring(
-              0,
-              Math.floor(nextText.text.length * overRate)
-            );
-            textData.push({ text: chunkedText, index: nextText.index });
+            const overRate = (newBytes + nextTextBytes - limit) / nextTextBytes
+            const chunkedText = nextText.text.substring(0, Math.floor(nextText.text.length * overRate))
+            textData.push({ text: chunkedText, index: nextText.index })
             result = textData
-              .sort(
-                (a: { index: number }, b: { index: number }) =>
-                  a.index - b.index
-              )
+              .sort((a: { index: number }, b: { index: number }) => a.index - b.index)
               .map((t: { text: any }) => t.text)
-              .join(' ');
+              .join(' ')
           } else {
-            result = newText;
+            result = newText
           }
         }
-      });
+      })
     } else {
-      result = text;
+      result = text
     }
   }
 
   const originalText = textDataOriginal
     .sort((a: { index: number }, b: { index: number }) => a.index - b.index)
     .map((t: { text: any }) => t.text)
-    .join(' ');
-  return result === '' ? originalText : result; // Just in case the result is empty
+    .join(' ')
+  return result === '' ? originalText : result // Just in case the result is empty
 }
 
 function truncateTranscript(str: string): string {
-  const bytes = textToBinaryString(str).length;
+  const bytes = textToBinaryString(str).length
   if (bytes > limit) {
-    const ratio = limit / bytes;
-    const newStr = str.substring(0, str.length * ratio);
-    return newStr;
+    const ratio = limit / bytes
+    const newStr = str.substring(0, str.length * ratio)
+    return newStr
   }
-  return str;
+  return str
 }
 
 function textToBinaryString(str: string) {
-  let escstr = decodeURIComponent(encodeURIComponent(escape(str)));
-  let binstr = escstr.replace(/%([0-9A-F]{2})/gi, function (match, hex) {
-    let i = parseInt(hex, 16);
-    return String.fromCharCode(i);
-  });
-  return binstr;
+  const escstr = decodeURIComponent(encodeURIComponent(escape(str)))
+  const binstr = escstr.replace(/%([0-9A-F]{2})/gi, function (match, hex) {
+    const i = parseInt(hex, 16)
+    return String.fromCharCode(i)
+  })
+  return binstr
 }

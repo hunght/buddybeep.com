@@ -1,14 +1,10 @@
-import he from "he"
-import { DOMParser } from "xmldom"
+import he from 'he'
+import { DOMParser } from 'xmldom'
 
-import type { LangOption, TranscriptItem } from "../type"
+import type { LangOption, TranscriptItem } from '../type'
 
-export async function getLangOptionsWithLink(
-  videoId: string
-): Promise<LangOption[] | undefined> {
-  const videoPageResponse = await fetch(
-    `https://www.youtube.com/watch?v=${videoId}`
-  )
+export async function getLangOptionsWithLink(videoId: string): Promise<LangOption[] | undefined> {
+  const videoPageResponse = await fetch(`https://www.youtube.com/watch?v=${videoId}`)
   const videoPageHtml = await videoPageResponse.text()
   const splittedHtml = videoPageHtml.split('"captions":')
 
@@ -16,35 +12,26 @@ export async function getLangOptionsWithLink(
     return
   }
 
-  const captions_json: any = JSON.parse(
-    splittedHtml[1].split(',"videoDetails')[0].replace("\n", "")
-  )
-  const captionTracks =
-    captions_json.playerCaptionsTracklistRenderer.captionTracks
-  const languageOptions = Array.from(captionTracks).map(
-    (i: any) => i.name.simpleText
-  )
+  const captions_json: any = JSON.parse(splittedHtml[1].split(',"videoDetails')[0].replace('\n', ''))
+  const captionTracks = captions_json.playerCaptionsTracklistRenderer.captionTracks
+  const languageOptions = Array.from(captionTracks).map((i: any) => i.name.simpleText)
 
-  const first = "English"
-  languageOptions.sort((x, y) =>
-    x.includes(first) ? -1 : y.includes(first) ? 1 : 0
-  )
+  const first = 'English'
+  languageOptions.sort((x, y) => (x.includes(first) ? -1 : y.includes(first) ? 1 : 0))
   languageOptions.sort((x, y) => (x === first ? -1 : y === first ? 1 : 0))
 
   return Array.from(languageOptions).map((langName, index) => {
-    const link = captionTracks.find(
-      (i: any) => i.name.simpleText === langName
-    ).baseUrl
+    const link = captionTracks.find((i: any) => i.name.simpleText === langName).baseUrl
     return {
       language: langName,
-      link: link
+      link: link,
     }
   })
 }
 
 export async function getTranscript(langOption: LangOption): Promise<string> {
   const rawTranscript = await getRawTranscript(langOption.link)
-  const transcript = rawTranscript.map((item) => item.text).join(" ")
+  const transcript = rawTranscript.map((item) => item.text).join(' ')
   return transcript
 }
 
@@ -72,7 +59,7 @@ function parseNode(node) {
           obj[child.nodeName] = parseNode(child)
         }
       } else if (child.nodeType === 3 && child.nodeValue.trim()) {
-        obj["text"] = child.nodeValue.trim()
+        obj['text'] = child.nodeValue.trim()
       }
     }
   }
@@ -81,14 +68,12 @@ function parseNode(node) {
 }
 function parseXML(xmlString): any {
   const parser = new DOMParser()
-  const xmlDoc = parser.parseFromString(xmlString, "text/xml")
+  const xmlDoc = parser.parseFromString(xmlString, 'text/xml')
   const json = parseNode(xmlDoc.documentElement)
   return json
 }
 
-export async function getRawTranscript(
-  link: string
-): Promise<TranscriptItem[]> {
+export async function getRawTranscript(link: string): Promise<TranscriptItem[]> {
   // Get Transcript
   const transcriptPageResponse = await fetch(link) // default 0
   const transcriptPageXml = await transcriptPageResponse.text()
@@ -100,7 +85,7 @@ export async function getRawTranscript(
     return {
       start: i.start,
       duration: i.dur,
-      text: he.decode(i.text)
+      text: he.decode(i.text),
     }
   })
 }

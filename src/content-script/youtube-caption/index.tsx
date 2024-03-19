@@ -5,7 +5,11 @@ import { createRoot } from 'react-dom/client'
 import injectedStyle from './style.css?inline'
 import { ContentScript } from './contentScript'
 import { waitForElm } from './helper/transcipt'
-
+import { Provider } from 'jotai'
+import { myAtomStore } from '~app/state/store'
+import { youtubeVideoDataAtom } from '~app/state/youtubeAtom'
+import { getSearchParam } from './helper/searchParam'
+import './base.css'
 const root = document.createElement('div')
 root.id = 'plasmo-inline-example-unique-id'
 
@@ -26,11 +30,42 @@ shadowRoot.appendChild(styleElement)
 waitForElm('#secondary.style-scope.ytd-watch-flexy')
   .then((element) => {
     element?.insertAdjacentElement('afterbegin', root)
-    createRoot(shadowRoot).render(<ContentScript />)
+    createRoot(shadowRoot).render(
+      <Provider store={myAtomStore}>
+        <ContentScript />
+      </Provider>,
+    )
   })
   .catch((error) => {
     console.error('Error fetching data:', error)
   })
-  .finally(() => {
-    console.log('finally')
+  .finally(() => {})
+
+const observeUrlChange = () => {
+  let oldHref = document.location.href
+
+  const url = getSearchParam(oldHref).v
+  const title = document.title
+  console.log(`==== oldHref ===`)
+  console.log(url)
+  console.log(oldHref)
+  console.log('==== end log ===')
+
+  myAtomStore.set(youtubeVideoDataAtom, { url, title: title })
+  const observer = new MutationObserver((mutations) => {
+    if (oldHref !== document.location.href) {
+      oldHref = document.location.href
+      /* Changed ! your code here */
+      const url = getSearchParam(oldHref).v
+      const title = document.title
+      console.log(`==== MutationObserver oldHref ===`)
+      console.log(url)
+      console.log(oldHref)
+      console.log('==== end log ===')
+      myAtomStore.set(youtubeVideoDataAtom, { url, title: title })
+    }
   })
+
+  observer.observe(document.body, { childList: true, subtree: true })
+}
+window.addEventListener('load', observeUrlChange, false)

@@ -63,9 +63,30 @@ const GoogleSidebar: React.FC = () => {
               >
                 X
               </span>
-              <button
-                style={{ cursor: 'pointer', padding: 0 }}
-                type="button"
+
+              <div
+                onMouseEnter={(e) => {
+                  // change to indigo color
+
+                  e.currentTarget.style.backgroundColor = '#4B0082' // Pink color on hover
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'rgb(99, 102, 241)' // Reset to white
+                }}
+                style={{
+                  backgroundColor: 'rgb(99, 102, 241)',
+
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  justifyContent: 'center',
+                  display: 'flex',
+                  padding: '4px 8px',
+                  flexDirection: 'row',
+                  gap: '5px',
+                  borderRadius: '24px',
+                  boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)',
+                  cursor: 'pointer',
+                }}
                 onClick={async () => {
                   await chrome.runtime.sendMessage({
                     action: 'openSidePanel',
@@ -74,27 +95,11 @@ const GoogleSidebar: React.FC = () => {
                     title: document.title,
                     type: 'summary-web-content',
                   })
-                  console.log(`==== window.location.href ===`)
-                  console.log(window.location.href)
-                  console.log('==== end log ===')
                 }}
               >
-                <div
-                  style={{
-                    backgroundColor: 'rgb(99, 102, 241)',
-                    alignItems: 'center',
-                    textAlign: 'center',
-                    justifyContent: 'center',
-                    display: 'flex',
-                    padding: '0px 5px',
-                    flexDirection: 'row',
-                    gap: '5px',
-                  }}
-                >
-                  <span style={{ color: 'white' }}>Sum</span>
-                  <img src={chrome.runtime.getURL('src/assets/icon.png')} style={{ width: 25, height: 25 }} />
-                </div>
-              </button>
+                <span style={{ color: 'white' }}>Sum</span>
+                <img src={chrome.runtime.getURL('src/assets/icon.png')} style={{ width: 25, height: 25 }} />
+              </div>
             </div>
           )}
         </div>

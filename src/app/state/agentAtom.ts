@@ -81,7 +81,7 @@ export const getAllAgentsAtom = atom<Record<string, AgentType>>((get) => {
   Object.entries(allAgents).forEach(([key, value]) => {
     result[key] = {
       ...value,
-      name: object[key],
+      name: object[key] ?? value.name,
     }
   })
 
@@ -112,8 +112,8 @@ export const agentsByCategoryAtom = atom<AgentType[]>((get) => {
   if (searchQuery.length > 0) {
     results = results.filter(
       (agent) =>
-        agent.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        agent.prompt.toLowerCase().includes(searchQuery.toLowerCase()),
+        agent.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        agent.prompt?.toLowerCase().includes(searchQuery.toLowerCase()),
     )
   }
   return results
