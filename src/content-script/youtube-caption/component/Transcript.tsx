@@ -66,10 +66,17 @@ export const Transcript: React.FC<Props> = ({ transcriptHTML, videoId }) => {
               transcriptItem?.start === obj.start && 'bg-gray-200',
             )}
           >
-            <div className="text-2xl">{obj.text}</div>
+            <div className="text-2xl">
+              <span className="font-thin text-lg">{convertToTime(obj.start)}</span>
+              {': '}
+              {obj.text}
+            </div>
           </li>
         )
       })}
     </ul>
   )
+}
+function convertToTime(start: string): string {
+  return convertIntToHms(Number(start))
 }

@@ -32,9 +32,6 @@ export const ContentScript: React.FC = () => {
   const [langOptions, setLangOptions] = useState<LangOption[]>([])
   const [currentLangOption, setCurrentLangOption] = useState<LangOption>()
   const { t } = useTranslation()
-  console.log(`==== videoId ===`)
-  console.log(videoId)
-  console.log('==== end log ===')
 
   // make useEffect to get langOptions  when videoId changes
   useEffect(() => {

@@ -1,7 +1,7 @@
 export function getSummaryPrompt(transcript: any, documentTitle: string) {
   return `Title: "${documentTitle.replace(/\n+/g, ' ').trim()}"\nVideo Transcript: "${truncateTranscript(transcript)
     .replace(/\n+/g, ' ')
-    .trim()}"\nVideo Summary:`
+    .trim()}"\n Please Summary key points of the video.`
 }
 
 // Seems like 15,000 bytes is the limit for the prompt

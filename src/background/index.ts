@@ -10,12 +10,16 @@ import { sidePanelSummaryAtom } from '~app/state/sidePanelAtom'
 // using `chrome.*` API because `setAccessLevel` is not supported by `Browser.*` API
 chrome.storage.session.setAccessLevel({ accessLevel: 'TRUSTED_AND_UNTRUSTED_CONTEXTS' })
 
-async function openAppPage() {
+async function openAppPage({ agentId, botId }: { agentId?: string; botId?: string } = {}) {
   const tabs = await Browser.tabs.query({})
-  const url = Browser.runtime.getURL('app.html')
+  const url = Browser.runtime.getURL('app.html') + (agentId ? `#/chat-agent/${agentId}/${botId}` : '')
   const tab = tabs.find((tab) => tab.url?.startsWith(url))
   if (tab) {
     await Browser.tabs.update(tab.id, { active: true })
+    return
+  }
+  if (agentId && botId) {
+    await Browser.tabs.create({ url })
     return
   }
   const { startupPage } = await getUserConfig()
@@ -53,7 +57,7 @@ Browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     }
   }
   if (message.action === 'openMainApp') {
-    openAppPage()
+    openAppPage({ agentId: message.agentId, botId: message.botId })
   }
   if (message.target !== 'background') {
     return
