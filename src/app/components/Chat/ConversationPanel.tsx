@@ -21,6 +21,7 @@ import WebAccessCheckbox from './WebAccessCheckbox'
 import { getAllAgentsAtom } from '~app/state/agentAtom'
 import { capitalize } from 'lodash-es'
 import { useAtomValue } from 'jotai'
+import { agentIcons } from '../AgentIcons'
 
 interface Props {
   botId: BotId
@@ -80,7 +81,8 @@ const ConversationPanel: FC<Props> = (props) => {
     )
   }
   const agent = allAgents[props.agentId ?? '']
-  const avatar = agent ? agent.avatar ?? agent.name.slice(0, 2) : botInfo.avatar
+  const agentIcon = agentIcons[props.agentId ?? '']
+  const avatar = agent ? agentIcon ?? agent.avatar ?? agent.name.slice(0, 2) : botInfo.avatar
 
   return (
     <ConversationContext.Provider value={context}>
@@ -94,8 +96,10 @@ const ConversationPanel: FC<Props> = (props) => {
           {agent ? (
             <div className="flex flex-row items-center gap-1">
               <div>
-                {agent.avatar ? (
-                  <img src={agent.avatar} className="w-10 h-10" />
+                {agentIcon ? (
+                  <div className="w-10 h-10 text-2xl text-center items-center justify-center bg-secondary flex rounded-full">
+                    {agentIcon}
+                  </div>
                 ) : (
                   <div className="w-10 h-10 bg-secondary rounded-full flex justify-center items-center">
                     <span className="text-primary-text text-lg font-bold">{agent.name.slice(0, 2)}</span>

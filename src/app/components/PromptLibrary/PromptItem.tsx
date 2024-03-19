@@ -9,6 +9,7 @@ import { ActionButton } from './ActionButton'
 import { useEnabledBots } from '~app/hooks/use-enabled-bots'
 import { getAllAgentsAtom } from '~app/state/agentAtom'
 import { useAtomValue } from 'jotai'
+import { agentIcons } from '../AgentIcons'
 
 export const PromptItem = (props: {
   agentId: string
@@ -24,6 +25,7 @@ export const PromptItem = (props: {
   const [botId, setBotId] = useState<BotId>('gemini')
   const allAgents = useAtomValue(getAllAgentsAtom)
   const bots = useEnabledBots()
+  const agentIcon = agentIcons[props.agentId]
   const copyToLocal = useCallback(() => {
     props.copyToLocal?.(botId)
     setSaved(true)
@@ -33,8 +35,10 @@ export const PromptItem = (props: {
     <div className="group relative flex flex-col space-y-4 rounded-lg border border-primary-border dark:bg-gray-800 px-5 py-4 shadow-sm transition duration-200 ease-in-out hover:border-gray-400 hover:shadow-md ">
       <div className="flex flex-row space-x-4 items-start">
         <div>
-          {agent?.avatar ? (
-            <img src={agent.avatar} className="w-24 h-24 rounded-full object-cover" />
+          {agentIcon ? (
+            <div className="w-24 h-24 text-5xl text-center items-center justify-center bg-secondary flex rounded-full">
+              {agentIcon}
+            </div>
           ) : (
             <div className="w-24 h-24  object-cover bg-secondary rounded-full flex justify-center items-center">
               <span className="text-primary-text text-4xl font-bold">{agent?.name?.slice(0, 2)}</span>

@@ -4,6 +4,7 @@ import { cx } from '~/utils'
 import { AgentType } from '~app/types/agent'
 import { LastMessageType } from '~app/types/chatState'
 import { formatTimestamp } from '~app/utils/time'
+import { agentIcons } from '../AgentIcons'
 
 function NavLink(props: {
   botId: string
@@ -16,6 +17,9 @@ function NavLink(props: {
   const { botId, agent, iconOnly, icon, botName } = props
 
   const title = agent ? `${agent.name} - ${capitalize(botId)}` : botName
+
+  const agentIcon = agentIcons[agent?.agentId ?? '']
+
   if (!title) {
     return null
   }
@@ -34,19 +38,7 @@ function NavLink(props: {
       params={{ botId, agentId: agent ? agent.agentId : undefined }}
       to={agent ? '/chat-agent/$agentId/$botId' : '/chat/$botId'}
     >
-      {agent ? (
-        <div>
-          {agent.avatar ? (
-            <img src={agent.avatar} className="w-10 h-10" />
-          ) : (
-            <div className="w-10 h-10 bg-secondary rounded-full flex justify-center items-center">
-              <span className="text-primary-text text-lg font-bold">{agent.name.slice(0, 2)}</span>
-            </div>
-          )}
-        </div>
-      ) : (
-        <img src={icon} className="w-10 h-10" />
-      )}
+      {renderIcon()}
 
       <div className="w-full">
         <span className="font-medium text-sm w-full line-clamp-1">{iconOnly ? '' : title}</span>
@@ -61,6 +53,31 @@ function NavLink(props: {
       </div>
     </Link>
   )
+
+  function renderIcon() {
+    if (agentIcon) {
+      return (
+        <div>
+          <div className="w-10 h-10 text-2xl text-center items-center justify-center bg-secondary flex rounded-full">
+            {agentIcon}
+          </div>
+        </div>
+      )
+    }
+    return agent ? (
+      <div>
+        {agent.avatar ? (
+          <img src={agent.avatar} className="w-10 h-10" />
+        ) : (
+          <div className="w-10 h-10 bg-secondary rounded-full flex justify-center items-center">
+            <span className="text-primary-text text-lg font-bold">{agent.name.slice(0, 2)}</span>
+          </div>
+        )}
+      </div>
+    ) : (
+      <img src={icon} className="w-10 h-10" />
+    )
+  }
 }
 
 export default NavLink

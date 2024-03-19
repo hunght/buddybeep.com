@@ -9,7 +9,7 @@ interface Props {
   botId: BotId
   messages: ChatMessageModel[]
   className?: string
-  avatar: string | null
+  avatar: string | null | React.ReactElement
 }
 
 const ChatMessageList: FC<Props> = (props) => {
