@@ -64,7 +64,7 @@ export const Transcript: React.FC<Props> = ({ transcriptHTML, videoId }) => {
             id={obj.start}
             data-start-time={obj.start}
             className={classNames(
-              'flex justify-left items-baselinerounded  px-1 py-1 hover:bg-gray-200 cursor-pointer',
+              'flex justify-left items-baselinerounded  px-1 py-1',
               transcriptItem?.start === obj.start ? 'bg-gray-200' : '',
             )}
           >

@@ -88,9 +88,10 @@ const GoogleSidebar: React.FC = () => {
                   cursor: 'pointer',
                 }}
                 onClick={async () => {
+                  const prompt = `Get key points from web:Title:${document.title},Link:${window.location.href} content:${getDocumentTextFromDOM()}`
                   await chrome.runtime.sendMessage({
                     action: 'openSidePanel',
-                    content: getDocumentTextFromDOM(),
+                    content: prompt,
                     link: window.location.href,
                     title: document.title,
                     type: 'summary-web-content',
