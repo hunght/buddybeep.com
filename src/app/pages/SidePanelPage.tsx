@@ -15,6 +15,8 @@ import { LanguageSelection } from './LanguageSelection'
 import { getAllAgentsAtom } from '~app/state/agentAtom'
 import logo from '~/assets/santa-logo.png'
 
+import { buildPromptWithLang } from '~app/utils/lang'
+
 function SidePanelPage() {
   const { t } = useTranslation()
   const [botId, setBotId] = useAtom(sidePanelBotAtom)
@@ -26,6 +28,7 @@ function SidePanelPage() {
   const chat = useChat(botId, agentId)
   const allAgents = useAtomValue(getAllAgentsAtom)
   const agent = allAgents[agentId]
+
   useEffect(() => {
     chrome.storage.local.get('sidePanelSummaryAtom').then((data) => {
       if (data.sidePanelSummaryAtom) {
@@ -43,7 +46,8 @@ function SidePanelPage() {
   )
   useEffect(() => {
     if (summaryText?.content) {
-      chat.sendMessage(summaryText.content, undefined, { link: summaryText.link, title: summaryText.title })
+      const content = buildPromptWithLang(summaryText.content)
+      chat.sendMessage(content, undefined, { link: summaryText.link, title: summaryText.title })
       setSummaryText((prev) => (!prev ? null : { ...prev, content: null }))
     }
   }, [chat, setSummaryText, summaryText])
@@ -76,8 +80,10 @@ function SidePanelPage() {
             }}
           />
 
-          {/* <LanguageSelection /> */}
-          {agent && <span className="text-primary-text">{agent.name}</span>}
+          {/* {agent && <span className="text-primary-text">{agent.name}</span>} */}
+          <div className="w-20">
+            <LanguageSelection position="down" short={true} />
+          </div>
           <div className="flex flex-row items-center gap-2">
             <img src={botInfo.avatar} className="w-4 h-4 object-contain rounded-full" />
             <ChatbotName botId={botId} name={botInfo.name} onSwitchBot={setBotId} />
@@ -91,8 +97,7 @@ function SidePanelPage() {
           </div>
         </div>
         <ChatMessageList avatar={null} botId={botId} messages={chat.messages} className="mx-3" />
-        <div className="flex flex-col mx-3 my-3 gap-3">
-          <hr className="grow border-primary-border" />
+        <div className="flex flex-row mx-3 my-3 gap-3">
           <ChatMessageInput
             mode="compact"
             disabled={chat.generating}

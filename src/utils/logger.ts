@@ -9,10 +9,14 @@ const logger = {
   },
 
   error: (...errors: any[]) => {
+    console.log(`==== errors ===`)
+    console.log(errors)
+    console.log('==== end log ===')
+
     console.error(...errors) // Always log errors in the console
-    if (isProduction()) {
-      Sentry.captureException(errors[0]) // Send the first error to Sentry
-    }
+    // if (isProduction()) {
+    //   Sentry.captureException(errors[0]) // Send the first error to Sentry
+    // }
   },
 
   warn: (...warnings: any[]) => {

@@ -32,6 +32,9 @@ export const searchQueryAtom = atom<string>('')
 export const getAllAgentsAtom = atom<Record<string, AgentType>>((get) => {
   const allAgents = jsonData as unknown as Record<string, AgentType>
   const lang = get(languageAtom)
+  console.log(`==== lang ===`)
+  console.log(lang)
+  console.log('==== end log ===')
 
   if (lang === 'en') {
     return allAgents
@@ -84,6 +87,9 @@ export const getAllAgentsAtom = atom<Record<string, AgentType>>((get) => {
       name: object[key] ?? value.name,
     }
   })
+  console.log(`==== result ===`)
+  console.log(result)
+  console.log('==== end log ===')
 
   return result
 })

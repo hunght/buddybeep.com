@@ -7,7 +7,7 @@ import { ChatMessageModel } from '~/types'
 import Markdown from '../Markdown'
 import ErrorAction from './ErrorAction'
 import MessageBubble from './MessageBubble'
-import { Sentry } from '~services/sentry'
+
 import logger from '~utils/logger'
 
 const COPY_ICON_CLASS = 'self-top cursor-pointer invisible group-hover:visible mt-[12px] text-primary-text'
@@ -25,7 +25,7 @@ const ChatMessageCard: FC<Props> = ({ message, className, avatar }) => {
     try {
       return message.image ? URL.createObjectURL(message.image) : ''
     } catch (error) {
-      logger.error('[Failed to create object URL for image]', error)
+      logger.warn('[Failed to create object URL for image]', error)
       return ''
     }
   }, [message.image])
