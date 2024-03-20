@@ -17,12 +17,9 @@ export const Transcript: React.FC<Props> = ({ transcriptHTML, videoId }) => {
   useEffect(() => {
     let count = 0
     let yourFunctionTimeOutId: number
-    const jumpingToCurrentTranscriptItem = (_transcriptItem: TranscriptItem) => {
+    const jumpingToCurrentTranscriptItem = (_transcriptItem?: TranscriptItem) => {
       // Your function logic goes here
       const currTime = getTYCurrentTime()
-      console.log(`==== currTime ===`)
-      console.log(currTime)
-      console.log('==== end log ===')
 
       const firstItem = transcriptHTML.find((obj) => Number(obj.start) + Number(obj.duration) >= currTime)
       if (!firstItem) {
@@ -51,9 +48,7 @@ export const Transcript: React.FC<Props> = ({ transcriptHTML, videoId }) => {
       yourFunctionTimeOutId = setTimeout(jumpingToCurrentTranscriptItem, delay)
     }
 
-    if (transcriptItem) {
-      jumpingToCurrentTranscriptItem(transcriptItem)
-    }
+    jumpingToCurrentTranscriptItem(transcriptItem)
 
     return () => {
       clearTimeout(yourFunctionTimeOutId)
@@ -69,7 +64,7 @@ export const Transcript: React.FC<Props> = ({ transcriptHTML, videoId }) => {
             id={obj.start}
             data-start-time={obj.start}
             className={classNames(
-              'flex justify-left items-baseline',
+              'flex justify-left items-baselinerounded  px-1 py-1 hover:bg-gray-200 cursor-pointer',
               transcriptItem?.start === obj.start ? 'bg-gray-200' : '',
             )}
           >
