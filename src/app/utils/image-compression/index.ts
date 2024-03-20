@@ -1,12 +1,13 @@
 import { createCache } from 'async-cache-dedupe'
 import CompressionWorker from './worker?worker'
+import logger from '~utils/logger'
 
 async function compressImageFileViaWorker(image: File): Promise<File> {
   return new Promise((resolve, reject) => {
     const worker = new CompressionWorker()
     worker.addEventListener('message', (event) => {
       const blob: Blob = event.data
-      console.debug('worker result', blob)
+      logger.debug('worker result', blob)
       resolve(new File([blob], image.name, { type: blob.type }))
       worker.terminate()
     })
@@ -21,10 +22,10 @@ async function compressImageFileViaWorker(image: File): Promise<File> {
 async function _compressImageFile(image: File): Promise<File> {
   try {
     const result = await compressImageFileViaWorker(image)
-    console.debug('image compression', image.size, '=>', result.size)
+    logger.debug('image compression', image.size, '=>', result.size)
     return result
   } catch (err) {
-    console.error(err)
+    logger.error('[compressImageFileViaWorker][_compressImageFile]', err)
     return image
   }
 }

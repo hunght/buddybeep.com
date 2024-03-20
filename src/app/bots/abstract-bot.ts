@@ -1,6 +1,7 @@
 import { ConversationContext } from '~app/types/ConversationContext'
-import { Sentry } from '~services/sentry'
+
 import { ChatError, ErrorCode } from '~utils/errors'
+import logger from '~utils/logger'
 import { streamAsyncIterable } from '~utils/stream-async-iterable'
 
 export type AnwserPayload = {
@@ -38,7 +39,7 @@ export abstract class AbstractBot {
 
   protected async *doSendMessageGenerator(params: MessageParams) {
     const wrapError = (err: unknown) => {
-      Sentry.captureException(err)
+      logger.error(err)
       if (err instanceof ChatError) {
         return err
       }

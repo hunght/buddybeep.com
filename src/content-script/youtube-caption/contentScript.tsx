@@ -21,6 +21,7 @@ import type { LangOption, TranscriptItem } from './type'
 import { useTranslation } from 'react-i18next'
 import { useAtomValue } from 'jotai'
 import { youtubeVideoDataAtom } from '~app/state/youtubeAtom'
+import logger from '~utils/logger'
 
 export const ContentScript: React.FC = () => {
   const youtubeVideoData = useAtomValue(youtubeVideoDataAtom)
@@ -43,14 +44,14 @@ export const ContentScript: React.FC = () => {
         // Get Transcript Language Options & Create Language Select Btns
         const langOptionsWithLink = await getLangOptionsWithLink(videoId)
         if (!langOptionsWithLink) {
-          console.log('no langOptionsWithLink')
+          logger.log('no langOptionsWithLink')
           return
         }
         setLangOptions(langOptionsWithLink)
 
         setCurrentLangOption(langOptionsWithLink[0])
       } catch (error) {
-        console.error('Error fetching data:', error)
+        logger.error('[fetchTranscript] Error fetching data:', error)
       }
     }
 
@@ -62,7 +63,7 @@ export const ContentScript: React.FC = () => {
     async function fetchTranscript() {
       try {
         if (!currentLangOption) {
-          console.log('no currentLangOption')
+          logger.log('no currentLangOption')
           return
         }
 
@@ -71,7 +72,7 @@ export const ContentScript: React.FC = () => {
 
         setTranscriptHTML(transcriptHTML)
       } catch (error) {
-        console.error('Error fetching data:', error)
+        logger.error('Error fetching data:', error)
       }
     }
 

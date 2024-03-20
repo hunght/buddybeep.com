@@ -1,6 +1,7 @@
 import WebSocketAsPromised from 'websocket-as-promised'
 import { GradioBot } from '../gradio'
 import { ChatError, ErrorCode } from '~utils/errors'
+import logger from '~utils/logger'
 
 export class LMSYSBot extends GradioBot {
   constructor(model: string) {
@@ -29,7 +30,7 @@ export class LMSYSBot extends GradioBot {
         }
       })
       wsp.open().catch((err) => {
-        console.error('lmsys ws open error', err)
+        logger.error('lmsys ws open error', err)
         reject(new ChatError('Failed to establish websocket connection.', ErrorCode.LMSYS_WS_ERROR))
       })
     })

@@ -13,6 +13,7 @@ import WebSocketAsPromised from 'websocket-as-promised'
 import { APPSHORTNAME } from '~app/utils/consts'
 import Browser from 'webextension-polyfill'
 import { fetchSSE } from './fetch-sse'
+import logger from '~utils/logger'
 
 function removeCitations(text: string) {
   return text.replaceAll(/\u3010\d+\u2020source\u3011/g, '')
@@ -137,11 +138,11 @@ export class ChatGPTWebBot extends AbstractBot {
         conversation_mode: { kind: 'primary_assistant' },
       }),
       onMessage(message: string) {
-        console.debug('ChatGPTProvider:generateAnswerBySSE:message', message)
+        logger.log('ChatGPTProvider:generateAnswerBySSE:message', message)
         if (message.includes('wss_url')) {
           // params.onEvent({ type: 'ERROR', error: new ChatError(message, ErrorCode.UNKOWN_ERROR) })
           // cleanup()
-          console.error('ChatGPTProvider:generateAnswerBySSE:message', message)
+          logger.error('ChatGPTProvider:generateAnswerBySSE:message', message)
           return
         }
         if (message === '[DONE]') {
@@ -153,7 +154,7 @@ export class ChatGPTWebBot extends AbstractBot {
         try {
           data = JSON.parse(message)
         } catch (err) {
-          console.error(err)
+          logger.error(err)
           return
         }
         const text = data.message?.content?.parts?.[0]
@@ -284,7 +285,7 @@ export class ChatGPTWebBot extends AbstractBot {
     wsp.onMessage.addListener(messageListener)
     wsp.onClose.removeListener(messageListener)
     wsp.open().catch(async (e) => {
-      console.error('ChatGPTProvider:doSendMessage:showError:Error caught while opening ws', e)
+      logger.error('ChatGPTProvider:doSendMessage:showError:Error caught while opening ws', e)
       wsp.removeAllListeners()
       wsp.close()
       await setChatgptwssIsOpenFlag(false)
@@ -399,7 +400,7 @@ export class ChatGPTWebBot extends AbstractBot {
       try {
         parsed = JSON.parse(message)
       } catch (err) {
-        console.error(err)
+        logger.error(err)
         return
       }
       if (!parsed.message && parsed.error) {

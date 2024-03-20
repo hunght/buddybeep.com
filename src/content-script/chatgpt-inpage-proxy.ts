@@ -1,5 +1,6 @@
 import Browser from 'webextension-polyfill'
 import { setupProxyExecutor } from '~services/proxy-fetch'
+import logger from '~utils/logger'
 
 function injectTip() {
   const div = document.createElement('div')
@@ -30,4 +31,4 @@ async function main() {
 }
 
 setupProxyExecutor()
-main().catch(console.error)
+main().catch(logger.error)

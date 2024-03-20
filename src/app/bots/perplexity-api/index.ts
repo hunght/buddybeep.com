@@ -1,5 +1,6 @@
 import { parseSSEResponse } from '~utils/sse'
 import { AbstractBot, SendMessageParams } from '../abstract-bot'
+import logger from '~utils/logger'
 
 interface ChatMessage {
   role: 'user' | 'assistant'
@@ -34,12 +35,12 @@ export class PerplexityApiBot extends AbstractBot {
     let answer: string = ''
 
     await parseSSEResponse(resp, (message) => {
-      console.debug('pplx sse message', message)
+      logger.debug('pplx sse message', message)
       let data
       try {
         data = JSON.parse(message)
       } catch (err) {
-        console.error(err)
+        logger.error('[PerplexityApiBot][parseSSEResponse]', err)
         return
       }
       if (data?.choices?.length) {

@@ -1,13 +1,14 @@
 import { FetchError, ofetch } from 'ofetch'
 import { uuid } from '~utils'
 import { ChatError, ErrorCode } from '~utils/errors'
+import logger from '~utils/logger'
 
 export async function fetchOrganizationId(): Promise<string> {
   let resp: Response
   try {
     resp = await fetch('https://claude.ai/api/organizations', { redirect: 'error', cache: 'no-cache' })
   } catch (err) {
-    console.error(err)
+    logger.error(err)
     throw new ChatError('Claude webapp not avaiable in your country', ErrorCode.CLAUDE_WEB_UNAVAILABLE)
   }
   if (resp.status === 403) {

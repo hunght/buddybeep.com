@@ -5,6 +5,7 @@ import { PoeClaudeModel, PoeGPTModel } from '~services/user-config'
 import { ChatError, ErrorCode } from '~utils/errors'
 import { AbstractBot, SendMessageParams } from '../abstract-bot'
 import { GRAPHQL_QUERIES, PoeSettings, getChatId, getPoeSettings, gqlRequest } from './api'
+import logger from '~utils/logger'
 
 interface ChatMessage {
   id: string
@@ -45,12 +46,12 @@ export class PoeWebBot extends AbstractBot {
     }
 
     if (!this.conversationContext) {
-      console.log('Using poe model', this.botId)
+      logger.log('Using poe model', this.botId)
       const { poeSettings, chatId } = await this.getChatInfo()
       const wsp = await this.connectWebsocket(poeSettings)
       await this.subscribe(poeSettings)
       this.conversationContext = { chatId, poeSettings, wsp }
-      await this.sendChatBreak().catch(console.error)
+      await this.sendChatBreak().catch(logger.error)
     }
 
     const wsp = this.conversationContext.wsp
@@ -60,7 +61,7 @@ export class PoeWebBot extends AbstractBot {
       for (const m of messages) {
         if (m.message_type === 'subscriptionUpdate' && m.payload.subscription_name === 'messageAdded') {
           const chatMessage = m.payload.data.messageAdded
-          console.debug('poe ws chat message', chatMessage)
+          logger.debug('poe ws chat message', chatMessage)
           if (chatMessage.author !== this.botId) {
             continue
           }
@@ -84,12 +85,12 @@ export class PoeWebBot extends AbstractBot {
     }
 
     wsp.onUnpackedMessage.addListener(onUnpackedMessageListener)
-    wsp.onError.addListener(console.error)
+    wsp.onError.addListener(logger.error)
 
     try {
       await wsp.open()
     } catch (e) {
-      console.error('poe ws open error', e)
+      logger.error('poe ws open error', e)
       throw new ChatError('Failed to establish websocket connection.', ErrorCode.NETWORK_ERROR)
     }
 
@@ -168,7 +169,7 @@ export class PoeWebBot extends AbstractBot {
 
   private async connectWebsocket(poeSettings: PoeSettings) {
     const wsUrl = await this.getWebsocketUrl(poeSettings)
-    console.debug('ws url', wsUrl)
+    logger.debug('ws url', wsUrl)
 
     const wsp = new WebSocketAsPromised(wsUrl, {
       packMessage: (data) => JSON.stringify(data),

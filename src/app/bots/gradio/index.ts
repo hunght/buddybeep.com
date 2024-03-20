@@ -2,6 +2,7 @@ import WebSocketAsPromised from 'websocket-as-promised'
 import { ChatError, ErrorCode } from '~utils/errors'
 import { AbstractBot, SendMessageParams } from '../abstract-bot'
 import { html2md } from '~app/utils/markdown'
+import logger from '~utils/logger'
 
 function generateSessionHash() {
   // https://stackoverflow.com/a/12502559/325241
@@ -109,7 +110,7 @@ export class GradioBot extends AbstractBot {
     try {
       await wsp.open()
     } catch (err) {
-      console.error('WS open error', err)
+      logger.error('WS open error', err)
       throw new ChatError('Failed to establish websocket connection.', ErrorCode.NETWORK_ERROR)
     }
 

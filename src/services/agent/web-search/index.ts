@@ -3,6 +3,7 @@ import { truncate } from 'lodash-es'
 import type { SearchResultItem } from './base'
 import { BingNewsSearch } from './bing-news'
 import { DuckDuckGoSearch } from './duckduckgo'
+import logger from '~utils/logger'
 
 const MAX_CONTEXT_ITEMS = 15
 
@@ -13,10 +14,10 @@ async function _searchRelatedContext(query: string, signal?: AbortSignal) {
     providers.map(async (provider) => {
       try {
         const result = await provider.search(query, signal)
-        console.debug('web search result', query, result.items)
+        logger.debug('web search result', query, result.items)
         return result
       } catch (err) {
-        console.error(err)
+        logger.error('[_searchRelatedContext]', err)
         return { items: [] }
       }
     }),
@@ -41,7 +42,7 @@ async function _searchRelatedContext(query: string, signal?: AbortSignal) {
     i++
   } while (hasMore && items.length < MAX_CONTEXT_ITEMS)
 
-  console.debug('web search items', items)
+  logger.debug('web search items', items)
 
   const context: string[] = []
   for (const item of items) {

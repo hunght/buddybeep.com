@@ -6,6 +6,7 @@ import { parseSSEResponse } from '~utils/sse'
 import { AbstractBot, SendMessageParams } from '../abstract-bot'
 import { file2base64 } from '../bing/utils'
 import { ChatMessage } from './types'
+import logger from '~utils/logger'
 
 interface ConversationContext {
   messages: ChatMessage[]
@@ -69,7 +70,7 @@ export abstract class AbstractChatGPTApiBot extends AbstractBot {
     }
 
     await parseSSEResponse(resp, (message) => {
-      console.debug('chatgpt sse message', message)
+      logger.debug('chatgpt sse message', message)
       if (message === '[DONE]') {
         finish()
         return
@@ -78,7 +79,7 @@ export abstract class AbstractChatGPTApiBot extends AbstractBot {
       try {
         data = JSON.parse(message)
       } catch (err) {
-        console.error(err)
+        logger.error(err)
         return
       }
       if (data?.choices?.length) {

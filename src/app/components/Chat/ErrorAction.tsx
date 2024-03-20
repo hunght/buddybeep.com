@@ -6,6 +6,7 @@ import { ConversationContext } from '~app/context'
 import { ChatError, ErrorCode } from '~utils/errors'
 import Button, { Props as ButtonProps } from '../Button'
 import MessageBubble from './MessageBubble'
+import logger from '~utils/logger'
 
 const ActionButton: FC<ButtonProps> = (props) => {
   return <Button {...props} size="small" className="font-medium underline" color="primary" />
@@ -22,7 +23,7 @@ const ChatGPTAuthErrorAction = () => {
     try {
       await chatGPTClient.fixAuthState()
     } catch (e) {
-      console.error(e)
+      logger.error(e)
       return
     } finally {
       setFixing(false)

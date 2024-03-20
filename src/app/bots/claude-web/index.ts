@@ -3,6 +3,7 @@ import { AbstractBot, SendMessageParams } from '../abstract-bot'
 import { createConversation, fetchOrganizationId, generateChatTitle } from './api'
 import { requestHostPermission } from '~app/utils/permissions'
 import { ChatError, ErrorCode } from '~utils/errors'
+import logger from '~utils/logger'
 
 interface ConversationContext {
   conversationId: string
@@ -30,7 +31,7 @@ export class ClaudeWebBot extends AbstractBot {
     if (!this.conversationContext) {
       const conversationId = await createConversation(this.organizationId)
       this.conversationContext = { conversationId }
-      generateChatTitle(this.organizationId, conversationId, params.prompt).catch(console.error)
+      generateChatTitle(this.organizationId, conversationId, params.prompt).catch(logger.error)
     }
 
     const resp = await fetch('https://claude.ai/api/append_message', {

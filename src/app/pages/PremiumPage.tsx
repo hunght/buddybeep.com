@@ -13,6 +13,7 @@ import { useDiscountCode } from '~app/hooks/use-purchase-info'
 import { trackEvent } from '~app/plausible'
 import { premiumRoute } from '~app/router'
 import { activatePremium, deactivatePremium } from '~services/premium'
+import logger from '~utils/logger'
 
 function PremiumPage() {
   const { t } = useTranslation()
@@ -35,7 +36,7 @@ function PremiumPage() {
     try {
       await activatePremium(key)
     } catch (err) {
-      console.error('activation', err)
+      logger.error('[PremiumPage] activation', err)
       setActivationError(getPath(err, 'data.error') || 'Activation failed')
       setActivating(false)
       return

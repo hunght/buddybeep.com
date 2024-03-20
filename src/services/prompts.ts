@@ -2,6 +2,7 @@ import i18next from 'i18next'
 import { ofetch } from 'ofetch'
 import Browser from 'webextension-polyfill'
 import { BotId } from '~app/bots'
+import logger from '~utils/logger'
 
 export interface Prompt {
   agentId: string
@@ -42,7 +43,7 @@ export async function loadRemotePrompts() {
   return ofetch<Prompt[]>('https://buddybeep.com/api/community-prompts', {
     params: { language: i18next.language, languages: i18next.languages },
   }).catch((err) => {
-    console.error('Failed to load remote prompts', err)
+    logger.error('[loadRemotePrompts] Failed to load remote prompts', err)
     return []
   })
 }

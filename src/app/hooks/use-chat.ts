@@ -11,6 +11,7 @@ import { BotId } from '../bots'
 import { getAllAgentsAtom } from '~app/state/agentAtom'
 
 import { buildPromptWithLang } from '~app/utils/lang'
+import logger from '~utils/logger'
 
 export function useChat(botId: BotId, agentId: string | null) {
   const chatAtom = useMemo(() => chatFamily({ botId, agentId }), [botId, agentId])
@@ -69,7 +70,7 @@ export function useChat(botId: BotId, agentId: string | null) {
           abortController.abort()
         }
         const error = err as ChatError
-        console.error('sendMessage error', error.code, error)
+        logger.error('sendMessage error', error.code, error)
         updateMessage(botMessageId, (message) => {
           message.error = error
         })

@@ -1,10 +1,11 @@
 import { getOrGenerateUserUUID } from '~app/utils/localStorage'
+import logger from '~utils/logger'
 
 async function trackEvent(name: string, props: object) {
   try {
-    console.log('plausible.trackEvent', name, props)
+    logger.log('plausible.trackEvent', name, props)
   } catch (err) {
-    console.error('plausible.trackEvent error', err)
+    logger.error('plausible.trackEvent error', err)
   }
 }
 

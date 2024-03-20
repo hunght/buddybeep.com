@@ -3,6 +3,7 @@ import { FetchError, FetchResponse, ofetch } from 'ofetch'
 import { uuid } from '~utils'
 import { ChatError, ErrorCode } from '~utils/errors'
 import { ConversationResponse } from './types'
+import logger from '~utils/logger'
 
 // https://github.com/acheong08/EdgeGPT/blob/master/src/EdgeGPT.py#L32
 function randomIP() {
@@ -24,7 +25,7 @@ export async function createConversation(): Promise<ConversationResponse> {
       throw new Error('Invalid response')
     }
   } catch (err) {
-    console.error('retry bing create', err)
+    logger.error('retry bing create', err)
     rawResponse = await ofetch.raw<ConversationResponse>(API_ENDPOINT, {
       headers: { ...headers, 'x-forwarded-for': randomIP() },
       redirect: 'error',

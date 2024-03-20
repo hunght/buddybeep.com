@@ -10,6 +10,7 @@ import { myAtomStore } from '~app/state/store'
 import { youtubeVideoDataAtom } from '~app/state/youtubeAtom'
 import { getSearchParam } from './helper/searchParam'
 import './base.css'
+import logger from '~utils/logger'
 const root = document.createElement('div')
 root.id = 'plasmo-inline-example-unique-id'
 
@@ -37,7 +38,7 @@ waitForElm('#secondary.style-scope.ytd-watch-flexy')
     )
   })
   .catch((error) => {
-    console.error('Error fetching data:', error)
+    logger.error('[#secondary.style-scope.ytd-watch-flexy]', error)
   })
   .finally(() => {})
 
@@ -46,10 +47,6 @@ const observeUrlChange = () => {
 
   const url = getSearchParam(oldHref).v
   const title = document.title
-  console.log(`==== oldHref ===`)
-  console.log(url)
-  console.log(oldHref)
-  console.log('==== end log ===')
 
   myAtomStore.set(youtubeVideoDataAtom, { url, title: title })
   const observer = new MutationObserver((mutations) => {
@@ -58,10 +55,7 @@ const observeUrlChange = () => {
       /* Changed ! your code here */
       const url = getSearchParam(oldHref).v
       const title = document.title
-      console.log(`==== MutationObserver oldHref ===`)
-      console.log(url)
-      console.log(oldHref)
-      console.log('==== end log ===')
+
       myAtomStore.set(youtubeVideoDataAtom, { url, title: title })
     }
   })

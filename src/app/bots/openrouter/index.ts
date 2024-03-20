@@ -2,6 +2,7 @@ import { requestHostPermission } from '~app/utils/permissions'
 import { ChatError, ErrorCode } from '~utils/errors'
 import { parseSSEResponse } from '~utils/sse'
 import { AbstractBot, SendMessageParams } from '../abstract-bot'
+import logger from '~utils/logger'
 
 interface ChatMessage {
   role: 'system' | 'assistant' | 'user'
@@ -52,7 +53,7 @@ export class OpenRouterBot extends AbstractBot {
     }
 
     await parseSSEResponse(resp, (message) => {
-      console.debug('openrouter sse message', message)
+      logger.debug('openrouter sse message', message)
       if (message === '[DONE]') {
         finish()
         return
@@ -61,7 +62,7 @@ export class OpenRouterBot extends AbstractBot {
       try {
         data = JSON.parse(message)
       } catch (err) {
-        console.error(err)
+        logger.error('[OpenRouterBot-parseSSEResponse]', err)
         return
       }
       if (data?.choices?.length) {

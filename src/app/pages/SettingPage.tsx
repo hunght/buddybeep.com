@@ -38,6 +38,7 @@ import Tooltip from '~app/components/Tooltip'
 import ThemeSettingModal from '~app/components/ThemeSettingModal'
 import { IconButton } from '~app/components/Sidebar/IconButton'
 import { LanguageSelection } from './LanguageSelection'
+import logger from '~utils/logger'
 
 const BING_STYLE_OPTIONS = [
   { name: 'Precise', value: BingConversationStyle.Precise },
@@ -83,7 +84,7 @@ function SettingPage() {
       try {
         await Browser.permissions.request({ origins: [apiHost + '/'] })
       } catch (e) {
-        console.error(e)
+        logger.error('[SettingPage][useCallback]', e)
       }
     } else {
       apiHost = undefined

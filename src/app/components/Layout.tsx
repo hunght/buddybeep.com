@@ -1,4 +1,4 @@
-import { Outlet } from '@tanstack/react-router'
+import { CatchBoundary, Outlet } from '@tanstack/react-router'
 import { useAtomValue } from 'jotai'
 import { themeColorAtom } from '~app/state'
 
