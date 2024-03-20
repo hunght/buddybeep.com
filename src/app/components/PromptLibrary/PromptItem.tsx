@@ -7,12 +7,12 @@ import Select from '../Select'
 
 import { ActionButton } from './ActionButton'
 import { useEnabledBots } from '~app/hooks/use-enabled-bots'
-import { getAllAgentsAtom } from '~app/state/agentAtom'
-import { useAtomValue } from 'jotai'
+
 import { agentIcons } from '../AgentIcons'
+import { AgentType } from '~app/types/agent'
 
 export const PromptItem = (props: {
-  agentId: string
+  agent: AgentType
   title: string
   prompt: string
   edit?: () => void
@@ -21,16 +21,17 @@ export const PromptItem = (props: {
   insertPrompt: ({ botId, agentId }: { botId: BotId; agentId: string | null }) => void
 }) => {
   const { t } = useTranslation()
+  const { agent } = props
   const [saved, setSaved] = useState(false)
   const [botId, setBotId] = useState<BotId>('gemini')
-  const allAgents = useAtomValue(getAllAgentsAtom)
+
   const bots = useEnabledBots()
-  const agentIcon = agentIcons[props.agentId]
+  const agentIcon = agentIcons[agent.agentId]
   const copyToLocal = useCallback(() => {
     props.copyToLocal?.(botId)
     setSaved(true)
   }, [botId, props])
-  const agent = allAgents[props.agentId]
+
   return (
     <div className="group relative flex flex-col space-y-4 rounded-lg border border-primary-border dark:bg-gray-800 px-5 py-4 shadow-sm transition duration-200 ease-in-out hover:border-gray-400 hover:shadow-md ">
       <div className="flex flex-row space-x-4 items-start">
@@ -57,7 +58,7 @@ export const PromptItem = (props: {
               <button
                 type="button"
                 className="rounded bg-indigo-500 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-                onClick={() => props.insertPrompt({ botId, agentId: props.agentId })}
+                onClick={() => props.insertPrompt({ botId, agentId: agent.agentId })}
               >
                 {t('Use')}
               </button>

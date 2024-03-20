@@ -29,11 +29,13 @@ const resources: Resource = {
 
 export const languageCodes = Object.keys(resources)
 
+const lng = localStorage.getItem(LANGUAGE_KEY) || undefined
+
 i18n
   .use(initReactI18next)
   .use(LanguageDetector)
   .init({
-    lng: localStorage.getItem(LANGUAGE_KEY) || undefined,
+    lng: lng,
     fallbackLng: 'en',
     resources,
     interpolation: {

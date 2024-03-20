@@ -81,8 +81,8 @@ function SidePanelPage() {
           />
 
           {/* {agent && <span className="text-primary-text">{agent.name}</span>} */}
-          <div className="w-20">
-            <LanguageSelection position="down" short={true} />
+          <div className="w-40">
+            <LanguageSelection />
           </div>
           <div className="flex flex-row items-center gap-2">
             <img src={botInfo.avatar} className="w-4 h-4 object-contain rounded-full" />

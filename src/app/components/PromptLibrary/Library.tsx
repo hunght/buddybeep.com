@@ -15,6 +15,7 @@ import { agentsByCategoryAtom, categoryAtom } from '~app/state/agentAtom'
 import { useAtom, useAtomValue } from 'jotai'
 import { SearchInput } from './SearchInput'
 import { LanguageSelection } from '~app/pages/LanguageSelection'
+import { getAllAgentsAtom } from '~app/state/agentAtom'
 
 function CommunityPrompts(props: {
   insertPrompt: ({ botId, agentId }: { botId: BotId; agentId: string | null }) => void
@@ -24,6 +25,7 @@ function CommunityPrompts(props: {
   }, [])
   const agentsArray = useAtomValue(agentsByCategoryAtom)
   const [category, setCategory] = useAtom(categoryAtom)
+  const allAgents = useAtomValue(getAllAgentsAtom)
 
   const { t } = useTranslation()
   const [formData, setFormData] = useState<Prompt | null>(null)
@@ -92,7 +94,7 @@ function CommunityPrompts(props: {
           {agentsArray.map((prompt) => (
             <PromptItem
               key={prompt.agentId}
-              agentId={prompt.agentId}
+              agent={allAgents[prompt.agentId]}
               title={prompt.name}
               prompt={prompt.prompt}
               insertPrompt={props.insertPrompt}
@@ -139,7 +141,7 @@ function CommunityPrompts(props: {
         {agentsArray.map((prompt) => (
           <PromptItem
             key={prompt.agentId}
-            agentId={prompt.agentId}
+            agent={allAgents[prompt.agentId]}
             title={prompt.name}
             prompt={prompt.prompt}
             insertPrompt={props.insertPrompt}
