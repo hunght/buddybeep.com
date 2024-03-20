@@ -26,7 +26,7 @@ import logger from '~utils/logger'
 export const ContentScript: React.FC = () => {
   const youtubeVideoData = useAtomValue(youtubeVideoDataAtom)
   const videoId = youtubeVideoData?.url
-
+  logger.log('videoId', videoId)
   const [transcriptHTML, setTranscriptHTML] = useState<TranscriptItem[]>([])
 
   const [open, setOpen] = React.useState(true)

@@ -42,24 +42,24 @@ waitForElm('#secondary.style-scope.ytd-watch-flexy')
   })
   .finally(() => {})
 
-const observeUrlChange = () => {
-  let oldHref = document.location.href
+let currentUrl = window.location.href
+const url = getSearchParam(currentUrl).v
+const title = document.title
+myAtomStore.set(youtubeVideoDataAtom, { url, title: title })
+const observer = new MutationObserver((mutations) => {
+  // Check if the URL has changed
+  const newUrl = window.location.href
+  if (newUrl !== currentUrl) {
+    const url = getSearchParam(newUrl).v
+    const title = document.title
 
-  const url = getSearchParam(oldHref).v
-  const title = document.title
+    myAtomStore.set(youtubeVideoDataAtom, { url, title: title })
+    currentUrl = newUrl
+  }
+})
 
-  myAtomStore.set(youtubeVideoDataAtom, { url, title: title })
-  const observer = new MutationObserver((mutations) => {
-    if (oldHref !== document.location.href) {
-      oldHref = document.location.href
-      /* Changed ! your code here */
-      const url = getSearchParam(oldHref).v
-      const title = document.title
-
-      myAtomStore.set(youtubeVideoDataAtom, { url, title: title })
-    }
-  })
-
-  observer.observe(document.body, { childList: true, subtree: true })
-}
-window.addEventListener('load', observeUrlChange, false)
+// Start observing the document body for changes
+observer.observe(document.body, {
+  childList: true,
+  subtree: true,
+})

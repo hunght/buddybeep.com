@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 export const Tooltip: React.FC<{ text: string; children: React.ReactElement }> = ({ text, children }) => {
   const [isTooltipVisible, setTooltipVisible] = useState(false)
-
+  if (!children) return null
   return (
     <div className="relative inline-block">
       <div onMouseEnter={() => setTooltipVisible(true)} onMouseLeave={() => setTooltipVisible(false)}>

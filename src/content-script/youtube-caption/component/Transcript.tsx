@@ -16,14 +16,20 @@ export const Transcript: React.FC<Props> = ({ transcriptHTML, videoId }) => {
 
   useEffect(() => {
     let count = 0
-    let yourFunctionTimeOutId: string | number
-    const yourFunction = (transcriptItem: TranscriptItem) => {
+    let yourFunctionTimeOutId: number
+    const jumpingToCurrentTranscriptItem = (_transcriptItem: TranscriptItem) => {
       // Your function logic goes here
       const currTime = getTYCurrentTime()
+      console.log(`==== currTime ===`)
+      console.log(currTime)
+      console.log('==== end log ===')
 
       const firstItem = transcriptHTML.find((obj) => Number(obj.start) + Number(obj.duration) >= currTime)
-
-      if (transcriptItem || transcriptItem?.start !== firstItem?.start) {
+      if (!firstItem) {
+        yourFunctionTimeOutId = setTimeout(jumpingToCurrentTranscriptItem, 1000)
+        return
+      }
+      if (_transcriptItem || _transcriptItem?.start !== firstItem?.start) {
         let isSame = false
         setTranscriptItem((pre) => {
           if (pre?.start === firstItem?.start) {
@@ -42,11 +48,12 @@ export const Transcript: React.FC<Props> = ({ transcriptHTML, videoId }) => {
       }
       const delay = Number(firstItem.duration) * 1000
       // Call your function again after the delay
-      yourFunctionTimeOutId = setTimeout(yourFunction, delay)
+      yourFunctionTimeOutId = setTimeout(jumpingToCurrentTranscriptItem, delay)
     }
 
-    // Call your function initially
-    yourFunction(transcriptItem)
+    if (transcriptItem) {
+      jumpingToCurrentTranscriptItem(transcriptItem)
+    }
 
     return () => {
       clearTimeout(yourFunctionTimeOutId)
@@ -63,7 +70,7 @@ export const Transcript: React.FC<Props> = ({ transcriptHTML, videoId }) => {
             data-start-time={obj.start}
             className={classNames(
               'flex justify-left items-baseline',
-              transcriptItem?.start === obj.start && 'bg-gray-200',
+              transcriptItem?.start === obj.start ? 'bg-gray-200' : '',
             )}
           >
             <div className="text-2xl">
