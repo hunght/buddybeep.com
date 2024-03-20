@@ -12,9 +12,14 @@ import { getAllAgentsAtom } from '~app/state/agentAtom'
 
 import { buildPromptWithLang } from '~app/utils/lang'
 import logger from '~utils/logger'
+import { atomChatStateLocalStorage } from '~app/state/atomWithLocalStorage'
+import { getBotSlug } from '~app/utils/slug'
+import { LastMessageType } from '~app/types/chatState'
 
 export function useChat(botId: BotId, agentId: string | null) {
   const chatAtom = useMemo(() => chatFamily({ botId, agentId }), [botId, agentId])
+  const [, setChatStateLocalStorage] = useAtom(atomChatStateLocalStorage)
+
   const allAgents = useAtomValue(getAllAgentsAtom)
   const [chatState, setChatState] = useAtom(chatAtom)
 
@@ -24,6 +29,34 @@ export function useChat(botId: BotId, agentId: string | null) {
         const message = draft.messages.find((m) => m.id === messageId)
         if (message) {
           updater(message)
+          setChatStateLocalStorage((prev) => {
+            const botSlug = getBotSlug({ agentId, botId })
+            const botChatState = prev[botSlug]
+
+            const lastMessage: LastMessageType = {
+              id: messageId,
+              text: message?.text ?? '',
+              time: Date.now().toString(),
+              author: message?.author ?? 'user',
+            }
+            if (!botChatState) {
+              return {
+                ...prev,
+                [botSlug]: {
+                  botId,
+                  agentId,
+                  lastMessage: lastMessage,
+                },
+              }
+            }
+            return {
+              ...prev,
+              [botSlug]: {
+                ...botChatState,
+                lastMessage: lastMessage,
+              },
+            }
+          })
         }
       })
     },

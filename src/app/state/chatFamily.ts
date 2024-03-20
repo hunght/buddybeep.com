@@ -13,7 +13,6 @@ import { OriginalChatState } from '~app/types/OriginalChatState'
 import { ChatState } from '~app/types/chatState'
 
 import { getNestedLocalStorage, setNestedLocalStorage } from '~app/utils/localStorage'
-import { last } from 'lodash-es'
 
 type Param = { botId: BotId; agentId: string | null }
 
@@ -26,7 +25,6 @@ const atomWithLocalStorage = (key: string, initialValue: OriginalChatState) => {
       initialValue.messages = serializeChatState.messages.map((m) => ({
         id: m.id,
         text: m.text,
-        image: m.image,
         author: m.author,
       }))
 
@@ -48,32 +46,13 @@ const atomWithLocalStorage = (key: string, initialValue: OriginalChatState) => {
       const messages = nextValue.messages.map((m) => ({
         id: m.id,
         text: m.text,
-        image: m.image,
         error: m.error?.code,
         author: m.author,
       }))
 
-      const lastMessage = last(nextValue.messages)
-      const serializeLastMessage = lastMessage
-        ? {
-            id: lastMessage.id,
-            text: lastMessage.text,
-            image: lastMessage.image,
-            error: lastMessage.error?.code,
-            author: lastMessage.author,
-            time: Date.now().toString(),
-          }
-        : null
-
       const serializeChatState: ChatState = {
-        botId: nextValue.botId,
+        ...nextValue,
         messages: messages,
-        isSetup: nextValue.isSetup,
-        generatingMessageId: nextValue.generatingMessageId,
-        conversationId: nextValue.conversationId,
-        conversationContext: nextValue.bot.getConversationContext,
-        agentId: nextValue.agentId,
-        lastMessage: serializeLastMessage,
       }
 
       setNestedLocalStorage({ mainKey: CHAT_STATE_STORAGE, subKey: key, value: serializeChatState })

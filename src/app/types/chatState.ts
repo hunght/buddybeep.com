@@ -8,14 +8,20 @@ export type LastMessageType =
   | null
 
 export type ChatState = {
-  botId: BotId
-  agentId: string | null
   conversationContext?: ConversationContext
+  botId: BotId
   messages: ChatMessageModel[]
-  lastMessage: LastMessageType
+  agentId: string | null
   generatingMessageId: string
   isSetup: boolean
   conversationId: string
+}
+
+export type ChatMessageState = {
+  botId: BotId
+  agentId: string | null
+
+  lastMessage: LastMessageType | null
 }
 export interface ChatMessageModel {
   id: string

@@ -1,4 +1,4 @@
-import { useAtom, useAtomValue } from 'jotai'
+import { useAtom } from 'jotai'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import clearIcon from '~/assets/icons/clear.svg'
@@ -12,7 +12,7 @@ import { ConversationContext, ConversationContextValue } from '~app/context'
 import { useChat } from '~app/hooks/use-chat'
 import { sidePanelBotAtom, sidePanelSummaryAtom } from '~app/state/sidePanelAtom'
 import { LanguageSelection } from './LanguageSelection'
-import { getAllAgentsAtom } from '~app/state/agentAtom'
+
 import logo from '~/assets/santa-logo.png'
 
 import { buildPromptWithLang } from '~app/utils/lang'
@@ -26,8 +26,6 @@ function SidePanelPage() {
   const agentId = summaryText?.type ?? 'summary-web-content'
 
   const chat = useChat(botId, agentId)
-  const allAgents = useAtomValue(getAllAgentsAtom)
-  const agent = allAgents[agentId]
 
   useEffect(() => {
     chrome.storage.local.get('sidePanelSummaryAtom').then((data) => {

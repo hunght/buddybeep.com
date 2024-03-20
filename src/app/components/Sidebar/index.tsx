@@ -59,10 +59,6 @@ function Sidebar() {
           [botSlug]: {
             botId,
             agentId,
-            messages: [],
-            isSetup: false,
-            generatingMessageId: '',
-            conversationId: '',
             lastMessage: null,
           },
         }
