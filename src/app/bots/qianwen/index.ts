@@ -4,6 +4,7 @@ import { ChatError, ErrorCode } from '~utils/errors'
 import { parseSSEResponse } from '~utils/sse'
 import { AbstractBot, SendMessageParams } from '../abstract-bot'
 import { createConversation, getCsrfToken } from './api'
+import logger from '~utils/logger'
 
 function generateMessageId() {
   return uuid().replace(/-/g, '')
@@ -54,7 +55,7 @@ export class QianwenWebBot extends AbstractBot {
     let done = false
 
     await parseSSEResponse(resp, (message) => {
-      console.debug('qianwen sse', message)
+      logger.debug('qianwen sse', message)
       const data = JSON.parse(message)
       const text = data.content[0]
       if (text) {

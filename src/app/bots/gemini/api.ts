@@ -1,5 +1,6 @@
 import { ofetch } from 'ofetch'
 import { ChatError, ErrorCode } from '~utils/errors'
+import logger from '~utils/logger'
 
 function extractFromHTML(variableName: string, html: string) {
   const regex = new RegExp(`"${variableName}":"([^"]+)"`)
@@ -26,7 +27,7 @@ export function parseGeminiResponse(resp: string) {
   if (!payload) {
     throw new ChatError('Failed to load gemini response', ErrorCode.BARD_EMPTY_RESPONSE)
   }
-  console.debug('gemini response payload', payload)
+  logger.debug('gemini response payload', payload)
 
   let text = payload[4][0][1][0] as string
 

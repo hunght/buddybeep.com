@@ -2,6 +2,7 @@ import { ofetch } from 'ofetch'
 import { AbstractBot, SendMessageParams } from '../abstract-bot'
 import { fetchRequestParams, parseGeminiResponse } from './api'
 import { ConversationContext } from '~app/types/ConversationContext'
+import logger from '~utils/logger'
 
 function generateReqId() {
   return Math.floor(Math.random() * 900000) + 100000
@@ -92,7 +93,7 @@ export class GeminiBot extends AbstractBot {
       body: new URLSearchParams({ [`File name: ${image.name}`]: '' }),
     })
     const uploadUrl = resp.headers.get('x-goog-upload-url')
-    console.debug('Gemini upload url', uploadUrl)
+    logger.debug('Gemini upload url', uploadUrl)
     if (!uploadUrl) {
       throw new Error('Failed to upload image')
     }

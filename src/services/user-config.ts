@@ -2,6 +2,7 @@ import { defaults } from 'lodash-es'
 import Browser from 'webextension-polyfill'
 import { BotId } from '~app/bots'
 import { ALL_IN_ONE_PAGE_ID, CHATBOTS, CHATGPT_API_MODELS, DEFAULT_CHATGPT_SYSTEM_MESSAGE } from '~app/consts'
+import logger from '~utils/logger'
 
 export enum BingConversationStyle {
   Creative = 'creative',
@@ -115,7 +116,7 @@ export async function getUserConfig(): Promise<UserConfig> {
 }
 
 export async function updateUserConfig(updates: Partial<UserConfig>) {
-  console.debug('update configs', updates)
+  logger.debug('update configs', updates)
   await Browser.storage.sync.set(updates)
   for (const [key, value] of Object.entries(updates)) {
     if (value === undefined) {

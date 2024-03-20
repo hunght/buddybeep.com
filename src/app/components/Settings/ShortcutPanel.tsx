@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import Browser from 'webextension-polyfill'
 import Button from '~app/components/Button'
 import KDB from '~app/components/Settings/KDB'
+import logger from '~utils/logger'
 
 function ShortcutPanel() {
   const [shortcuts, setShortcuts] = useState<string[]>([])
@@ -12,7 +13,7 @@ function ShortcutPanel() {
     Browser.commands.getAll().then((commands) => {
       for (const c of commands) {
         if (c.name === 'open-app' && c.shortcut) {
-          console.debug(c.shortcut)
+          logger.debug(c.shortcut)
           setShortcuts(c.shortcut ? [c.shortcut] : [])
         }
       }

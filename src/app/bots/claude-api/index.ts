@@ -3,6 +3,7 @@ import { ClaudeAPIModel, UserConfig } from '~services/user-config'
 import { ChatError, ErrorCode } from '~utils/errors'
 import { parseSSEResponse } from '~utils/sse'
 import { AbstractBot, SendMessageParams } from '../abstract-bot'
+import logger from '~utils/logger'
 
 interface ConversationContext {
   prompt: string
@@ -48,7 +49,7 @@ export class ClaudeApiBot extends AbstractBot {
     let result = ''
 
     await parseSSEResponse(resp, (message) => {
-      console.debug('claude sse message', message)
+      logger.debug('claude sse message', message)
       const data = JSON.parse(message) as { completion: string }
       if (data.completion) {
         result += data.completion

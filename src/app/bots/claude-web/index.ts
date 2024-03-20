@@ -63,7 +63,7 @@ export class ClaudeWebBot extends AbstractBot {
     let result = ''
 
     await parseSSEResponse(resp, (message) => {
-      console.debug('claude sse message', message)
+      logger.debug('claude sse message', message)
       const payload = JSON.parse(message)
       if (payload.completion) {
         result += payload.completion

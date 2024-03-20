@@ -9,6 +9,7 @@ import MessageAddedSubscription from './graphql/MessageAddedSubscription.graphql
 import SendMessageMutation from './graphql/SendMessageMutation.graphql?raw'
 import SubscriptionsMutation from './graphql/SubscriptionsMutation.graphql?raw'
 import ViewerStateUpdatedSubscription from './graphql/ViewerStateUpdatedSubscription.graphql?raw'
+import logger from '~utils/logger'
 
 export const GRAPHQL_QUERIES = {
   AddMessageBreakMutation,
@@ -42,7 +43,7 @@ async function getFormkey() {
 
 export async function getPoeSettings(): Promise<PoeSettings> {
   const [settings, formkey] = await Promise.all([ofetch<PoeSettings>('https://poe.com/api/settings'), getFormkey()])
-  console.debug('poe formkey', formkey)
+  logger.debug('poe formkey', formkey)
   settings.formkey = formkey
   return settings
 }

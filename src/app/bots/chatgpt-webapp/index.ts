@@ -45,13 +45,13 @@ const getConversationTitle = (bigtext: string) => {
   try {
     ret = ret.split('for summarizing :')[1]
   } catch (e) {
-    console.log(e)
+    logger.log(e)
   }
   ret = ret.split('.', 1)[0]
   try {
     ret = APPSHORTNAME + ':' + ret.split(':')[1].trim()
   } catch (e) {
-    console.log(e)
+    logger.log(e)
     ret = APPSHORTNAME + ':' + ret.trim().slice(0, 8) + '..'
   }
   return ret
@@ -106,10 +106,10 @@ export class ChatGPTWebBot extends AbstractBot {
     super()
   }
   async generateAnswerBySSE(params: SendMessageParams, arkoseToken: string, cleanup: () => void) {
-    console.debug('ChatGPTProvider:generateAnswerBySSE:', params)
+    logger.debug('ChatGPTProvider:generateAnswerBySSE:', params)
     const modelName = await this.getModelName()
-    console.debug('ChatGPTProvider:this.token:', this.accessToken)
-    console.debug('ChatGPTProvider:modelName:', modelName)
+    logger.debug('ChatGPTProvider:this.token:', this.accessToken)
+    logger.debug('ChatGPTProvider:modelName:', modelName)
     const accessToken = this.accessToken
     await fetchSSE('https://chat.openai.com/backend-api/conversation', {
       method: 'POST',
@@ -193,10 +193,10 @@ export class ChatGPTWebBot extends AbstractBot {
         return ws
       },
     })
-    console.log('ChatGPTProvider:setupWebsocket:wsp', wsp)
+    logger.log('ChatGPTProvider:setupWebsocket:wsp', wsp)
 
     const openListener = async () => {
-      console.log('ChatGPTProvider:setupWSSopenListener::wsp.onOpen')
+      logger.log('ChatGPTProvider:setupWSSopenListener::wsp.onOpen')
       await setChatgptwssIsOpenFlag(true)
     }
 
@@ -207,30 +207,30 @@ export class ChatGPTWebBot extends AbstractBot {
       const rawMessage = jjws['data'] ? jjws['data']['body'] : ''
 
       const finalMessageStr = atob(rawMessage)
-      console.log('ChatGPTProvider:setupWebsocket:wsp.onMessage:finalMessage:', finalMessageStr)
+      logger.log('ChatGPTProvider:setupWebsocket:wsp.onMessage:finalMessage:', finalMessageStr)
 
       const parser = createParser((parent_message) => {
-        console.log('ChatGPTProvider:setupWSS:createParser:parent_message', parent_message) //event=`{data:'{}',event:undefine,id=undefined,type='event'}`
+        logger.log('ChatGPTProvider:setupWSS:createParser:parent_message', parent_message) //event=`{data:'{}',event:undefine,id=undefined,type='event'}`
         let data
         try {
           if ((parent_message['data' as keyof typeof parent_message] as string) === '[DONE]') {
-            console.log('ChatGPTProvider:setupWSS:createParser:returning DONE to frontend2')
+            logger.log('ChatGPTProvider:setupWSS:createParser:returning DONE to frontend2')
             params.onEvent({ type: 'DONE' })
             wsp.close()
             return
           } else if (parent_message['data' as keyof typeof parent_message]) {
             data = JSON.parse(parent_message['data' as keyof typeof parent_message])
-            console.log('ChatGPTProvider:setupWSS:createParser:data', data)
+            logger.log('ChatGPTProvider:setupWSS:createParser:data', data)
           }
         } catch (err) {
-          console.log('ChatGPTProvider:setupWSS:createParser:Error', err)
+          logger.log('ChatGPTProvider:setupWSS:createParser:Error', err)
           params.onEvent({ type: 'ERROR', error: (err as any)?.message })
           wsp.close()
           return
         }
         const content = data?.message?.content as ResponseContent | undefined
         if (!content) {
-          console.log('ChatGPTProvider:returning DONE to frontend3')
+          logger.log('ChatGPTProvider:returning DONE to frontend3')
           params.onEvent({ type: 'DONE' })
           wsp.close()
           return
@@ -242,13 +242,13 @@ export class ChatGPTWebBot extends AbstractBot {
         } else if (content.content_type === 'code') {
           text = '_' + content.text + '_'
         } else {
-          console.log('ChatGPTProvider:returning DONE to frontend4')
+          logger.log('ChatGPTProvider:returning DONE to frontend4')
           params.onEvent({ type: 'DONE' })
           wsp.close()
           return
         }
         if (text) {
-          console.log('ChatGPTProvider:setupWSS:text', text)
+          logger.log('ChatGPTProvider:setupWSS:text', text)
           if (countWords(text) == 1 && data.message?.author?.role == 'assistant') {
             if (params.prompt.indexOf('search query:') !== -1 && accessToken) {
               renameConversationTitle({ convId: data.conversation_id, prompt: params.prompt, accessToken })
@@ -269,7 +269,7 @@ export class ChatGPTWebBot extends AbstractBot {
       parser.feed(finalMessageStr)
 
       const sequenceId = jjws['sequenceId']
-      console.log('ChatGPTProvider:doSendMessage:sequenceId:', sequenceId)
+      logger.log('ChatGPTProvider:doSendMessage:sequenceId:', sequenceId)
       if (sequenceId === next_check_seqid) {
         const t = {
           type: 'sequenceAck',
@@ -353,7 +353,7 @@ export class ChatGPTWebBot extends AbstractBot {
     }
 
     const modelName = await this.getModelName()
-    console.debug('Using model:', modelName)
+    logger.debug('Using model:', modelName)
 
     const arkoseToken = await getArkoseToken()
 
@@ -391,7 +391,7 @@ export class ChatGPTWebBot extends AbstractBot {
     const isFirstMessage = !this.conversationContext
 
     await parseSSEResponse(resp, (message) => {
-      console.debug('chatgpt sse message', message)
+      logger.debug('chatgpt sse message', message)
       if (message === '[DONE]') {
         params.onEvent({ type: 'DONE' })
         return

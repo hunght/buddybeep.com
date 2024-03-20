@@ -2,6 +2,7 @@ import { removeSlashes } from 'slashes'
 import { PROMPT_TEMPLATE } from './prompts'
 import { searchRelatedContext } from './web-search'
 import { AnwserPayload } from '~app/bots/abstract-bot'
+import logger from '~utils/logger'
 
 const TOOLS = {
   web_search:
@@ -39,7 +40,7 @@ async function* execute(
 
   for await (const payload of llm(prompt, input)) {
     output = payload
-    console.debug('llm output', output)
+    logger.debug('llm output', output)
     if (outputType === 'answer' || FINAL_ANSWER_KEYWORD_REGEX.test(payload.text)) {
       outputType = 'answer'
       const answer = payload.text.match(ACTION_INPUT_REGEX)?.[1]

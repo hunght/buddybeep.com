@@ -5,13 +5,14 @@ import closeIcon from '~/assets/icons/close.svg'
 import { useAtom } from 'jotai'
 import { searchQueryAtom } from '~app/state/agentAtom'
 import { t } from 'i18next'
+import logger from '~utils/logger'
 export const SearchInput: React.FC = () => {
   const [query, setQuery] = useState('')
   const [, setSearchQuery] = useAtom(searchQueryAtom)
   // Debounce the search query to avoid too many search operations
   const debounceSearch = useCallback(
     debounce((nextValue) => {
-      console.log('Searching for:', nextValue)
+      logger.log('Searching for:', nextValue)
       setSearchQuery(nextValue)
     }, 500),
     [],

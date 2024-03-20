@@ -2,6 +2,7 @@ import { ofetch } from 'ofetch'
 import { RequestInitSubset } from '~types/messaging'
 import { ChatError, ErrorCode } from '~utils/errors'
 import { Requester, globalFetchRequester, proxyFetchRequester } from './requesters'
+import logger from '~utils/logger'
 
 class ChatGPTClient {
   requester: Requester
@@ -16,7 +17,7 @@ class ChatGPTClient {
   }
 
   switchRequester(newRequester: Requester) {
-    console.debug('client switchRequester', newRequester)
+    logger.debug('client switchRequester', newRequester)
     this.requester = newRequester
   }
 

@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI, ChatSession } from '@google/generative-ai'
 import { AbstractBot, AsyncAbstractBot, SendMessageParams } from '../abstract-bot'
 import { getUserConfig } from '~services/user-config'
+import logger from '~utils/logger'
 
 interface ConversationContext {
   chatSession: ChatSession
@@ -27,7 +28,7 @@ export class GeminiApiBot extends AbstractBot {
     let text = ''
     for await (const chunk of result.stream) {
       const chunkText = chunk.text()
-      console.debug('gemini stream', chunkText)
+      logger.debug('gemini stream', chunkText)
       text += chunkText
       params.onEvent({ type: 'UPDATE_ANSWER', data: { text } })
     }

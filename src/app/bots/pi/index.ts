@@ -2,6 +2,7 @@ import { requestHostPermission } from '~app/utils/permissions'
 import { ChatError, ErrorCode } from '~utils/errors'
 import { parseSSEResponse } from '~utils/sse'
 import { AbstractBot, SendMessageParams } from '../abstract-bot'
+import logger from '~utils/logger'
 
 interface ConversationContext {
   initialized: boolean
@@ -30,7 +31,7 @@ export class PiBot extends AbstractBot {
     })
 
     await parseSSEResponse(resp, (message) => {
-      console.debug('pi sse', message)
+      logger.debug('pi sse', message)
       const data = JSON.parse(message)
       if (data.text) {
         params.onEvent({ type: 'UPDATE_ANSWER', data: { text: data.text } })

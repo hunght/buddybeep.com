@@ -1,5 +1,6 @@
 import { createParser } from 'eventsource-parser'
 import { isEmpty } from 'lodash-es'
+import logger from '~utils/logger'
 import { streamAsyncIterable } from '~utils/stream-async-iterable'
 
 export async function fetchSSE(resource: string, options: RequestInit & { onMessage: (message: string) => void }) {
@@ -16,7 +17,7 @@ export async function fetchSSE(resource: string, options: RequestInit & { onMess
   })
   for await (const chunk of streamAsyncIterable(resp.body!)) {
     const str = new TextDecoder().decode(chunk)
-    console.log('fetchSSE', str)
+    logger.log('fetchSSE', str)
     if (str.includes('wss_url')) {
       onMessage(str)
     }

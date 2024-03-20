@@ -43,10 +43,6 @@ function SidePanelPage() {
   )
   useEffect(() => {
     if (summaryText?.content) {
-      console.log(`==== summaryText?.content ===`)
-      console.log(summaryText?.content)
-      console.log('==== end log ===')
-
       chat.sendMessage(summaryText.content, undefined, { link: summaryText.link, title: summaryText.title })
       setSummaryText((prev) => (!prev ? null : { ...prev, content: null }))
     }

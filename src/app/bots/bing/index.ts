@@ -8,6 +8,7 @@ import { AbstractBot, SendMessageParams } from '../abstract-bot'
 import { createConversation } from './api'
 import { ChatResponseMessage, ConversationInfo, InvocationEventType } from './types'
 import { convertMessageToMarkdown, file2base64, websocketUtils } from './utils'
+import logger from '~utils/logger'
 
 const OPTIONS_SETS = [
   'nlu_direct_response_filter',
@@ -132,7 +133,7 @@ export class BingWebBot extends AbstractBot {
 
     wsp.onUnpackedMessage.addListener((events) => {
       for (const event of events) {
-        console.debug('bing ws event', event)
+        logger.debug('bing ws event', event)
         if (JSON.stringify(event) === '{}') {
           wsp.sendPacked({ type: 6 })
           wsp.sendPacked(this.buildChatRequest(conversation, params.prompt, imageUrl))
@@ -247,7 +248,7 @@ export class BingWebBot extends AbstractBot {
       body: formData,
     })
     if (!resp.blobId) {
-      console.debug('kblob response: ', resp)
+      logger.debug('kblob response: ', resp)
       throw new Error('Failed to upload image')
     }
     return `https://www.bing.com/images/blob?bcid=${resp.blobId}`

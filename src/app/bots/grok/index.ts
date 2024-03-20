@@ -4,6 +4,7 @@ import { requestHostPermission } from '~app/utils/permissions'
 import { ChatError, ErrorCode } from '~utils/errors'
 import { streamAsyncIterable } from '~utils/stream-async-iterable'
 import { AbstractBot, SendMessageParams } from '../abstract-bot'
+import logger from '~utils/logger'
 
 const AUTHORIZATION_VALUE =
   'Bearer AAAAAAAAAAAAAAAAAAAAANRILgAAAAAAnNwIzUejRCOuH5E6I8xnZz4puTs=1Zv7ttfk8LF81IUq16cHjhLTvJu4FA33AGWWjCpTnA'
@@ -73,7 +74,7 @@ export class GrokWebBot extends AbstractBot {
 
     for await (const uint8Array of streamAsyncIterable(resp.body!)) {
       const str = decoder.decode(uint8Array)
-      console.debug('grok stream', str)
+      logger.debug('grok stream', str)
       const lines = str.split('\n')
       for (const line of lines) {
         if (!line) {
@@ -135,7 +136,7 @@ export class GrokWebBot extends AbstractBot {
       data: { refresh },
       target: 'background',
     })
-    console.debug('twitter csrf token', token)
+    logger.debug('twitter csrf token', token)
     if (!token) {
       throw new ChatError('There is no logged-in Twitter account in this browser.', ErrorCode.TWITTER_UNAUTHORIZED)
     }

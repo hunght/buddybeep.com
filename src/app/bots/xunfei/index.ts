@@ -4,6 +4,7 @@ import { AbstractBot, SendMessageParams } from '../abstract-bot'
 import { createConversation, getGeeToken } from './api'
 import { ChatError, ErrorCode } from '~utils/errors'
 import { parseSSEResponse } from '~utils/sse'
+import logger from '~utils/logger'
 
 interface ConversationContext {
   geeToken: string
@@ -46,7 +47,7 @@ export class XunfeiBot extends AbstractBot {
     let done = false
 
     await parseSSEResponse(resp, (message) => {
-      console.debug('xunfei sse', message)
+      logger.debug('xunfei sse', message)
       if (message === '<end>') {
         done = true
         params.onEvent({ type: 'DONE' })

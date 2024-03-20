@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { UserConfig } from '~services/user-config'
 import Select from '../Select'
 import Blockquote from './Blockquote'
+import logger from '~utils/logger'
 
 interface Props {
   userConfig: UserConfig
@@ -16,7 +17,7 @@ const ClaudeWebappSettings: FC<Props> = () => {
       <Blockquote className="mb-1">{t('Webapp mode uses your login session in current browser')}</Blockquote>
       <p className="font-medium text-sm">{t('Model')}</p>
       <div className="w-[250px] mb-1">
-        <Select options={[{ name: 'Claude 2', value: 'claude-2' }]} value="claude-2" onChange={console.log} />
+        <Select options={[{ name: 'Claude 2', value: 'claude-2' }]} value="claude-2" onChange={logger.log} />
       </div>
     </div>
   )

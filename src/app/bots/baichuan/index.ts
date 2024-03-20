@@ -4,6 +4,7 @@ import { ChatError, ErrorCode } from '~utils/errors'
 import { uuid } from '~utils'
 import { generateMessageId, generateSessionId, getUserInfo } from './api'
 import { streamAsyncIterable } from '~utils/stream-async-iterable'
+import logger from '~utils/logger'
 
 interface Message {
   id: string
@@ -52,7 +53,7 @@ export class BaichuanWebBot extends AbstractBot {
         assistant: {},
         assistant_info: {},
         retry: 3,
-        type: "input",
+        type: 'input',
         stream: true,
         request_id: uuid(),
         app_info: { id: 10001, name: 'baichuan_web' },
@@ -63,7 +64,7 @@ export class BaichuanWebBot extends AbstractBot {
           from: message.from,
           parent_id: lastMessageId || 0,
           created_at: message.createdAt,
-          attachments: []
+          attachments: [],
         },
         session_info: { id: conversationId, name: '新的对话', created_at: Date.now() },
         parameters: {
@@ -74,7 +75,7 @@ export class BaichuanWebBot extends AbstractBot {
           max_new_tokens: -1,
           do_sample: -1,
           regenerate: 0,
-          wse:true
+          wse: true,
         },
         history: historyMessages,
       }),
@@ -86,7 +87,7 @@ export class BaichuanWebBot extends AbstractBot {
 
     for await (const uint8Array of streamAsyncIterable(resp.body!)) {
       const str = decoder.decode(uint8Array)
-      console.debug('baichuan stream', str)
+      logger.debug('baichuan stream', str)
       const lines = str.split('\n')
       for (const line of lines) {
         if (!line) {

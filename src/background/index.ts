@@ -5,6 +5,7 @@ import { trackInstallSource } from './source'
 import { readTwitterCsrfToken } from './twitter-cookie'
 import { myAtomStore } from '~app/state/store'
 import { sidePanelSummaryAtom } from '~app/state/sidePanelAtom'
+import logger from '~utils/logger'
 
 // expose storage.session to content scripts
 // using `chrome.*` API because `setAccessLevel` is not supported by `Browser.*` API
@@ -39,14 +40,14 @@ Browser.runtime.onInstalled.addListener((details) => {
 })
 
 Browser.commands.onCommand.addListener(async (command) => {
-  console.debug(`Command: ${command}`)
+  logger.debug(`Command: ${command}`)
   if (command === 'open-app') {
     openAppPage()
   }
 })
 
 Browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  console.debug('onMessage', message, sender)
+  logger.debug('onMessage', message, sender)
 
   if (message.action === 'openSidePanel') {
     const tabId = sender.tab?.id

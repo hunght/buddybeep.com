@@ -2,6 +2,7 @@ import Browser, { Runtime } from 'webextension-polyfill'
 import { CHATGPT_HOME_URL } from '~app/consts'
 import { proxyFetch } from '~services/proxy-fetch'
 import { RequestInitSubset } from '~types/messaging'
+import logger from '~utils/logger'
 
 export interface Requester {
   fetch(url: string, options?: RequestInitSubset): Promise<Response>
@@ -35,7 +36,7 @@ class ProxyFetchRequester implements Requester {
     return new Promise((resolve, reject) => {
       const listener = async function (message: any, sender: Runtime.MessageSender) {
         if (message.event === 'PROXY_TAB_READY') {
-          console.debug('new proxy tab ready')
+          logger.debug('new proxy tab ready')
           Browser.runtime.onMessage.removeListener(listener)
           clearTimeout(timer)
           resolve(sender.tab!)

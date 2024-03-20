@@ -7,6 +7,7 @@ import {
 } from '~types/messaging'
 import { uuid } from '~utils'
 import { string2Uint8Array, uint8Array2String } from '~utils/encoding'
+import logger from '~utils/logger'
 import { streamAsyncIterable } from '~utils/stream-async-iterable'
 
 export function setupProxyExecutor() {
@@ -17,7 +18,7 @@ export function setupProxyExecutor() {
       abortController.abort()
     })
     port.onMessage.addListener(async (message: ProxyFetchRequestMessage) => {
-      console.debug('proxy fetch', message.url, message.options)
+      logger.debug('proxy fetch', message.url, message.options)
       const resp = await fetch(message.url, {
         ...message.options,
         signal: abortController.signal,
@@ -43,7 +44,7 @@ export function setupProxyExecutor() {
 }
 
 export async function proxyFetch(tabId: number, url: string, options?: RequestInitSubset): Promise<Response> {
-  console.debug('proxyFetch', tabId, url, options)
+  logger.debug('proxyFetch', tabId, url, options)
   return new Promise((resolve) => {
     const port = Browser.tabs.connect(tabId, { name: uuid() })
     port.onDisconnect.addListener(() => {

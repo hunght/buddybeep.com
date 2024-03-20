@@ -3,6 +3,7 @@ import { requestHostPermissions } from '~app/utils/permissions'
 import { ChatError, ErrorCode } from '~utils/errors'
 import { AbstractBot, SendMessageParams } from '../abstract-bot'
 import { createSession } from './api'
+import logger from '~utils/logger'
 
 interface ConversationContext {
   wsp: WebSocketAsPromised
@@ -62,7 +63,7 @@ export class PerplexityLabsBot extends AbstractBot {
     const { wsp } = this.conversationContext
 
     const listener = (data: string) => {
-      console.debug('pplx ws data', data)
+      logger.debug('pplx ws data', data)
       if (!data.startsWith('42')) {
         return
       }
