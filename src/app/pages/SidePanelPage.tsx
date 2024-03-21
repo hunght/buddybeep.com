@@ -67,7 +67,7 @@ function SidePanelPage() {
   return (
     <ConversationContext.Provider value={context}>
       <div className="flex flex-col overflow-hidden bg-primary-background h-full">
-        <div className="border-b border-solid border-primary-border flex flex-row items-center justify-between gap-2 py-3 mx-3">
+        <div className="border-b border-solid border-primary-border flex flex-row items-center justify-between gap-2 pt-3 mx-3">
           <img
             src={logo}
             className="w-[30px] cursor-pointer"
@@ -86,7 +86,7 @@ function SidePanelPage() {
                 setTab('chat')
               }}
               className={cx(
-                'relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10',
+                'relative inline-flex items-center rounded-tl-2xl bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10',
                 tab === 'chat'
                   ? 'bg-indigo-600 text-white hover:bg-indigo-500'
                   : 'ring-1 ring-inset ring-gray-300 bg-white text-gray-900 hover:bg-gray-50',
@@ -100,7 +100,7 @@ function SidePanelPage() {
               }}
               type="button"
               className={cx(
-                'relative -ml-px inline-flex items-center  px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10 rounded-r-md',
+                'relative -ml-px inline-flex items-center  px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10 rounded-tr-2xl',
                 tab === 'write'
                   ? 'bg-indigo-600 text-white hover:bg-indigo-500'
                   : 'ring-1 ring-inset ring-gray-300 bg-white text-gray-900 hover:bg-gray-50',
@@ -111,12 +111,13 @@ function SidePanelPage() {
           </span>
 
           {/* {agent && <span className="text-primary-text">{agent.name}</span>} */}
-          <div className="w-40">
-            <LanguageSelection />
-          </div>
+
           <div className="flex flex-row items-center gap-2">
             <img src={botInfo.avatar} className="w-4 h-4 object-contain rounded-full" />
             <ChatbotName botId={botId} name={botInfo.name} onSwitchBot={setBotId} />
+          </div>
+          <div className="w-30">
+            <LanguageSelection />
           </div>
           <div className="flex flex-row items-center gap-3">
             <img
