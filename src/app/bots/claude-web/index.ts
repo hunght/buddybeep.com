@@ -4,11 +4,12 @@ import { createConversation, fetchOrganizationId, generateChatTitle } from './ap
 import { requestHostPermission } from '~app/utils/permissions'
 import { ChatError, ErrorCode } from '~utils/errors'
 import logger from '~utils/logger'
+import { ClaudeAPIModel } from '~services/user-config'
 
 interface ConversationContext {
   conversationId: string
 }
-
+const DEFAULT_MODEL = 'claude-3-sonnet-20240229'
 export class ClaudeWebBot extends AbstractBot {
   private organizationId?: string
   private conversationContext?: ConversationContext
@@ -16,7 +17,8 @@ export class ClaudeWebBot extends AbstractBot {
 
   constructor() {
     super()
-    this.model = 'claude-2.1'
+
+    this.model = DEFAULT_MODEL
   }
 
   async doSendMessage(params: SendMessageParams): Promise<void> {
@@ -34,23 +36,21 @@ export class ClaudeWebBot extends AbstractBot {
       generateChatTitle(this.organizationId, conversationId, params.prompt).catch(logger.error)
     }
 
-    const resp = await fetch('https://claude.ai/api/append_message', {
-      method: 'POST',
-      signal: params.signal,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        organization_uuid: this.organizationId,
-        conversation_uuid: this.conversationContext.conversationId,
-        text: params.prompt,
-        completion: {
-          prompt: params.prompt,
-          model: this.model,
+    const resp = await fetch(
+      `https://claude.ai/api/organizations/${this.organizationId}/chat_conversations/${this.conversationContext.conversationId}/completion`,
+      {
+        method: 'POST',
+        signal: params.signal,
+        headers: {
+          'Content-Type': 'application/json',
         },
-        attachments: [],
-      }),
-    })
+        body: JSON.stringify({
+          prompt: params.prompt,
+          attachments: [],
+          files: [],
+        }),
+      },
+    )
 
     // different models are available for different accounts
     if (!resp.ok && resp.status === 403 && this.model === 'claude-2.1') {
@@ -84,6 +84,6 @@ export class ClaudeWebBot extends AbstractBot {
   }
 
   get name() {
-    return 'Claude (webapp/claude-2)'
+    return 'Claude (webapp/claude-3)'
   }
 }

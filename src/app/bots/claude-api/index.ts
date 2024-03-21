@@ -65,8 +65,17 @@ export class ClaudeApiBot extends AbstractBot {
     switch (this.config.claudeApiModel) {
       case ClaudeAPIModel['claude-instant-1']:
         return 'claude-instant-1.2'
-      default:
+      case ClaudeAPIModel['claude-2']:
         return 'claude-2.1'
+      case ClaudeAPIModel['claude-3-sonnet']:
+        return 'claude-3-sonnet-20240229'
+      case ClaudeAPIModel['claude-3-opus']:
+        return 'claude-3-opus-20240229'
+      case ClaudeAPIModel['claude-3-haiku']:
+        return 'claude-3-haiku-20240307'
+
+      default:
+        return 'claude-3-sonnet-20240229'
     }
   }
 

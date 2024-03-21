@@ -17,7 +17,11 @@ const ClaudeWebappSettings: FC<Props> = () => {
       <Blockquote className="mb-1">{t('Webapp mode uses your login session in current browser')}</Blockquote>
       <p className="font-medium text-sm">{t('Model')}</p>
       <div className="w-[250px] mb-1">
-        <Select options={[{ name: 'Claude 2', value: 'claude-2' }]} value="claude-2" onChange={logger.log} />
+        <Select
+          options={[{ name: 'Claude 3', value: 'claude-3-sonnet' }]}
+          value="claude-3-sonnet"
+          onChange={logger.log}
+        />
       </div>
     </div>
   )

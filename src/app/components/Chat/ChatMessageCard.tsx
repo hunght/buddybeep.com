@@ -44,6 +44,9 @@ const ChatMessageCard: FC<Props> = ({ message, className, avatar }) => {
       setTimeout(() => setCopied(false), 1000)
     }
   }, [copied])
+  console.log(`==== message ===`)
+  console.log(message)
+  console.log('==== end log ===')
 
   return (
     <div
@@ -56,7 +59,12 @@ const ChatMessageCard: FC<Props> = ({ message, className, avatar }) => {
           {message.text ? (
             <Markdown>{message.text}</Markdown>
           ) : (
-            !message.error && <BeatLoader size={10} className="leading-tight" color="rgb(var(--primary-text))" />
+            !message.error &&
+            (message?.text?.length === 0 ? (
+              <Markdown>{'...'}</Markdown>
+            ) : (
+              <BeatLoader size={10} className="leading-tight" color="rgb(var(--primary-text))" />
+            ))
           )}
           {!!message.error && <p className="text-[#cc0000] dark:text-[#ff0033]">{message.error.message}</p>}
         </MessageBubble>

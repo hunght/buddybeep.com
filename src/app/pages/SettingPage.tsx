@@ -163,7 +163,7 @@ function SettingPage() {
               </div>
             </div>
           </ChatBotSettingPanel>
-          {/* <ChatBotSettingPanel title="Claude">
+          <ChatBotSettingPanel title="Claude">
             <RadioGroup
               options={Object.entries(ClaudeMode).map(([k, v]) => ({ label: `${k} ${t('Mode')}`, value: v }))}
               value={userConfig.claudeMode}
@@ -179,7 +179,7 @@ function SettingPage() {
               <ClaudePoeSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
             )}
           </ChatBotSettingPanel>
-          <ChatBotSettingPanel title="Perplexity">
+          {/* <ChatBotSettingPanel title="Perplexity">
             <RadioGroup
               options={Object.entries(PerplexityMode).map(([k, v]) => ({ label: `${k} ${t('Mode')}`, value: v }))}
               value={userConfig.perplexityMode}

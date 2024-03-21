@@ -45,7 +45,7 @@ const atomWithLocalStorage = (key: string, initialValue: OriginalChatState) => {
 
       const messages = nextValue.messages.map((m) => ({
         id: m.id,
-        text: m.text,
+        text: m.text ?? '',
         error: m.error?.code,
         author: m.author,
       }))

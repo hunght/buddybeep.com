@@ -41,6 +41,7 @@ export const ContentScript: React.FC = () => {
         if (!videoId) {
           return
         }
+        setTranscriptHTML([])
         // Get Transcript Language Options & Create Language Select Btns
         const langOptionsWithLink = await getLangOptionsWithLink(videoId)
         if (!langOptionsWithLink) {
@@ -82,6 +83,7 @@ export const ContentScript: React.FC = () => {
   if (!videoId) {
     return <div></div>
   }
+  const isHasTranscripts = transcriptHTML.length > 0 && !!videoId
   return (
     <div
       style={{
@@ -89,7 +91,7 @@ export const ContentScript: React.FC = () => {
         position: 'relative',
         backgroundColor: '#1b141d',
         width: '420px',
-        height: open ? '28rem' : '4rem',
+        height: isHasTranscripts && open ? '28rem' : '4rem',
         borderRadius: '1rem',
       }}
     >
@@ -106,7 +108,7 @@ export const ContentScript: React.FC = () => {
       >
         <Collapsible
           className="w-full rounded z-10 bg-primary-background flex flex-col"
-          open={open}
+          open={isHasTranscripts && open}
           onOpenChange={setOpen}
         >
           <div className="flex items-center flex-1 text-white py-2 px-4 rounded w-full">
@@ -141,26 +143,30 @@ export const ContentScript: React.FC = () => {
                 </button>
               </Tooltip>
 
-              <Tooltip text="Jump to current time">
-                <button
-                  className="px-4 items-center justify-center py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-xl"
-                  onClick={() => {
-                    if (!open) {
-                      setOpen(true)
-                    }
-                    const currTime = getTYCurrentTime()
+              {isHasTranscripts && (
+                <Tooltip text="Jump to current time">
+                  <button
+                    className="px-4 items-center justify-center py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-xl"
+                    onClick={() => {
+                      if (!open) {
+                        setOpen(true)
+                      }
+                      const currTime = getTYCurrentTime()
 
-                    const firstItem = transcriptHTML.find((obj) => Number(obj.start) + Number(obj.duration) >= currTime)
+                      const firstItem = transcriptHTML.find(
+                        (obj) => Number(obj.start) + Number(obj.duration) >= currTime,
+                      )
 
-                    const element = firstItem ? getElementById(firstItem.start) : null
-                    if (element) {
-                      element.scrollIntoView({ behavior: 'auto', block: 'center' })
-                    }
-                  }}
-                >
-                  <ArrowDownOnSquareStackIcon className="h-6 w-6" />
-                </button>
-              </Tooltip>
+                      const element = firstItem ? getElementById(firstItem.start) : null
+                      if (element) {
+                        element.scrollIntoView({ behavior: 'auto', block: 'center' })
+                      }
+                    }}
+                  >
+                    <ArrowDownOnSquareStackIcon className="h-6 w-6" />
+                  </button>
+                </Tooltip>
+              )}
               <Tooltip text="Play or Pause Video">
                 <button
                   className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-xl"
@@ -171,19 +177,21 @@ export const ContentScript: React.FC = () => {
                   <PlayPauseIcon className="h-6 w-6" />
                 </button>
               </Tooltip>
-              <Tooltip text="Collap or Expand View">
-                <button
-                  className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-xl dark:bg-gray-900"
-                  onClick={() => {
-                    setOpen(!open)
-                  }}
-                >
-                  {!open ? <ChevronDownIcon className="h-6 w-6" /> : <ChevronUpIcon className="h-6 w-6" />}
-                </button>
-              </Tooltip>
+              {isHasTranscripts && (
+                <Tooltip text="Collap or Expand View">
+                  <button
+                    className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-xl dark:bg-gray-900"
+                    onClick={() => {
+                      setOpen(!open)
+                    }}
+                  >
+                    {!open ? <ChevronDownIcon className="h-6 w-6" /> : <ChevronUpIcon className="h-6 w-6" />}
+                  </button>
+                </Tooltip>
+              )}
             </div>
           </div>
-          {langOptions.length > 3 && (
+          {/* {langOptions.length > 3 && (
             <div className="flex px-4 pb-1 justify-between items-center gap-1">
               {langOptions.map((lang) => (
                 <button
@@ -197,7 +205,7 @@ export const ContentScript: React.FC = () => {
                 </button>
               ))}
             </div>
-          )}
+          )} */}
 
           <CollapsibleContent className="overflow-scroll h-96 bg-white text-primary-text rounded-lg">
             {transcriptHTML.length > 0 && videoId && <Transcript videoId={videoId} transcriptHTML={transcriptHTML} />}

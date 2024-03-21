@@ -22,6 +22,9 @@ export function useChat(botId: BotId, agentId: string | null) {
 
   const allAgents = useAtomValue(getAllAgentsAtom)
   const [chatState, setChatState] = useAtom(chatAtom)
+  console.log(`==== chatState ===`)
+  console.log(chatState)
+  console.log('==== end log ===')
 
   const updateMessage = useCallback(
     (messageId: string, updater: (message: ChatMessageModel) => void) => {
@@ -71,7 +74,7 @@ export function useChat(botId: BotId, agentId: string | null) {
       setChatState((draft) => {
         draft.messages.push(
           { id: uuid(), text: summary ? `${summary.title}[${summary.link}]` : input, image, author: 'user' },
-          { id: botMessageId, text: '', author: botId },
+          { id: botMessageId, text: null, author: botId },
         )
       })
 

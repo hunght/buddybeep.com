@@ -20,14 +20,6 @@ export const CHAT_STATE_STORAGE = 'CHAT_STATE_STORAGE'
 export const CHAT_MESSAGE_STATE = 'CHAT_MESSAGE_STATE'
 
 export const CHATBOTS: Record<BotId, { name: string; avatar: string }> = {
-  chatgpt: {
-    name: 'ChatGPT',
-    avatar: chatgptLogo,
-  },
-  // claude: {
-  //   name: 'Claude',
-  //   avatar: claudeLogo,
-  // },
   gemini: {
     name: 'Gemini',
     avatar: geminiLogo,
@@ -35,6 +27,15 @@ export const CHATBOTS: Record<BotId, { name: string; avatar: string }> = {
   bing: {
     name: 'Bing',
     avatar: bingLogo,
+  },
+  chatgpt: {
+    name: 'ChatGPT',
+    avatar: chatgptLogo,
+  },
+
+  claude: {
+    name: 'Claude',
+    avatar: claudeLogo,
   },
   // perplexity: {
   //   name: 'Perplexity',

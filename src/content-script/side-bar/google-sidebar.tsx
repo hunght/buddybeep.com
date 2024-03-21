@@ -4,12 +4,13 @@ import { useEffect, useState } from 'react'
 import './google-sidebar-base.css'
 
 import { getDocumentTextFromDOM } from '~content-script/helper/dom'
+import { useTranslation } from 'react-i18next'
 
 // Inject into the ShadowDOM
 
 const GoogleSidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true)
-
+  const { t } = useTranslation()
   const isPrintLayout = document.body.id === 'print-layout'
   if (isPrintLayout) {
     return <div />
@@ -98,7 +99,7 @@ const GoogleSidebar: React.FC = () => {
                   })
                 }}
               >
-                <span style={{ color: 'white' }}>Sum</span>
+                <span style={{ color: 'white' }}>{t('Ask')}</span>
                 <img src={chrome.runtime.getURL('src/assets/icon.png')} style={{ width: 25, height: 25 }} />
               </div>
             </div>

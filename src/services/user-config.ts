@@ -42,8 +42,11 @@ export enum ClaudeMode {
 }
 
 export enum ClaudeAPIModel {
-  'claude-2' = 'claude-2',
-  'claude-instant-1' = 'claude-instant-v1',
+  'claude-2' = 'claude-2.1',
+  'claude-instant-1' = 'claude-instant-1.2',
+  'claude-3-sonnet' = 'claude-3-sonnet-20240229',
+  'claude-3-opus' = 'claude-3-opus-20240229',
+  'claude-3-haiku' = 'claude-3-haiku-20240307',
 }
 
 export enum OpenRouterClaudeModel {
@@ -74,7 +77,7 @@ const userConfigWithDefaultValue = {
   enabledBots: Object.keys(CHATBOTS).slice(0, 8) as BotId[],
   claudeApiKey: '',
   claudeMode: ClaudeMode.Webapp,
-  claudeApiModel: ClaudeAPIModel['claude-2'],
+  claudeApiModel: ClaudeAPIModel['claude-3-sonnet'],
   chatgptWebAccess: false,
   claudeWebAccess: false,
   openrouterOpenAIModel: CHATGPT_API_MODELS[0] as (typeof CHATGPT_API_MODELS)[number],
@@ -110,7 +113,7 @@ export async function getUserConfig(): Promise<UserConfig> {
     result.claudeApiModel !== ClaudeAPIModel['claude-2'] ||
     result.claudeApiModel !== ClaudeAPIModel['claude-instant-1']
   ) {
-    result.claudeApiModel = ClaudeAPIModel['claude-2']
+    result.claudeApiModel = ClaudeAPIModel['claude-3-sonnet']
   }
   return defaults(result, userConfigWithDefaultValue)
 }
