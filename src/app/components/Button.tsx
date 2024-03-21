@@ -1,5 +1,5 @@
 import { cx } from '~/utils'
-import { ButtonHTMLAttributes, FC, ReactNode } from 'react'
+import { ButtonHTMLAttributes, ReactNode } from 'react'
 import { BeatLoader } from 'react-spinners'
 import React from 'react'
 import { motion } from 'framer-motion'

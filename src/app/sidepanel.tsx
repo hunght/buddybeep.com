@@ -2,7 +2,7 @@ import { createRoot } from 'react-dom/client'
 
 import './i18n'
 import SidePanelPage from './pages/SidePanelPage'
-import { trackEvent } from './plausible'
+
 import './base.scss'
 import './sidepanel.css'
 import { Provider } from 'jotai'

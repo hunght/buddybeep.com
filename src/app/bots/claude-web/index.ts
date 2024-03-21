@@ -4,7 +4,6 @@ import { createConversation, fetchOrganizationId, generateChatTitle } from './ap
 import { requestHostPermission } from '~app/utils/permissions'
 import { ChatError, ErrorCode } from '~utils/errors'
 import logger from '~utils/logger'
-import { ClaudeAPIModel } from '~services/user-config'
 
 interface ConversationContext {
   conversationId: string

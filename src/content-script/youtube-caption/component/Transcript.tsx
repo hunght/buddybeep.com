@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { convertIntToHms, getTYCurrentTime, getTYEndTime } from '../helper/transcipt'
 import type { TranscriptItem } from '../type'
-import { classNames } from '../utils/classNames'
+
 import { getElementById } from '../helper/htmlSelector'
+import { cx } from '~utils'
 
 type Props = {
   videoId: string
@@ -63,8 +64,8 @@ export const Transcript: React.FC<Props> = ({ transcriptHTML, videoId }) => {
             key={obj.start ?? index}
             id={obj.start}
             data-start-time={obj.start}
-            className={classNames(
-              'flex justify-left items-baselinerounded  px-1 py-1',
+            className={cx(
+              'flex justify-left items-baselinerounded px-1 py-1',
               transcriptItem?.start === obj.start ? 'bg-gray-200' : '',
             )}
           >

@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import clearIcon from '~/assets/icons/clear.svg'
 import { cx } from '~/utils'
@@ -16,8 +16,10 @@ import { LanguageSelection } from './LanguageSelection'
 import logo from '~/assets/santa-logo.png'
 
 import { buildPromptWithLang } from '~app/utils/lang'
+import { WriteReplyUI } from '~app/components/write-reply'
 
 function SidePanelPage() {
+  const [tab, setTab] = useState<'chat' | 'write'>('chat')
   const { t } = useTranslation()
   const [botId, setBotId] = useAtom(sidePanelBotAtom)
   const [summaryText, setSummaryText] = useAtom(sidePanelSummaryAtom)
@@ -77,6 +79,36 @@ function SidePanelPage() {
               })
             }}
           />
+          <span className="isolate inline-flex rounded-md shadow-sm">
+            <button
+              type="button"
+              onClick={() => {
+                setTab('chat')
+              }}
+              className={cx(
+                'relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10',
+                tab === 'chat'
+                  ? 'bg-indigo-600 text-white hover:bg-indigo-500'
+                  : 'ring-1 ring-inset ring-gray-300 bg-white text-gray-900 hover:bg-gray-50',
+              )}
+            >
+              {t('Chat')}
+            </button>
+            <button
+              onClick={() => {
+                setTab('write')
+              }}
+              type="button"
+              className={cx(
+                'relative -ml-px inline-flex items-center  px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10 rounded-r-md',
+                tab === 'write'
+                  ? 'bg-indigo-600 text-white hover:bg-indigo-500'
+                  : 'ring-1 ring-inset ring-gray-300 bg-white text-gray-900 hover:bg-gray-50',
+              )}
+            >
+              {t('Write')}
+            </button>
+          </span>
 
           {/* {agent && <span className="text-primary-text">{agent.name}</span>} */}
           <div className="w-40">
@@ -94,24 +126,30 @@ function SidePanelPage() {
             />
           </div>
         </div>
-        <ChatMessageList avatar={null} botId={botId} messages={chat.messages} className="mx-3" />
-        <div className="flex flex-col mx-3 my-3 gap-3">
-          <hr className="grow border-primary-border" />
-          <ChatMessageInput
-            mode="compact"
-            disabled={chat.generating}
-            autoFocus={true}
-            placeholder="Ask me anything..."
-            onSubmit={onSubmit}
-            actionButton={
-              chat.generating ? (
-                <Button text={t('Stop')} color="flat" size="small" onClick={chat.stopGenerating} />
-              ) : (
-                <Button text={t('Send')} color="primary" type="submit" size="small" />
-              )
-            }
-          />
-        </div>
+        {tab === 'chat' ? (
+          <>
+            <ChatMessageList avatar={null} botId={botId} messages={chat.messages} className="mx-3" />
+            <div className="flex flex-col mx-3 my-3 gap-3">
+              <hr className="grow border-primary-border" />
+              <ChatMessageInput
+                mode="compact"
+                disabled={chat.generating}
+                autoFocus={true}
+                placeholder="Ask me anything..."
+                onSubmit={onSubmit}
+                actionButton={
+                  chat.generating ? (
+                    <Button text={t('Stop')} color="flat" size="small" onClick={chat.stopGenerating} />
+                  ) : (
+                    <Button text={t('Send')} color="primary" type="submit" size="small" />
+                  )
+                }
+              />
+            </div>
+          </>
+        ) : (
+          <WriteReplyUI />
+        )}
       </div>
     </ConversationContext.Provider>
   )

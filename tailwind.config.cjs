@@ -39,5 +39,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require('@headlessui/tailwindcss'), require('tailwind-scrollbar')],
+  plugins: [require('@headlessui/tailwindcss'), require('tailwind-scrollbar'), require('@tailwindcss/forms')],
 }
