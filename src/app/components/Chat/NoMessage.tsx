@@ -1,13 +1,18 @@
-import { t } from 'i18next'
-import React, { FC } from 'react'
+import React, { FC, useMemo } from 'react'
 import logo from '~/assets/santa-logo.png'
 import { FaArrowRightLong } from 'react-icons/fa6'
-const textArrays = [
-  t('Tell me something about the Big Bang so that I can explain it to my 5-year-old child'),
-  t("Please provide me with 10 gift ideas for my friend's birthday"),
-  t('Generate five catchy titles for my writing about the use case of ChatGPT'),
-]
+import { useTranslation } from 'react-i18next'
+
 export const NoMessage: FC<{ onClick: (prompt: string) => void }> = ({ onClick }) => {
+  const { t } = useTranslation()
+  const textArrays = useMemo(
+    () => [
+      t('Tell me something about the Big Bang so that I can explain it to my 5-year-old child'),
+      t("Please provide me with 10 gift ideas for my friend's birthday"),
+      t('Generate five catchy titles for my writing about the use case of ChatGPT'),
+    ],
+    [t],
+  )
   return (
     <div className="bg-gray-100 min-h-screen flex justify-center items-center">
       <div className="bg-white p-6 rounded-lg shadow-lg">
