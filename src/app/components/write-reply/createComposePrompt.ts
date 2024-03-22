@@ -1,18 +1,14 @@
-import { FormatWritingType } from '~app/types/writing'
-
-export function createReplyPrompt({
-  originalText,
-  replyContent,
+export function createComposePrompt({
+  topic,
   tone,
   length,
   format,
   language,
 }: {
-  originalText: string
-  replyContent: string
+  topic: string
   tone: string
   length: string
-  format: FormatWritingType
+  format: string
   language: string
 }) {
   // Normalize the tone to match ChatGPT's expected keywords
@@ -34,14 +30,20 @@ export function createReplyPrompt({
 
   // Normalize the format to match ChatGPT's expected keywords
   const formatMapping: Record<string, string> = {
-    comment: 'as a comment',
+    essay: 'as an essay',
+    paragraph: 'as a paragraph',
     email: 'as an email',
+    idea: 'as an idea pitch',
+    blog_post: 'as a blog post',
+    outline: 'as an outline',
+    marketing_ads: 'as a marketing ad',
+    comment: 'as a comment',
     message: 'as a direct message',
     twitter: 'as a tweet',
   }
 
   // Create the prompt based on the mappings and provided inputs
-  const prompt = `Please write a reply in ${language} to the following text "${originalText}" with the general content "${replyContent}", ${toneMapping[tone]}, ${lengthMapping[length]}, ${formatMapping[format]}.`
+  const prompt = `Please compose a message on the topic "${topic}", ${toneMapping[tone]}, ${lengthMapping[length]}, ${formatMapping[format]}, in ${language}.`
 
   return prompt
 }

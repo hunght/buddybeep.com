@@ -1,10 +1,10 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import { useTranslation } from 'react-i18next'
 import { RadioGroupView } from './RadioGroup'
 
 import { PrimaryButton } from '../PrimaryButton'
-import { createChatGPTPrompt } from './createReplyPrompt'
+import { createReplyPrompt } from './createReplyPrompt'
 import { LanguageWritingSelection } from './LanguageWritingSelection'
 import { getLanguagePrompt } from '~app/utils/buildPromptWithLang'
 import { useAtom } from 'jotai'
@@ -15,11 +15,16 @@ import {
   lengthAtom,
   replyContentAtom,
   originalTextAtom,
+  formatComposeAtom,
+  composeTextAtom,
 } from '~app/state/writingAssistantAtom'
 import { FormatWritingType } from '~app/types/writing'
+import { cx } from '~utils'
+import { createComposePrompt } from './createComposePrompt'
 
 export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = ({ onGenerate }) => {
   const { t } = useTranslation()
+  const [tab, setTab] = useState<'compose' | 'reply'>('compose')
   const toneOptions = useMemo(
     () => [
       { name: t('Formal'), value: 'formal' },
@@ -50,54 +55,135 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
     ],
     [t],
   )
+  const formatComposeOptions = useMemo(
+    () => [
+      { name: t('Essay'), value: 'essay' },
+      { name: t('Paragraph'), value: 'paragraph' },
+      { name: t('Email'), value: 'email' },
+      { name: t('Idea'), value: 'idea' },
+      { name: t('Blog Post'), value: 'blog_post' },
+      { name: t('Outline'), value: 'outline' },
+      { name: t('Marketing Ads'), value: 'marketing_ads' },
+      { name: t('Comment'), value: 'comment' },
+      { name: t('Message'), value: 'message' },
+      { name: t('Twitter'), value: 'twitter' },
+    ],
+    [t],
+  )
+
   const [lang, setLang] = useAtom(langAtom)
   const [format, setFormat] = useAtom(formatAtom)
+  const [formatCompose, setFormatCompose] = useAtom(formatComposeAtom)
   const [tone, setTone] = useAtom(toneAtom)
   const [length, setLength] = useAtom(lengthAtom)
   const [replyContent, setReplyContent] = useAtom(replyContentAtom)
   const [originalText, setOriginalText] = useAtom(originalTextAtom)
+  const [composeText, setComposeText] = useAtom(composeTextAtom)
+
+  const getDisabled = (): boolean | undefined => {
+    if (tab === 'compose') {
+      return composeText.length === 0
+    }
+    return originalText.length === 0 || replyContent.length === 0
+  }
 
   return (
     <div className=" rounded-lg shadow-lg  w-full py-4 px-6 overflow-scroll">
-      <div className="mb-4">
-        <div className="tabs flex justify-between border-b">
-          <div className="tab">Compose</div>
-          <div className="tab">Reply</div>
+      <span className="isolate inline-flex rounded-md shadow-sm">
+        <button
+          type="button"
+          onClick={() => {
+            setTab('compose')
+          }}
+          className={cx(
+            'relative inline-flex items-center rounded-tl-2xl bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10',
+            tab === 'compose'
+              ? 'bg-indigo-600 text-white hover:bg-indigo-500'
+              : 'ring-1 ring-inset ring-gray-300 bg-white text-gray-900 hover:bg-gray-50',
+          )}
+        >
+          {t('Compose')}
+        </button>
+        <button
+          onClick={() => {
+            setTab('reply')
+          }}
+          type="button"
+          className={cx(
+            'relative -ml-px inline-flex items-center  px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10 rounded-tr-2xl',
+            tab === 'reply'
+              ? 'bg-indigo-600 text-white hover:bg-indigo-500'
+              : 'ring-1 ring-inset ring-gray-300 bg-white text-gray-900 hover:bg-gray-50',
+          )}
+        >
+          {t('Reply')}
+        </button>
+      </span>
+
+      <div className="mb-4  border-b"></div>
+
+      {tab === 'reply' ? (
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="original-text">
+            The original text to which you want to reply
+          </label>
+          <textarea
+            id="original-text"
+            value={originalText}
+            onChange={(e) => setOriginalText(e.target.value)}
+            placeholder='For example, "I am writing to you to express my dissatisfaction with the service I received from your company."'
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-36"
+          ></textarea>
         </div>
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="original-text">
-          The original text to which you want to reply
-        </label>
-        <textarea
-          id="original-text"
-          value={originalText}
-          onChange={(e) => setOriginalText(e.target.value)}
-          placeholder='For example, "I am writing to you to express my dissatisfaction with the service I received from your company."'
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-36"
-        ></textarea>
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="reply-content">
-          The general content of your reply to the above text
-        </label>
-        <textarea
-          id="reply-content"
-          value={replyContent}
-          onChange={(e) => setReplyContent(e.target.value)}
-          placeholder='Press Enter to generate draft suggestions based on the content you write. For example, "I am sorry to hear that you are dissatisfied with our service. We strive to provide the best service possible and we are sorry that we did not meet your expectations."'
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline h-44"
-        ></textarea>
-      </div>
-
-      <div className="mb-4  ">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-medium leading-6 text-gray-900">Format</h2>
+      ) : (
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="original-text">
+            The topic you want to compose
+          </label>
+          <textarea
+            id="original-text"
+            value={composeText}
+            onChange={(e) => setComposeText(e.target.value)}
+            placeholder='For example, "The impact of climate change on the economy."'
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-36"
+          ></textarea>
         </div>
-        <RadioGroupView options={formatOptions} value={format} onChange={(value) => setFormat(value)} />
-      </div>
+      )}
+
+      {tab === 'reply' && (
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="reply-content">
+            The general content of your reply to the above text
+          </label>
+          <textarea
+            id="reply-content"
+            value={replyContent}
+            onChange={(e) => setReplyContent(e.target.value)}
+            placeholder='Press Enter to generate draft suggestions based on the content you write. For example, "I am sorry to hear that you are dissatisfied with our service. We strive to provide the best service possible and we are sorry that we did not meet your expectations."'
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline h-44"
+          ></textarea>
+        </div>
+      )}
+
+      {tab === 'reply' ? (
+        <div className="mb-4  ">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-medium leading-6 text-gray-900">Format</h2>
+          </div>
+          <RadioGroupView options={formatOptions} value={format} onChange={(value) => setFormat(value)} />
+        </div>
+      ) : (
+        <div className="mb-4  ">
+          <div className="flex items-center justify-between">
+            <h2 className="text-sm font-medium leading-6 text-gray-900">Format</h2>
+          </div>
+          <RadioGroupView
+            options={formatComposeOptions}
+            value={formatCompose}
+            onChange={(value) => setFormatCompose(value)}
+          />
+        </div>
+      )}
 
       <div className="mb-4">
         <div className="flex items-center justify-between">
@@ -120,9 +206,20 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
         </div>
         <PrimaryButton
           title={t('Generate draft')}
-          disabled={originalText.length === 0 || replyContent.length === 0}
+          disabled={getDisabled()}
           onClick={() => {
-            const prompt = createChatGPTPrompt({
+            if (tab === 'compose') {
+              const prompt = createComposePrompt({
+                topic: composeText,
+                tone: tone,
+                length: length,
+                format: formatCompose,
+                language: getLanguagePrompt(lang) ?? 'English',
+              })
+              onGenerate(prompt)
+              return
+            }
+            const prompt = createReplyPrompt({
               originalText,
               replyContent,
               tone: tone,
