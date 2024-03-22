@@ -8,16 +8,13 @@ import './sidepanel.css'
 import { Provider } from 'jotai'
 import { myAtomStore } from './state/store'
 import { sidePanelSummaryAtom } from './state/sidePanelAtom'
-
-function SidePanelApp() {
-  return <SidePanelPage />
-}
+import Browser from 'webextension-polyfill'
 
 const container = document.getElementById('app')!
 const root = createRoot(container)
 root.render(
   <Provider store={myAtomStore}>
-    <SidePanelApp />
+    <SidePanelPage />
   </Provider>,
 )
 
@@ -28,6 +25,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       link: request.link,
       title: request.title,
       type: request.type,
+      subType: request.subType,
     })
+  }
+})
+Browser.storage.local.onChanged.addListener((changes) => {
+  if (changes.sidePanelSummaryAtom) {
+    myAtomStore.set(sidePanelSummaryAtom, changes.sidePanelSummaryAtom.newValue)
   }
 })

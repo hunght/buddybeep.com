@@ -3,9 +3,9 @@ import { ALL_IN_ONE_PAGE_ID } from '~app/consts'
 import { getUserConfig } from '~services/user-config'
 import { trackInstallSource } from './source'
 import { readTwitterCsrfToken } from './twitter-cookie'
-import { myAtomStore } from '~app/state/store'
-import { sidePanelSummaryAtom } from '~app/state/sidePanelAtom'
+
 import logger from '~utils/logger'
+import { SidePanelMessageType } from '~app/types/sidePanel'
 
 // expose storage.session to content scripts
 // using `chrome.*` API because `setAccessLevel` is not supported by `Browser.*` API
@@ -32,11 +32,77 @@ Browser.action.onClicked.addListener(() => {
   openAppPage()
 })
 
+Browser.contextMenus.onClicked.addListener(function (info, tab) {
+  const message = {
+    content: info.selectionText ?? '',
+    link: info.pageUrl ?? '',
+    title: '',
+  }
+
+  switch (info.menuItemId) {
+    case 'composeThis': {
+      // Handle the "Compose this" action
+      console.log('Composing: ' + info.selectionText)
+      chrome.sidePanel.open({ tabId: tab?.id })
+      const composeMessage: SidePanelMessageType = { ...message, subType: 'compose', type: 'writing-assistant' }
+
+      Browser.storage.local.set({ sidePanelSummaryAtom: composeMessage })
+      break
+    }
+    case 'replyToThis': {
+      // Handle the "Reply to this" action
+      chrome.sidePanel.open({ tabId: tab?.id })
+      const composeMessage: SidePanelMessageType = { ...message, subType: 'reply', type: 'writing-assistant' }
+
+      Browser.storage.local.set({ sidePanelSummaryAtom: composeMessage })
+
+      break
+    }
+    case 'explainThis': {
+      // Handle the "Explain this" action
+      chrome.sidePanel.open({ tabId: tab?.id })
+
+      const composeMessage: SidePanelMessageType = { ...message, subType: 'reply', type: 'explain-a-concept' }
+
+      Browser.storage.local.set({ sidePanelSummaryAtom: composeMessage })
+      break
+    }
+  }
+})
 Browser.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
     Browser.tabs.create({ url: 'app.html#/setting' })
     trackInstallSource()
   }
+  chrome.contextMenus.create({
+    id: 'buddyBeep',
+    title: 'BuddyBeep',
+    contexts: ['selection'],
+  })
+
+  // Submenu: Compose this
+  chrome.contextMenus.create({
+    id: 'composeThis',
+    parentId: 'buddyBeep',
+    title: 'Compose this',
+    contexts: ['selection'],
+  })
+
+  // Submenu: Reply to this
+  chrome.contextMenus.create({
+    id: 'replyToThis',
+    parentId: 'buddyBeep',
+    title: 'Reply to this',
+    contexts: ['selection'],
+  })
+
+  // Submenu: Explain this
+  chrome.contextMenus.create({
+    id: 'explainThis',
+    parentId: 'buddyBeep',
+    title: 'Explain this',
+    contexts: ['selection'],
+  })
 })
 
 Browser.commands.onCommand.addListener(async (command) => {
@@ -53,7 +119,7 @@ Browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
     const tabId = sender.tab?.id
     if (tabId) {
       chrome.sidePanel.open({ tabId })
-      myAtomStore.set(sidePanelSummaryAtom, message)
+
       Browser.storage.local.set({ sidePanelSummaryAtom: message })
     }
   }

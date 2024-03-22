@@ -1,12 +1,8 @@
 import { atom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { BotId } from '~app/bots'
+import { SidePanelMessageType } from '~app/types/sidePanel'
 
 export const sidePanelBotAtom = atomWithStorage<BotId>('sidePanelBot', 'gemini')
 
-export const sidePanelSummaryAtom = atom<{
-  content: string | null
-  link: string
-  title: string
-  type: 'summary-web-content' | 'summary-youtube-videos' | 'writing-assistant'
-} | null>(null)
+export const sidePanelSummaryAtom = atom<SidePanelMessageType | null>(null)

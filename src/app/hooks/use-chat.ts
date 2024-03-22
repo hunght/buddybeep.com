@@ -126,7 +126,12 @@ export function useChat(botId: BotId, agentId: string | null) {
 
   // send the prompt to the bot when the agent is set
   useEffect(() => {
-    if (agentId === 'summary-web-content' || agentId === 'summary-youtube-videos' || agentId === 'writing-assistant') {
+    if (
+      agentId === 'summary-web-content' ||
+      agentId === 'summary-youtube-videos' ||
+      agentId === 'writing-assistant' ||
+      agentId === 'explain-a-concept'
+    ) {
       // don't send prompt to summary-web-content agent
       return
     }

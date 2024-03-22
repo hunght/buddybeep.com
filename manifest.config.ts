@@ -29,7 +29,14 @@ export default defineManifest(async () => {
       'https://*.claude.ai/',
     ],
     optional_host_permissions: ['https://*/*', 'wss://*/*'],
-    permissions: ['storage', 'unlimitedStorage', 'declarativeNetRequestWithHostAccess', 'sidePanel', 'scripting'],
+    permissions: [
+      'contextMenus',
+      'storage',
+      'unlimitedStorage',
+      'declarativeNetRequestWithHostAccess',
+      'sidePanel',
+      'scripting',
+    ],
     side_panel: {
       default_path: 'sidepanel.html',
     },

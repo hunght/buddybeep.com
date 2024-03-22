@@ -44,9 +44,6 @@ const ChatMessageCard: FC<Props> = ({ message, className, avatar }) => {
       setTimeout(() => setCopied(false), 1000)
     }
   }, [copied])
-  console.log(`==== message ===`)
-  console.log(message)
-  console.log('==== end log ===')
 
   return (
     <div

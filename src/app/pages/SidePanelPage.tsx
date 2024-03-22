@@ -18,6 +18,7 @@ import logo from '~/assets/santa-logo.png'
 import { WritingPresetModal } from '~app/components/write-reply/modal'
 import { PrimaryButton } from '~app/components/PrimaryButton'
 import { buildPromptWithLang } from '~app/utils/lang'
+import { composeTextAtom, originalTextAtom, subTabAtom } from '~app/state/writingAssistantAtom'
 
 function SidePanelPage() {
   const [tab, setTab] = useState<'chat' | 'write'>('chat')
@@ -25,6 +26,12 @@ function SidePanelPage() {
   const [botId, setBotId] = useAtom(sidePanelBotAtom)
   const [summaryText, setSummaryText] = useAtom(sidePanelSummaryAtom)
   const [openWritingPreset, setOpenWritingPreset] = useState(false)
+  const [, setOriginalTextAtom] = useAtom(originalTextAtom)
+  const [, setComposeTextAtom] = useAtom(composeTextAtom)
+  console.log(`==== summaryText ===`)
+  console.log(summaryText)
+  console.log('==== end log ===')
+  const [, setSubTab] = useAtom(subTabAtom)
   const botInfo = CHATBOTS[botId]
   const agentType = summaryText?.type
   const agentId = useMemo(() => {
@@ -58,12 +65,36 @@ function SidePanelPage() {
     [chat],
   )
   useEffect(() => {
-    if (summaryText?.content) {
-      const content = buildPromptWithLang(summaryText.content)
-      chat.sendMessage(content, undefined, { link: summaryText.link, title: summaryText.title })
-      setSummaryText((prev) => (!prev ? null : { ...prev, content: null }))
+    if (!summaryText?.type || summaryText?.content === null) {
+      return
     }
-  }, [chat, setSummaryText, summaryText])
+
+    if (summaryText.type === 'writing-assistant') {
+      setTab('write')
+      setOpenWritingPreset(true)
+      setSubTab(summaryText.subType ?? 'compose')
+      if (summaryText.subType === 'reply') {
+        setOriginalTextAtom(summaryText.content ?? '')
+      }
+      if (summaryText.subType === 'compose') {
+        setComposeTextAtom(summaryText.content ?? '')
+      }
+      setSummaryText((prev) => (!prev ? null : { ...prev, content: null }))
+      return
+    }
+    if (
+      summaryText.type === 'explain-a-concept' ||
+      summaryText.type === 'summary-web-content' ||
+      summaryText.type === 'summary-youtube-videos'
+    ) {
+      if (summaryText?.content) {
+        const content = buildPromptWithLang(summaryText.content)
+        chat.sendMessage(content, undefined, { link: summaryText.link, title: summaryText.title })
+        setSummaryText((prev) => (!prev ? null : { ...prev, content: null }))
+      }
+      return
+    }
+  }, [chat, setComposeTextAtom, setOriginalTextAtom, setSubTab, setSummaryText, summaryText])
 
   const resetConversation = useCallback(() => {
     if (!chat.generating) {

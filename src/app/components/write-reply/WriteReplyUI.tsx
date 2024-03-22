@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 
 import { useTranslation } from 'react-i18next'
 import { RadioGroupView } from './RadioGroup'
@@ -17,6 +17,7 @@ import {
   originalTextAtom,
   formatComposeAtom,
   composeTextAtom,
+  subTabAtom,
 } from '~app/state/writingAssistantAtom'
 import { FormatWritingType } from '~app/types/writing'
 import { cx } from '~utils'
@@ -24,7 +25,7 @@ import { createComposePrompt } from './createComposePrompt'
 
 export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = ({ onGenerate }) => {
   const { t } = useTranslation()
-  const [tab, setTab] = useState<'compose' | 'reply'>('compose')
+
   const toneOptions = useMemo(
     () => [
       { name: t('Formal'), value: 'formal' },
@@ -79,7 +80,7 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
   const [replyContent, setReplyContent] = useAtom(replyContentAtom)
   const [originalText, setOriginalText] = useAtom(originalTextAtom)
   const [composeText, setComposeText] = useAtom(composeTextAtom)
-
+  const [tab, setTab] = useAtom(subTabAtom)
   const getDisabled = (): boolean | undefined => {
     if (tab === 'compose') {
       return composeText.length === 0

@@ -22,6 +22,7 @@ export const toneAtom = atom<'formal' | 'casual' | 'professional' | 'enthusiasti
 )
 
 export const lengthAtom = atom<'short' | 'medium' | 'long'>('short')
+export const subTabAtom = atom<'compose' | 'reply'>('compose')
 
 export const replyContentAtom = atom('')
 export const originalTextAtom = atom('')
