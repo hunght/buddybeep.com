@@ -1,24 +1,24 @@
-import { FC } from 'react'
 import { RadioGroup } from '@headlessui/react'
 
 import { OptionType } from './type'
 import { cx } from '~utils'
 
-type Props = {
+interface Props<T> {
   options: OptionType[]
-  value: OptionType
-  onChange: (value: OptionType) => void
+  value: T
+  onChange: (value: T) => void
+  label?: string
 }
 
-export const RadioGroupView: FC<Props> = ({ options, value, onChange }) => {
+export const RadioGroupView = <T,>({ options, value, onChange, label }: Props<T>) => {
   return (
     <RadioGroup value={value} onChange={onChange} className="mt-2">
-      <RadioGroup.Label className="sr-only">Choose a memory option</RadioGroup.Label>
+      {label && <RadioGroup.Label className="sr-only">{label}</RadioGroup.Label>}
       <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
         {options.map((option) => (
           <RadioGroup.Option
             key={option.name}
-            value={option}
+            value={option.value}
             className={({ active, checked }) =>
               cx(
                 'cursor-pointer focus:outline-none',

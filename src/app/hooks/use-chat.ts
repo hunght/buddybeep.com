@@ -10,11 +10,11 @@ import { ChatError } from '~utils/errors'
 import { BotId } from '../bots'
 import { getAllAgentsAtom } from '~app/state/agentAtom'
 
-import { buildPromptWithLang } from '~app/utils/lang'
 import logger from '~utils/logger'
 import { atomChatStateLocalStorage } from '~app/state/atomWithLocalStorage'
 import { getBotSlug } from '~app/utils/slug'
 import { LastMessageType } from '~app/types/chatState'
+import { buildPromptWithLang } from '~app/utils/lang'
 
 export function useChat(botId: BotId, agentId: string | null) {
   const chatAtom = useMemo(() => chatFamily({ botId, agentId }), [botId, agentId])
@@ -126,7 +126,7 @@ export function useChat(botId: BotId, agentId: string | null) {
 
   // send the prompt to the bot when the agent is set
   useEffect(() => {
-    if (agentId === 'summary-web-content' || agentId === 'summary-youtube-videos') {
+    if (agentId === 'summary-web-content' || agentId === 'summary-youtube-videos' || agentId === 'writing-assistant') {
       // don't send prompt to summary-web-content agent
       return
     }

@@ -126,6 +126,7 @@ import { FaCodeCommit, FaYoutube } from 'react-icons/fa6'
 import { RiPresentationLine } from 'react-icons/ri'
 import { GrUserManager } from 'react-icons/gr'
 export const agentIcons: Record<string, React.ReactElement> = {
+  'writing-assistant': <FaPencilAlt />,
   'summary-web-content': <GiCobweb />,
   'summary-youtube-videos': <FaYoutube />,
   'socratic-method': <FaQuestionCircle />, // Socratic Method icon

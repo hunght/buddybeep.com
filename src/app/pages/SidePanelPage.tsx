@@ -15,17 +15,24 @@ import { LanguageSelection } from './LanguageSelection'
 
 import logo from '~/assets/santa-logo.png'
 
+import { WritingPresetModal } from '~app/components/write-reply/modal'
+import { PrimaryButton } from '~app/components/PrimaryButton'
 import { buildPromptWithLang } from '~app/utils/lang'
-import { WriteReplyUI } from '~app/components/write-reply'
 
 function SidePanelPage() {
   const [tab, setTab] = useState<'chat' | 'write'>('chat')
   const { t } = useTranslation()
   const [botId, setBotId] = useAtom(sidePanelBotAtom)
   const [summaryText, setSummaryText] = useAtom(sidePanelSummaryAtom)
-
+  const [openWritingPreset, setOpenWritingPreset] = useState(false)
   const botInfo = CHATBOTS[botId]
-  const agentId = summaryText?.type ?? 'summary-web-content'
+  const agentType = summaryText?.type
+  const agentId = useMemo(() => {
+    if (tab === 'write') {
+      return 'writing-assistant'
+    }
+    return agentType ?? 'summary-web-content'
+  }, [agentType, tab])
 
   const chat = useChat(botId, agentId)
 
@@ -37,6 +44,12 @@ function SidePanelPage() {
       }
     })
   }, [])
+
+  useEffect(() => {
+    if (tab === 'write') {
+      setOpenWritingPreset(true)
+    }
+  }, [tab])
 
   const onSubmit = useCallback(
     async (input: string) => {
@@ -127,9 +140,9 @@ function SidePanelPage() {
             />
           </div>
         </div>
-        {tab === 'chat' ? (
-          <>
-            <ChatMessageList avatar={null} botId={botId} messages={chat.messages} className="mx-3" />
+        <>
+          <ChatMessageList avatar={null} botId={botId} messages={chat.messages} className="mx-3" />
+          {tab === 'chat' ? (
             <div className="flex flex-col mx-3 my-3 gap-3">
               <hr className="grow border-primary-border" />
               <ChatMessageInput
@@ -147,10 +160,44 @@ function SidePanelPage() {
                 }
               />
             </div>
-          </>
-        ) : (
-          <WriteReplyUI />
-        )}
+          ) : (
+            <>
+              <WritingPresetModal
+                open={openWritingPreset}
+                onClose={() => {
+                  setOpenWritingPreset(false)
+                }}
+                onGenerate={(prompt) => {
+                  setOpenWritingPreset(false)
+                  chat.sendMessage(prompt)
+                }}
+              />
+              <div className="flex flex-col mx-3 my-3 gap-3">
+                <hr className="grow border-primary-border" />
+                <PrimaryButton
+                  title={t('Generate Preset Writing')}
+                  onClick={() => {
+                    setOpenWritingPreset(true)
+                  }}
+                />
+                <ChatMessageInput
+                  mode="compact"
+                  disabled={chat.generating}
+                  autoFocus={true}
+                  placeholder="Ask me anything..."
+                  onSubmit={onSubmit}
+                  actionButton={
+                    chat.generating ? (
+                      <Button text={t('Stop')} color="flat" size="small" onClick={chat.stopGenerating} />
+                    ) : (
+                      <Button text={t('Send')} color="primary" type="submit" size="small" />
+                    )
+                  }
+                />
+              </div>
+            </>
+          )}
+        </>
       </div>
     </ConversationContext.Provider>
   )

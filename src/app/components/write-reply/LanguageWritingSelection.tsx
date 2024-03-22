@@ -1,12 +1,14 @@
-import { useCallback, useMemo, useState } from 'react'
+import { FC, useMemo } from 'react'
 import Select from '~app/components/Select'
 
 import { languageCodes } from '~app/i18n'
 
 import { t } from 'i18next'
 
-export const LanguageWritingSelection: React.FunctionComponent = () => {
-  const [lang, setLang] = useState<string | null>(null)
+export const LanguageWritingSelection: FC<{
+  lang: string | null
+  onLanguageChange: (lang: string) => void
+}> = ({ onLanguageChange, lang }) => {
   const languageOptions = useMemo(() => {
     const nameGenerator = new Intl.DisplayNames('en', { type: 'language' })
     return languageCodes.map((code) => {
@@ -22,15 +24,12 @@ export const LanguageWritingSelection: React.FunctionComponent = () => {
     })
   }, [])
 
-  const onLanguageChange = useCallback((lang: string) => {
-    setLang(lang)
-  }, [])
-
   return (
     <Select
       options={[{ name: t('Auto'), value: 'auto' }, { name: 'English', value: 'en' }, ...languageOptions]}
       value={lang ?? 'auto'}
       onChange={onLanguageChange}
+      position="top"
     />
   )
 }

@@ -11,6 +11,7 @@ interface Props {
   onClose: () => void
   className?: string
   borderless?: boolean
+  showLanguageSelection?: boolean
 }
 
 const Dialog: FC<PropsWithChildren<Props>> = (props) => {
@@ -54,10 +55,14 @@ const Dialog: FC<PropsWithChildren<Props>> = (props) => {
                   <span className="ml-auto" />
                   <span className="font-bold text-primary-text text-base">{props.title}</span>
                   <div className=" ml-auto mr-[10px] flex flex-row items-center gap-2">
-                    <p className="font-bold text-sm text-center">{t('Language')}</p>
-                    <div className="w-40">
-                      <LanguageSelection />
-                    </div>
+                    {props.showLanguageSelection && (
+                      <>
+                        <p className="font-bold text-sm text-center">{t('Language')}</p>
+                        <div className="w-40">
+                          <LanguageSelection />
+                        </div>
+                      </>
+                    )}
 
                     <img src={closeIcon} className="w-4 h-4 cursor-pointer ml-4" onClick={props.onClose} />
                   </div>

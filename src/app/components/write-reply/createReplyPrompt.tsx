@@ -1,11 +1,20 @@
-export function createChatGPTPrompt(
-  originalText: string,
-  replyContent: string,
-  tone: string,
-  length: string,
-  format: string,
-  language: string,
-) {
+import { FormatWritingType } from '~app/types/writing'
+
+export function createChatGPTPrompt({
+  originalText,
+  replyContent,
+  tone,
+  length,
+  format,
+  language,
+}: {
+  originalText: string
+  replyContent: string
+  tone: string
+  length: string
+  format: FormatWritingType
+  language: string
+}) {
   // Normalize the tone to match ChatGPT's expected keywords
   const toneMapping: Record<string, string> = {
     formal: 'in a formal tone',

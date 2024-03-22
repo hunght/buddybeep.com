@@ -8,5 +8,5 @@ export const sidePanelSummaryAtom = atom<{
   content: string | null
   link: string
   title: string
-  type: 'summary-web-content' | 'summary-youtube-videos'
+  type: 'summary-web-content' | 'summary-youtube-videos' | 'writing-assistant'
 } | null>(null)

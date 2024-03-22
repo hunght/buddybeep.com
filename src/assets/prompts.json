@@ -1,4 +1,9 @@
 {
+    "writing-assistant": {
+        "agentId": "writing-assistant",
+        "name": "Writing Assistant",
+        "prompt": "Need custom preset for writing assistant."
+    },
     "summary-web-content": {
         "agentId": "summary-web-content",
         "name": "Summary Web Content",

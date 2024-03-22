@@ -1,10 +1,24 @@
-import React, { useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 
 import { useTranslation } from 'react-i18next'
 import { RadioGroupView } from './RadioGroup'
-import { OptionType } from './type'
 
-export const WriteReplyUI = () => {
+import { PrimaryButton } from '../PrimaryButton'
+import { createChatGPTPrompt } from './createReplyPrompt'
+import { LanguageWritingSelection } from './LanguageWritingSelection'
+import { getLanguagePrompt } from '~app/utils/buildPromptWithLang'
+import { useAtom } from 'jotai'
+import {
+  langAtom,
+  formatAtom,
+  toneAtom,
+  lengthAtom,
+  replyContentAtom,
+  originalTextAtom,
+} from '~app/state/writingAssistantAtom'
+import { FormatWritingType } from '~app/types/writing'
+
+export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = ({ onGenerate }) => {
   const { t } = useTranslation()
   const toneOptions = useMemo(
     () => [
@@ -27,7 +41,7 @@ export const WriteReplyUI = () => {
     [t],
   )
 
-  const formatOptions = useMemo(
+  const formatOptions = useMemo<{ name: string; value: FormatWritingType }[]>(
     () => [
       { name: t('Comment'), value: 'comment' },
       { name: t('Email'), value: 'email' },
@@ -36,15 +50,15 @@ export const WriteReplyUI = () => {
     ],
     [t],
   )
-
-  const [format, setFormat] = useState<OptionType>(formatOptions[0])
-  const [tone, setTone] = useState<OptionType>(toneOptions[0])
-  const [length, setLength] = useState<OptionType>(lengthOptions[0])
-  const [replyContent, setReplyContent] = useState<string>('')
-  const [originalText, setOriginalText] = useState<string>('')
+  const [lang, setLang] = useAtom(langAtom)
+  const [format, setFormat] = useAtom(formatAtom)
+  const [tone, setTone] = useAtom(toneAtom)
+  const [length, setLength] = useAtom(lengthAtom)
+  const [replyContent, setReplyContent] = useAtom(replyContentAtom)
+  const [originalText, setOriginalText] = useAtom(originalTextAtom)
 
   return (
-    <div className=" rounded-lg shadow-lg  w-full py-4 px-6">
+    <div className=" rounded-lg shadow-lg  w-full py-4 px-6 overflow-scroll">
       <div className="mb-4">
         <div className="tabs flex justify-between border-b">
           <div className="tab">Compose</div>
@@ -82,7 +96,7 @@ export const WriteReplyUI = () => {
         <div className="flex items-center justify-between">
           <h2 className="text-sm font-medium leading-6 text-gray-900">Format</h2>
         </div>
-        <RadioGroupView options={formatOptions} value={format} onChange={setFormat} />
+        <RadioGroupView options={formatOptions} value={format} onChange={(value) => setFormat(value)} />
       </div>
 
       <div className="mb-4">
@@ -98,15 +112,27 @@ export const WriteReplyUI = () => {
         </div>
         <RadioGroupView options={lengthOptions} value={length} onChange={setLength} />
       </div>
+      <div className="mb-4"></div>
 
-      <div className="flex justify-center">
-        <button
-          type="button"
-          className="rounded-md bg-indigo-600 py-2 text-lg font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 px-10"
+      <div className="flex justify-center flex-row items-center gap-2">
+        <div className="w-32">
+          <LanguageWritingSelection lang={lang} onLanguageChange={setLang} />
+        </div>
+        <PrimaryButton
+          title={t('Generate draft')}
           disabled={originalText.length === 0 || replyContent.length === 0}
-        >
-          Generate draft
-        </button>
+          onClick={() => {
+            const prompt = createChatGPTPrompt({
+              originalText,
+              replyContent,
+              tone: tone,
+              length: length,
+              format: format,
+              language: getLanguagePrompt(lang) ?? 'English',
+            })
+            onGenerate(prompt)
+          }}
+        />
       </div>
     </div>
   )

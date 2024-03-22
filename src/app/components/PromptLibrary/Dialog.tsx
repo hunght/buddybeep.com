@@ -16,6 +16,7 @@ const PromptLibraryDialog = (props: Props) => {
       open={props.isOpen}
       onClose={props.onClose}
       className="mx-32 w-full min-h-[400px]"
+      showLanguageSelection={true}
     >
       <div className="p-5 overflow-auto">
         <PromptLibrary insertPrompt={props.insertPrompt} />
