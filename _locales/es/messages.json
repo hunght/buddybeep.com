@@ -4,5 +4,14 @@
   },
   "appDesc": {
     "message": "Mejora la navegación web con resúmenes de IA, insights de videos, una biblioteca de prompts curada, consultas personalizables y chats directos con los principales modelos de IA."
+  },
+  "Ask": {
+    "message": "Preguntar"
+  },
+  "Transcripts": {
+    "message": "Transcripciones"
+  },
+  "Summary": {
+    "message": "Resumen"
   }
 }

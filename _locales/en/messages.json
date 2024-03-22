@@ -4,5 +4,14 @@
   },
   "appDesc": {
     "message": "Elevates browsing with AI-powered summaries, video insights, curated prompts, personalized queries, and direct AI chats."
+  },
+  "Ask": {
+    "message": "Ask"
+  },
+  "Transcripts": {
+    "message": "Transcripts"
+  },
+  "Summary": {
+    "message": "Summary"
   }
 }

@@ -99,7 +99,7 @@ const GoogleSidebar: React.FC = () => {
                   })
                 }}
               >
-                <span style={{ color: 'white' }}>{t('Ask')}</span>
+                <span style={{ color: 'white' }}>{chrome.i18n.getMessage('ask')}</span>
                 <img src={chrome.runtime.getURL('src/assets/icon.png')} style={{ width: 25, height: 25 }} />
               </div>
             </div>

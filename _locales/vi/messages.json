@@ -4,5 +4,14 @@
   },
   "appDesc": {
     "message": "Tóm tắt bằng AI mọi website, youtube, thư viện lệnh được biên soạn, trò chuyện mô hình AI hàng đầu"
+  },
+  "Ask": {
+    "message": "Hỏi"
+  },
+  "Transcripts": {
+    "message": "Bản ghi"
+  },
+  "Summary": {
+    "message": "Tóm tắt"
   }
 }

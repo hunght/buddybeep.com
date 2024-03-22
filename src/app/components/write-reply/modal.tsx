@@ -12,7 +12,7 @@ export const WritingPresetModal: FC<{ open: boolean; onClose: () => void; onGene
   const { t } = useTranslation()
 
   return (
-    <Dialog title={t('Preset Writing Assistant')} open={open} onClose={onClose} className="w-full  ">
+    <Dialog title={t('Generate Draft')} open={open} onClose={onClose} className="w-full  ">
       <WriteReplyUI onGenerate={onGenerate} />
     </Dialog>
   )

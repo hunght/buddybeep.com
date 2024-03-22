@@ -201,7 +201,7 @@ function SidePanelPage() {
                 mode="compact"
                 disabled={chat.generating}
                 autoFocus={true}
-                placeholder="Ask me anything..."
+                placeholder={t('Ask me anything...')}
                 onSubmit={onSubmit}
                 actionButton={
                   chat.generating ? (
@@ -227,7 +227,7 @@ function SidePanelPage() {
               <div className="flex flex-col mx-3 my-3 gap-3">
                 <hr className="grow border-primary-border" />
                 <PrimaryButton
-                  title={t('Generate Preset Writing')}
+                  title={t('Generate Draft')}
                   onClick={() => {
                     setOpenWritingPreset(true)
                   }}

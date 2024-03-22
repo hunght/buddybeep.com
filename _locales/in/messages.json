@@ -4,5 +4,14 @@
   },
   "appDesc": {
     "message": "Meningkatkan browsing web dengan ringkasan AI, wawasan video, perpustakaan prompt yang dikurasi, pertanyaan yang dapat disesuaikan, dan obrolan langsung dengan model AI terkemuka."
+  },
+  "Ask": {
+    "message": "Tanya"
+  },
+  "Transcripts": {
+    "message": "Transkrip"
+  },
+  "Summary": {
+    "message": "Ringkasan"
   }
 }

@@ -121,7 +121,7 @@ export const ContentScript: React.FC = () => {
                 })
               }}
             />
-            <div className="text-lg font-bold px-1 flex-1">{t('Transcripts')} </div>
+            <div className="text-lg font-bold px-1 flex-1">{chrome.i18n.getMessage('Transcripts')} </div>
             <div className="flex justify-between items-center gap-2 px-4 py-1">
               <Tooltip text="Summary video with BuddyBeep">
                 <button
@@ -138,7 +138,7 @@ export const ContentScript: React.FC = () => {
                   }}
                 >
                   <div className="flex flex-row ">
-                    {t('Summary')} <DocumentTextIcon className="h-6 w-6" />
+                    {chrome.i18n.getMessage('Summary')} <DocumentTextIcon className="h-6 w-6" />
                   </div>
                 </button>
               </Tooltip>

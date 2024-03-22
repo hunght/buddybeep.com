@@ -126,7 +126,7 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
       {tab === 'reply' ? (
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="original-text">
-            The original text to which you want to reply
+            {t('The original text to which you want to reply')}
           </label>
           <textarea
             id="original-text"
@@ -139,7 +139,7 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
       ) : (
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="original-text">
-            The topic you want to compose
+            {t('The topic you want to compose')}
           </label>
           <textarea
             id="original-text"
@@ -154,7 +154,7 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
       {tab === 'reply' && (
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="reply-content">
-            The general content of your reply to the above text
+            {t('The general content of your reply to the above text')}
           </label>
           <textarea
             id="reply-content"
@@ -169,14 +169,14 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
       {tab === 'reply' ? (
         <div className="mb-4  ">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-medium leading-6 text-gray-900">Format</h2>
+            <h2 className="text-sm font-medium leading-6 text-gray-900">{t('Format')}</h2>
           </div>
           <RadioGroupView options={formatOptions} value={format} onChange={(value) => setFormat(value)} />
         </div>
       ) : (
         <div className="mb-4  ">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-medium leading-6 text-gray-900">Format</h2>
+            <h2 className="text-sm font-medium leading-6 text-gray-900">{t('Format')}</h2>
           </div>
           <RadioGroupView
             options={formatComposeOptions}
@@ -188,14 +188,14 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
 
       <div className="mb-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-medium leading-6 text-gray-900">Tone</h2>
+          <h2 className="text-sm font-medium leading-6 text-gray-900">{t('Tone')}</h2>
         </div>
         <RadioGroupView options={toneOptions} value={tone} onChange={setTone} />
       </div>
 
       <div className="mb-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-medium leading-6 text-gray-900">Length</h2>
+          <h2 className="text-sm font-medium leading-6 text-gray-900">{t('Length')}</h2>
         </div>
         <RadioGroupView options={lengthOptions} value={length} onChange={setLength} />
       </div>
