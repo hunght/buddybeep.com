@@ -32,7 +32,7 @@ Browser.action.onClicked.addListener(() => {
   openAppPage()
 })
 
-Browser.contextMenus.onClicked.addListener(function (info, tab) {
+Browser.contextMenus.onClicked.addListener(async (info, tab) => {
   const message = {
     content: info.selectionText ?? '',
     link: info.pageUrl ?? '',
@@ -43,7 +43,7 @@ Browser.contextMenus.onClicked.addListener(function (info, tab) {
     case 'composeThis': {
       // Handle the "Compose this" action
       console.log('Composing: ' + info.selectionText)
-      chrome.sidePanel.open({ tabId: tab?.id })
+      await chrome.sidePanel.open({ tabId: tab?.id })
       const composeMessage: SidePanelMessageType = { ...message, subType: 'compose', type: 'writing-assistant' }
 
       Browser.storage.local.set({ sidePanelSummaryAtom: composeMessage })
@@ -51,7 +51,7 @@ Browser.contextMenus.onClicked.addListener(function (info, tab) {
     }
     case 'replyToThis': {
       // Handle the "Reply to this" action
-      chrome.sidePanel.open({ tabId: tab?.id })
+      await chrome.sidePanel.open({ tabId: tab?.id })
       const composeMessage: SidePanelMessageType = { ...message, subType: 'reply', type: 'writing-assistant' }
 
       Browser.storage.local.set({ sidePanelSummaryAtom: composeMessage })
@@ -60,9 +60,9 @@ Browser.contextMenus.onClicked.addListener(function (info, tab) {
     }
     case 'explainThis': {
       // Handle the "Explain this" action
-      chrome.sidePanel.open({ tabId: tab?.id })
+      await chrome.sidePanel.open({ tabId: tab?.id })
 
-      const composeMessage: SidePanelMessageType = { ...message, subType: 'reply', type: 'explain-a-concept' }
+      const composeMessage: SidePanelMessageType = { ...message, subType: null, type: 'explain-a-concept' }
 
       Browser.storage.local.set({ sidePanelSummaryAtom: composeMessage })
       break
@@ -112,13 +112,13 @@ Browser.commands.onCommand.addListener(async (command) => {
   }
 })
 
-Browser.runtime.onMessage.addListener((message, sender, sendResponse) => {
+Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   logger.debug('onMessage', message, sender)
 
   if (message.action === 'openSidePanel') {
     const tabId = sender.tab?.id
     if (tabId) {
-      chrome.sidePanel.open({ tabId })
+      await chrome.sidePanel.open({ tabId })
 
       Browser.storage.local.set({ sidePanelSummaryAtom: message })
     }

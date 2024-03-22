@@ -31,8 +31,10 @@ function SidePanelPage() {
 
   const [, setSubTab] = useAtom(subTabAtom)
   const botInfo = CHATBOTS[botId]
-  const agentType = summaryText?.type
+
   const agentId = useMemo(() => {
+    const agentType = summaryText?.type
+
     if (tab === 'write') {
       return 'writing-assistant'
     }
@@ -42,7 +44,19 @@ function SidePanelPage() {
       }
     }
     return agentType ?? null
-  }, [agentType, tab])
+  }, [summaryText, tab])
+  console.log(`==== agentId ===`)
+  console.log(agentId)
+  console.log('==== end log ===')
+
+  useEffect(() => {
+    chrome.storage.local.get('sidePanelSummaryAtom').then((data) => {
+      if (data.sidePanelSummaryAtom) {
+        setSummaryText(data.sidePanelSummaryAtom)
+        chrome.storage.local.set({ sidePanelSummaryAtom: { ...data.sidePanelSummaryAtom, content: null } })
+      }
+    })
+  }, [])
 
   const chat = useChat(botId, agentId)
 
@@ -82,12 +96,19 @@ function SidePanelPage() {
       summaryText.type === 'summary-youtube-videos'
     ) {
       setTab('chat')
-      if (summaryText?.content) {
-        const content = buildPromptWithLang(summaryText.content)
-        chat.sendMessage(content, undefined, { link: summaryText.link, title: summaryText.title })
-        setSummaryText((prev) => (!prev ? null : { ...prev, content: null }))
+      if (!summaryText?.content) {
+        return
       }
-      return
+
+      if (summaryText.type === 'explain-a-concept') {
+        const content = `As language teacher. Explain this: ${buildPromptWithLang(summaryText.content)}. Make it fun, simple and engaging! Don't repeat my question.`
+
+        chat.sendMessage(content, undefined, { link: summaryText.link, title: summaryText.content })
+        setSummaryText((prev) => (!prev ? null : { ...prev, content: null }))
+        return
+      }
+      const content = buildPromptWithLang(summaryText.content)
+      chat.sendMessage(content, undefined, { link: summaryText.link, title: summaryText.title })
     }
   }, [chat, setComposeTextAtom, setOriginalTextAtom, setSubTab, setSummaryText, summaryText])
 
