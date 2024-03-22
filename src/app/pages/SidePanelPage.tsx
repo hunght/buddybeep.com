@@ -28,9 +28,7 @@ function SidePanelPage() {
   const [openWritingPreset, setOpenWritingPreset] = useState(false)
   const [, setOriginalTextAtom] = useAtom(originalTextAtom)
   const [, setComposeTextAtom] = useAtom(composeTextAtom)
-  console.log(`==== summaryText ===`)
-  console.log(summaryText)
-  console.log('==== end log ===')
+
   const [, setSubTab] = useAtom(subTabAtom)
   const botInfo = CHATBOTS[botId]
   const agentType = summaryText?.type
