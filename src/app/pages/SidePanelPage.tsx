@@ -31,10 +31,8 @@ function SidePanelPage() {
 
   const [, setSubTab] = useAtom(subTabAtom)
   const botInfo = CHATBOTS[botId]
-
+  const agentType = summaryText?.type
   const agentId = useMemo(() => {
-    const agentType = summaryText?.type
-
     if (tab === 'write') {
       return 'writing-assistant'
     }
@@ -44,10 +42,7 @@ function SidePanelPage() {
       }
     }
     return agentType ?? null
-  }, [summaryText, tab])
-  console.log(`==== agentId ===`)
-  console.log(agentId)
-  console.log('==== end log ===')
+  }, [agentType, tab])
 
   useEffect(() => {
     chrome.storage.local.get('sidePanelSummaryAtom').then((data) => {
@@ -100,17 +95,24 @@ function SidePanelPage() {
         return
       }
 
-      if (summaryText.type === 'explain-a-concept') {
+      if (chat.agentId === 'explain-a-concept') {
         const content = `As language teacher. Explain this: ${buildPromptWithLang(summaryText.content)}. Make it fun, simple and engaging! Don't repeat my question.`
+        console.log(`====explain-a-concep content ===`)
+        console.log(content)
+        console.log('==== end log ===')
 
         chat.sendMessage(content, undefined, { link: summaryText.link, title: summaryText.content })
         setSummaryText((prev) => (!prev ? null : { ...prev, content: null }))
         return
       }
       const content = buildPromptWithLang(summaryText.content)
+      console.log(`==== content ===`)
+      console.log(content)
+      console.log('==== end log ===')
+
       chat.sendMessage(content, undefined, { link: summaryText.link, title: summaryText.title })
     }
-  }, [chat, setComposeTextAtom, setOriginalTextAtom, setSubTab, setSummaryText, summaryText])
+  }, [chat, summaryText])
 
   const resetConversation = useCallback(() => {
     if (!chat.generating) {

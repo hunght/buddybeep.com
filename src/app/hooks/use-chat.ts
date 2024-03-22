@@ -70,7 +70,7 @@ export function useChat(botId: BotId, agentId: string | null) {
       const botMessageId = uuid()
       setChatState((draft) => {
         draft.messages.push(
-          { id: uuid(), text: summary ? `${summary.title}[${summary.link}]` : input, image, author: 'user' },
+          { id: uuid(), text: summary ? `[${summary.title}](${summary.link})` : input, image, author: 'user' },
           { id: botMessageId, text: null, author: botId },
         )
       })
