@@ -193,7 +193,15 @@ function SidePanelPage() {
           </div>
         </div>
         <>
-          <ChatMessageList avatar={null} botId={botId} messages={chat.messages} className="mx-3" />
+          <ChatMessageList
+            onClick={(prompt) => {
+              chat.sendMessage(prompt)
+            }}
+            avatar={null}
+            botId={botId}
+            messages={chat.messages}
+            className="mx-3"
+          />
           {tab === 'chat' ? (
             <div className="flex flex-col mx-3 my-3 gap-3">
               <hr className="grow border-primary-border" />

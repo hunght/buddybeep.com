@@ -199,5 +199,9 @@
   "Ask me anything...": "何でも聞いてください...",
   "Generate Draft": "下書きを生成",
   "Write": "書く",
-  "Chat": "チャット"
+  "Chat": "チャット",
+  "Tell me something about the Big Bang so that I can explain it to my 5-year-old child": "ビッグバンについて何か教えてください。それを5歳の子供に説明できるように。",
+  "Please provide me with 10 gift ideas for my friend's birthday": "友達の誕生日のための10個のギフトアイデアを教えてください。",
+  "Generate five catchy titles for my writing about the use case of ChatGPT": "ChatGPTの使用例についての私の文章のための魅力的なタイトルを5つ生成してください。",
+  "How can I assist you today?": "今日はどのようにお手伝いできますか？"
 }

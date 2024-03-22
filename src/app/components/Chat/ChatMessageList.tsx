@@ -4,12 +4,14 @@ import ScrollToBottom from 'react-scroll-to-bottom'
 import { BotId } from '~app/bots'
 import { ChatMessageModel } from '~types'
 import ChatMessageCard from './ChatMessageCard'
+import { NoMessage } from './NoMessage'
 
 interface Props {
   botId: BotId
   messages: ChatMessageModel[]
   className?: string
   avatar: string | null | React.ReactElement
+  onClick: (prompt: string) => void
 }
 
 const ChatMessageList: FC<Props> = (props) => {
@@ -26,6 +28,7 @@ const ChatMessageList: FC<Props> = (props) => {
             />
           )
         })}
+        {props.messages.length === 0 && <NoMessage onClick={props.onClick} />}
       </div>
     </ScrollToBottom>
   )

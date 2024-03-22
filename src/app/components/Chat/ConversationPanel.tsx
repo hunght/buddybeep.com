@@ -131,7 +131,15 @@ const ConversationPanel: FC<Props> = (props) => {
             </Tooltip>
           </div>
         </div>
-        <ChatMessageList avatar={avatar} botId={props.botId} messages={props.messages} className={marginClass} />
+        <ChatMessageList
+          onClick={(prompt) => {
+            props.bot.sendMessage({ prompt })
+          }}
+          avatar={avatar}
+          botId={props.botId}
+          messages={props.messages}
+          className={marginClass}
+        />
         <div className={cx('mt-3 flex flex-col ', marginClass, mode === 'full' ? 'mb-3' : 'mb-[5px]')}>
           <div className={cx('flex flex-row items-center gap-[5px]', mode === 'full' ? 'mb-3' : 'mb-0')}>
             {mode === 'compact' && (
