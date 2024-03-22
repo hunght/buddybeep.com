@@ -38,19 +38,15 @@ function SidePanelPage() {
     if (tab === 'write') {
       return 'writing-assistant'
     }
-    return agentType ?? 'summary-web-content'
+    if (tab === 'chat') {
+      if (agentType === 'writing-assistant') {
+        return null
+      }
+    }
+    return agentType ?? null
   }, [agentType, tab])
 
   const chat = useChat(botId, agentId)
-
-  useEffect(() => {
-    chrome.storage.local.get('sidePanelSummaryAtom').then((data) => {
-      if (data.sidePanelSummaryAtom) {
-        setSummaryText(data.sidePanelSummaryAtom)
-        chrome.storage.local.set({ sidePanelSummaryAtom: null })
-      }
-    })
-  }, [])
 
   useEffect(() => {
     if (tab === 'write') {
@@ -87,6 +83,7 @@ function SidePanelPage() {
       summaryText.type === 'summary-web-content' ||
       summaryText.type === 'summary-youtube-videos'
     ) {
+      setTab('chat')
       if (summaryText?.content) {
         const content = buildPromptWithLang(summaryText.content)
         chat.sendMessage(content, undefined, { link: summaryText.link, title: summaryText.title })
@@ -128,6 +125,9 @@ function SidePanelPage() {
               type="button"
               onClick={() => {
                 setTab('chat')
+                if (agentId === 'writing-assistant') {
+                  setSubTab('compose')
+                }
               }}
               className={cx(
                 'relative inline-flex items-center rounded-tl-2xl bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10',
