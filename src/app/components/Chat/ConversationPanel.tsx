@@ -133,7 +133,7 @@ const ConversationPanel: FC<Props> = (props) => {
         </div>
         <ChatMessageList
           onClick={(prompt) => {
-            props.bot.sendMessage({ prompt })
+            props.onUserSendMessage(prompt)
           }}
           avatar={avatar}
           botId={props.botId}

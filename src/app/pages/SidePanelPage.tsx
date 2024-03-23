@@ -67,8 +67,10 @@ function SidePanelPage() {
     },
     [chat],
   )
+
   useEffect(() => {
-    if (!summaryText?.type || summaryText?.content === null) {
+    // send the prompt to the bot when the agent is set
+    if (!summaryText?.type || summaryText?.content === null || chat.generating) {
       return
     }
 
@@ -91,28 +93,20 @@ function SidePanelPage() {
       summaryText.type === 'summary-youtube-videos'
     ) {
       setTab('chat')
-      if (!summaryText?.content) {
-        return
-      }
 
       if (chat.agentId === 'explain-a-concept') {
         const content = `As language teacher. Explain this: ${buildPromptWithLang(summaryText.content)}. Make it fun, simple and engaging! Don't repeat my question.`
-        console.log(`====explain-a-concep content ===`)
-        console.log(content)
-        console.log('==== end log ===')
 
         chat.sendMessage(content, undefined, { link: summaryText.link, title: summaryText.content })
         setSummaryText((prev) => (!prev ? null : { ...prev, content: null }))
         return
       }
       const content = buildPromptWithLang(summaryText.content)
-      console.log(`==== content ===`)
-      console.log(content)
-      console.log('==== end log ===')
 
       chat.sendMessage(content, undefined, { link: summaryText.link, title: summaryText.title })
+      setSummaryText((prev) => (!prev ? null : { ...prev, content: null }))
     }
-  }, [chat, summaryText])
+  }, [summaryText?.content, chat.generating, summaryText?.type, chat.agentId])
 
   const resetConversation = useCallback(() => {
     if (!chat.generating) {

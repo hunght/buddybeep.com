@@ -18,17 +18,6 @@ root.render(
   </Provider>,
 )
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  if (request.action === 'openSidePanel') {
-    myAtomStore.set(sidePanelSummaryAtom, {
-      content: request.content,
-      link: request.link,
-      title: request.title,
-      type: request.type,
-      subType: request.subType,
-    })
-  }
-})
 Browser.storage.local.onChanged.addListener((changes) => {
   if (changes.sidePanelSummaryAtom) {
     myAtomStore.set(sidePanelSummaryAtom, changes.sidePanelSummaryAtom.newValue)
