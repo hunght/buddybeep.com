@@ -21,12 +21,12 @@ export const RadioGroupView = <T,>({ options, value, onChange, label }: Props<T>
             value={option.value}
             className={({ active, checked }) =>
               cx(
-                'cursor-pointer focus:outline-none',
+                'cursor-pointer focus:outline-none ',
+                'flex items-center justify-center rounded-full py-2 px-0 text-sm font-semibold   sm:flex-1',
                 active ? 'ring-2 ring-indigo-600 ring-offset-2' : '',
                 checked
                   ? 'bg-indigo-600 text-white hover:bg-indigo-500'
                   : 'ring-1 ring-inset ring-gray-300 bg-white text-gray-900 hover:bg-gray-50',
-                'flex items-center justify-center rounded-xl py-3 px-3 text-sm font-semibold   sm:flex-1',
               )
             }
           >

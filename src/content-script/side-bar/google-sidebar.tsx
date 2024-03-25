@@ -81,7 +81,7 @@ const GoogleSidebar: React.FC = () => {
                   textAlign: 'center',
                   justifyContent: 'center',
                   display: 'flex',
-                  padding: '4px 8px',
+                  padding: '4px 6px',
                   flexDirection: 'row',
                   gap: '5px',
                   borderRadius: '24px',
@@ -99,7 +99,6 @@ const GoogleSidebar: React.FC = () => {
                   })
                 }}
               >
-                <span style={{ color: 'white' }}>{chrome.i18n.getMessage('ask')}</span>
                 <img src={chrome.runtime.getURL('src/assets/icon.png')} style={{ width: 25, height: 25 }} />
               </div>
             </div>

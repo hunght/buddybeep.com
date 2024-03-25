@@ -43,7 +43,7 @@ export const SearchInput: React.FC = () => {
           value={query}
           onChange={handleInputChange}
           placeholder={t('Search Prompts')}
-          className="w-full bg-transparent"
+          className="w-full bg-transparent rounded"
         />
         {query ? (
           <img src={closeIcon} className="w-4 h-4 cursor-pointer" onClick={handleClearSearch} />
