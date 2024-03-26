@@ -87,7 +87,6 @@ export const ContentScript: React.FC = () => {
   return (
     <div
       style={{
-        zIndex: 2147483647,
         position: 'relative',
         backgroundColor: '#1b141d',
         width: '420px',

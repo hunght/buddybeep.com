@@ -6,7 +6,7 @@ export default defineManifest(async () => {
     name: '__MSG_appName__',
     description: '__MSG_appDesc__',
     default_locale: 'en',
-    version: '1.4.0',
+    version: '1.6.1',
     icons: {
       '16': 'src/assets/icon.png',
       '32': 'src/assets/icon.png',
@@ -28,7 +28,7 @@ export default defineManifest(async () => {
       'https://*.anthropic.com/',
       'https://*.claude.ai/',
     ],
-    optional_host_permissions: ['https://*/*', 'wss://*/*'],
+    optional_host_permissions: ['wss://*/*'],
     permissions: [
       'contextMenus',
       'storage',
@@ -46,41 +46,11 @@ export default defineManifest(async () => {
         js: ['src/content-script/chatgpt-inpage-proxy.ts'],
       },
       {
-        matches: ['https://*/*'],
+        matches: ['https://medium.com/*'],
         js: ['src/content-script/side-bar/index.tsx'],
       },
       {
-        matches: [
-          'https://www.youtube.com/*',
-          'https://en.wikipedia.org/*',
-          'https://www.facebook.com/*',
-          'https://www.instagram.com/*',
-          'https://twitter.com/*', // Also known as X
-          'https://www.whatsapp.com/*',
-          'https://www.pornhub.com/*',
-          'https://www.pinterest.com/*',
-          'https://play.google.com/*',
-          'https://www.microsoft.com/*',
-          'https://www.imdb.com/*',
-          'https://www.reddit.com/*',
-          'https://www.amazon.com/*',
-          'https://www.xnxx.com/*',
-          'https://www.apple.com/*',
-          'https://www.tiktok.com/*',
-          'https://es.wikipedia.org/*', // Spanish version of Wikipedia
-          'https://www.xvideos.com/*',
-          'https://www.nytimes.com/*',
-          'https://www.globo.com/*',
-          // Including sites similar to Medium as requested
-          'https://substack.com/*',
-          'https://www.vocal.media/*',
-          'https://dev.to/*', // Focus on developers
-          'https://www.linkedin.com/*', // LinkedIn Articles
-          'https://www.quora.com/*', // Quora Spaces
-          'https://ghost.org/*',
-          'https://wordpress.com/*', // WordPress Blogs
-          'https://www.blogger.com/*', // Blogger
-        ],
+        matches: ['https://www.youtube.com/*'],
         js: ['src/content-script/youtube-caption/index.tsx'],
       },
     ],
