@@ -159,7 +159,7 @@ export const ContentScript: React.FC = () => {
 
                       const element = firstItem ? getElementById(firstItem.start) : null
                       if (element) {
-                        element.scrollIntoView({ behavior: 'auto', block: 'center' })
+                        element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'end' })
                       }
                     }}
                   >

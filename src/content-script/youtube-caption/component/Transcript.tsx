@@ -39,7 +39,7 @@ export const Transcript: React.FC<Props> = ({ transcriptHTML, videoId }) => {
         if (!isSame && count % 10 === 0) {
           const element = getElementById(firstItem.start)
           if (element) {
-            // element.scrollIntoView({ behavior: 'auto', block: 'center' })
+            element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
           }
         }
         count++
