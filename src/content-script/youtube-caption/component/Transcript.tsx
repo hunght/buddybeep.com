@@ -5,12 +5,13 @@ import type { TranscriptItem } from '../type'
 
 import { getElementById } from '../helper/htmlSelector'
 import { cx } from '~utils'
+import { LAST_ITEM_TO_JUMP, findCurrentItem } from './findCurrentItem'
 
 type Props = {
   videoId: string
   transcriptHTML: TranscriptItem[]
 }
-const LAST_ITEM_TO_JUMP = 6
+
 export const Transcript: React.FC<Props> = ({ transcriptHTML, videoId }) => {
   const [transcriptItem, setTranscriptItem] = useState<TranscriptItem>()
   const listRef = useRef<HTMLUListElement>(null)
@@ -83,27 +84,6 @@ export const Transcript: React.FC<Props> = ({ transcriptHTML, videoId }) => {
     </ul>
   )
 }
-function findCurrentItem(transcriptHTML: TranscriptItem[], currTime: number) {
-  const currentIndex = transcriptHTML.findIndex((obj) => {
-    const objTime = Number(obj.start)
-    return objTime >= currTime
-  })
-  const currentItem = transcriptHTML[currentIndex]
-  if (!currentItem) {
-    return { currentItem: null, nextItem: null }
-  }
-
-  if (currentIndex >= transcriptHTML.length - 1) {
-    return { currentItem, nextItem: null }
-  }
-
-  const nextItem = transcriptHTML[currentIndex + 1]
-  if (currentIndex + LAST_ITEM_TO_JUMP < transcriptHTML.length) {
-    return { currentItem, nextItem, lastItem: transcriptHTML[currentIndex + LAST_ITEM_TO_JUMP] }
-  }
-  return { currentItem, nextItem }
-}
-
 function convertToTime(start: string): string {
   return convertIntToHms(Number(start))
 }

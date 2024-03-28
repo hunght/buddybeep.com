@@ -21,6 +21,7 @@ import type { LangOption, TranscriptItem } from './type'
 import { useAtomValue } from 'jotai'
 import { youtubeVideoDataAtom } from '~app/state/youtubeAtom'
 import logger from '~utils/logger'
+import { findCurrentItem } from './component/findCurrentItem'
 
 export const ContentScript: React.FC = () => {
   const youtubeVideoData = useAtomValue(youtubeVideoDataAtom)
@@ -124,13 +125,17 @@ export const ContentScript: React.FC = () => {
                   className="px-4 items-center justify-center py-2 bg-indigo-500  hover:bg-blue-700 text-white font-bold rounded-xl"
                   onClick={() => {
                     const prompt = copyTranscriptAndPrompt(transcriptHTML, document.title)
-                    chrome.runtime.sendMessage({
-                      action: 'openSidePanel',
-                      content: prompt,
-                      link: window.location.href,
-                      title: document.title,
-                      type: 'summary-youtube-videos',
-                    })
+                    console.log(`==== prompt ===`)
+                    console.log(prompt)
+                    console.log('==== end log ===')
+
+                    // chrome.runtime.sendMessage({
+                    //   action: 'openSidePanel',
+                    //   content: prompt,
+                    //   link: window.location.href,
+                    //   title: document.title,
+                    //   type: 'summary-youtube-videos',
+                    // })
                   }}
                 >
                   <div className="flex flex-row ">
@@ -149,11 +154,10 @@ export const ContentScript: React.FC = () => {
                       }
                       const currTime = getTYCurrentTime()
 
-                      const firstItem = transcriptHTML.find(
-                        (obj) => Number(obj.start) + Number(obj.duration) >= currTime,
-                      )
+                      const { lastItem, currentItem } = findCurrentItem(transcriptHTML, currTime, 3)
 
-                      const element = firstItem ? getElementById(firstItem.start) : null
+                      const element = getElementById(lastItem ? lastItem.start : currentItem?.start)
+
                       if (element) {
                         element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'end' })
                       }
