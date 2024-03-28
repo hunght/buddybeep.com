@@ -59,7 +59,6 @@ function SettingPage() {
   const { t } = useTranslation()
   const [userConfig, setUserConfig] = useState<UserConfig | undefined>(undefined)
   const [dirty, setDirty] = useState(false)
-  const [themeSettingModalOpen, setThemeSettingModalOpen] = useState(false)
 
   useEffect(() => {
     getUserConfig().then((config) => setUserConfig(config))
@@ -196,9 +195,7 @@ function SettingPage() {
           <p className="font-bold text-lg mb-3">{t('Language')}</p>
           <LanguageSelection />
         </div>
-        <a onClick={() => setThemeSettingModalOpen(true)}>
-          <IconButton className="bg-black" icon={themeIcon} />
-        </a>
+        <ThemeSettingModal />
       </div>
       {dirty && (
         <motion.div
@@ -211,8 +208,6 @@ function SettingPage() {
         </motion.div>
       )}
       <Toaster position="bottom-center" />
-
-      <ThemeSettingModal open={themeSettingModalOpen} onClose={() => setThemeSettingModalOpen(false)} />
     </PagePanel>
   )
 }

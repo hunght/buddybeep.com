@@ -43,10 +43,7 @@ const THEME_COLORS = [
   '#555555',
 ]
 
-interface Props {
-  open: boolean
-  onClose: () => void
-}
+interface Props {}
 
 const ThemeSettingModal: FC<Props> = (props) => {
   const { t, i18n } = useTranslation()
@@ -92,13 +89,8 @@ const ThemeSettingModal: FC<Props> = (props) => {
   )
 
   return (
-    <Dialog
-      title={t('Display Settings')}
-      open={props.open}
-      onClose={props.onClose}
-      className="rounded-xl w-[600px] min-h-[300px]"
-    >
-      <div className="p-5 pb-10 flex flex-col gap-5">
+    <>
+      <div className="pb-10 flex flex-col gap-5">
         <div className="w-[300px]">
           <p className="font-bold text-lg mb-3">{t('Theme Mode')}</p>
           <Select
@@ -112,19 +104,6 @@ const ThemeSettingModal: FC<Props> = (props) => {
           />
         </div>
         <div>
-          <p className="font-bold text-lg mb-3">
-            {t('Theme Color')}{' '}
-            {!premiumState.activated && (
-              <Link
-                to="/premium"
-                search={{ source: 'theme' }}
-                className="text-sm font-normal ml-1 underline italic"
-                onClick={() => props.onClose()}
-              >
-                ({t('Premium Feature')})
-              </Link>
-            )}
-          </p>
           <div className={cx('flex flex-col gap-3', !premiumState.activated && 'opacity-50 pointer-events-none')}>
             {isArcBrowser() && (
               <div className="flex flex-row items-center gap-2">
@@ -162,7 +141,7 @@ const ThemeSettingModal: FC<Props> = (props) => {
           </span>
         </div>
       </div>
-    </Dialog>
+    </>
   )
 }
 

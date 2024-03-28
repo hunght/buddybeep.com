@@ -89,7 +89,7 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
   }
 
   return (
-    <div className=" rounded-lg shadow-lg  w-full py-4 px-6 overflow-scroll">
+    <div className=" rounded-lg shadow-lg  w-full py-4 px-6 overflow-scroll dark:bg-gray-800">
       <span className="isolate inline-flex rounded-md shadow-sm">
         <button
           type="button"
@@ -97,10 +97,10 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
             setTab('compose')
           }}
           className={cx(
-            'relative inline-flex items-center rounded-tl-2xl bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10',
+            'relative inline-flex items-center rounded-tl-2xl bg-white px-3 py-2 text-sm font-semibold  text-primary-text ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10',
             tab === 'compose'
               ? 'bg-indigo-600 text-white hover:bg-indigo-500'
-              : 'ring-1 ring-inset ring-gray-300 bg-white text-gray-900 hover:bg-gray-50',
+              : 'ring-1 ring-inset ring-gray-300 bg-white  dark:text-black text-primary-text hover:bg-gray-50',
           )}
         >
           {t('Compose')}
@@ -111,10 +111,10 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
           }}
           type="button"
           className={cx(
-            'relative -ml-px inline-flex items-center  px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10 rounded-tr-2xl',
+            'relative -ml-px inline-flex items-center  px-3 py-2 text-sm font-semibold  text-primary-text ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10 rounded-tr-2xl',
             tab === 'reply'
-              ? 'bg-indigo-600 text-white hover:bg-indigo-500'
-              : 'ring-1 ring-inset ring-gray-300 bg-white text-gray-900 hover:bg-gray-50',
+              ? 'bg-indigo-600 text-primary-text hover:bg-indigo-500'
+              : 'ring-1 ring-inset ring-gray-300 bg-white  text-primary-text dark:text-black hover:bg-gray-50',
           )}
         >
           {t('Reply')}
@@ -125,7 +125,7 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
 
       {tab === 'reply' ? (
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="original-text">
+          <label className="block  text-primary-text text-sm font-bold mb-2" htmlFor="original-text">
             {t('The original text to which you want to reply')}
           </label>
           <textarea
@@ -133,12 +133,12 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
             value={originalText}
             onChange={(e) => setOriginalText(e.target.value)}
             placeholder='For example, "I am writing to you to express my dissatisfaction with the service I received from your company."'
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-36"
+            className="shadow appearance-none border rounded w-full py-2 px-3  text-primary-text  dark:text-black leading-tight focus:outline-none focus:shadow-outline h-36"
           ></textarea>
         </div>
       ) : (
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="original-text">
+          <label className="block text-primary-text text-sm font-bold mb-2" htmlFor="original-text">
             {t('The topic you want to compose')}
           </label>
           <textarea
@@ -146,14 +146,14 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
             value={composeText}
             onChange={(e) => setComposeText(e.target.value)}
             placeholder='For example, "The impact of climate change on the economy."'
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-36"
+            className="shadow appearance-none border rounded w-full py-2 px-3  text-primary-text dark:text-black leading-tight focus:outline-none focus:shadow-outline h-36"
           ></textarea>
         </div>
       )}
 
       {tab === 'reply' && (
         <div className="mb-4">
-          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="reply-content">
+          <label className="block  text-primary-text text-sm font-bold mb-2" htmlFor="reply-content">
             {t('The general content of your reply to the above text')}
           </label>
           <textarea
@@ -161,7 +161,7 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
             value={replyContent}
             onChange={(e) => setReplyContent(e.target.value)}
             placeholder='Press Enter to generate draft suggestions based on the content you write. For example, "I am sorry to hear that you are dissatisfied with our service. We strive to provide the best service possible and we are sorry that we did not meet your expectations."'
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline h-44"
+            className="shadow appearance-none border rounded w-full py-2 px-3  text-primary-text dark:text-black mb-3 leading-tight focus:outline-none focus:shadow-outline h-44"
           ></textarea>
         </div>
       )}
@@ -169,14 +169,14 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
       {tab === 'reply' ? (
         <div className="mb-4  ">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-medium leading-6 text-gray-900">{t('Format')}</h2>
+            <h2 className="text-sm font-medium leading-6  text-primary-text">{t('Format')}</h2>
           </div>
           <RadioGroupView options={formatOptions} value={format} onChange={(value) => setFormat(value)} />
         </div>
       ) : (
         <div className="mb-4  ">
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-medium leading-6 text-gray-900">{t('Format')}</h2>
+            <h2 className="text-sm font-medium leading-6  text-primary-text">{t('Format')}</h2>
           </div>
           <RadioGroupView
             options={formatComposeOptions}
@@ -188,14 +188,14 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
 
       <div className="mb-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-medium leading-6 text-gray-900">{t('Tone')}</h2>
+          <h2 className="text-sm font-medium leading-6  text-primary-text">{t('Tone')}</h2>
         </div>
         <RadioGroupView options={toneOptions} value={tone} onChange={setTone} />
       </div>
 
       <div className="mb-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-medium leading-6 text-gray-900">{t('Length')}</h2>
+          <h2 className="text-sm font-medium leading-6  text-primary-text">{t('Length')}</h2>
         </div>
         <RadioGroupView options={lengthOptions} value={length} onChange={setLength} />
       </div>
