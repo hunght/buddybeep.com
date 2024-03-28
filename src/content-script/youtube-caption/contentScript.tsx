@@ -129,13 +129,13 @@ export const ContentScript: React.FC = () => {
                     console.log(prompt)
                     console.log('==== end log ===')
 
-                    // chrome.runtime.sendMessage({
-                    //   action: 'openSidePanel',
-                    //   content: prompt,
-                    //   link: window.location.href,
-                    //   title: document.title,
-                    //   type: 'summary-youtube-videos',
-                    // })
+                    chrome.runtime.sendMessage({
+                      action: 'openSidePanel',
+                      content: prompt,
+                      link: window.location.href,
+                      title: document.title,
+                      type: 'summary-youtube-videos',
+                    })
                   }}
                 >
                   <div className="flex flex-row ">

@@ -82,7 +82,16 @@ function Sidebar() {
       )}
     >
       <div className={cx('flex mt-8 gap-3 items-center', collapsed ? 'flex-col' : 'flex-row justify-between')}>
-        {collapsed ? <img src={logo} className="w-[30px]" /> : <img src={logo} className="w-[50px] ml-2" />}
+        <div
+          className="cursor-pointer"
+          onClick={() => {
+            chrome.runtime.sendMessage({
+              action: 'openSidePanelOnly',
+            })
+          }}
+        >
+          {collapsed ? <img src={logo} className="w-[30px]" /> : <img src={logo} className="w-[50px] ml-2" />}
+        </div>
         <div className="flex flex-row justify-center items-center gap-2">
           <Tooltip content={t('Settings')}>
             <Link to="/setting">

@@ -28,8 +28,9 @@ async function openAppPage({ agentId, botId }: { agentId?: string; botId?: strin
   await Browser.tabs.create({ url: `app.html${hash}` })
 }
 
-Browser.action.onClicked.addListener(() => {
-  openAppPage()
+Browser.action.onClicked.addListener(async () => {
+  openSidePanel()
+  // openAppPage()
 })
 
 Browser.contextMenus.onClicked.addListener(async (info, tab) => {
@@ -108,7 +109,7 @@ Browser.runtime.onInstalled.addListener((details) => {
 Browser.commands.onCommand.addListener(async (command) => {
   logger.debug(`Command: ${command}`)
   if (command === 'open-app') {
-    openAppPage()
+    openSidePanel()
   }
 })
 
@@ -117,14 +118,21 @@ Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 
   if (message.action === 'openSidePanel') {
     const tabId = sender.tab?.id
-    if (tabId) {
-      await chrome.sidePanel.open({ tabId })
-
-      Browser.storage.local.set({ sidePanelSummaryAtom: message })
-    }
+    await openSidePanelWithTabId(tabId)
+    Browser.storage.local.set({ sidePanelSummaryAtom: message })
   }
+
+  if (message.action === 'openSidePanelOnly') {
+    const tabId = sender.tab?.id
+    await openSidePanelWithTabId(tabId)
+  }
+
   if (message.action === 'openMainApp') {
     openAppPage({ agentId: message.agentId, botId: message.botId })
+    await chrome.sidePanel.setOptions({
+      path: 'sidepanel.html',
+      enabled: false,
+    })
   }
   if (message.target !== 'background') {
     return
@@ -133,3 +141,31 @@ Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     return readTwitterCsrfToken(message.data)
   }
 })
+
+async function openSidePanelWithTabId(tabId: number | undefined) {
+  if (tabId) {
+    chrome.sidePanel.setOptions({
+      path: 'sidepanel.html',
+      enabled: true,
+    })
+    await chrome.sidePanel.open({ tabId })
+    await chrome.sidePanel.setOptions({
+      path: 'sidepanel.html',
+      enabled: true,
+    })
+  }
+}
+
+function openSidePanel() {
+  chrome.tabs.query({ active: true, currentWindow: true }, async ([tab]) => {
+    chrome.sidePanel.setOptions({
+      path: 'sidepanel.html',
+      enabled: true,
+    })
+    await chrome.sidePanel.open({ tabId: tab.id })
+    await chrome.sidePanel.setOptions({
+      path: 'sidepanel.html',
+      enabled: true,
+    })
+  })
+}
