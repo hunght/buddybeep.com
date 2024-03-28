@@ -18,7 +18,6 @@ import { getLangOptionsWithLink, getRawTranscript } from './helper/transcript'
 import { copyTranscriptAndPrompt } from './helper/youtube'
 import type { LangOption, TranscriptItem } from './type'
 
-import { useTranslation } from 'react-i18next'
 import { useAtomValue } from 'jotai'
 import { youtubeVideoDataAtom } from '~app/state/youtubeAtom'
 import logger from '~utils/logger'
@@ -26,13 +25,12 @@ import logger from '~utils/logger'
 export const ContentScript: React.FC = () => {
   const youtubeVideoData = useAtomValue(youtubeVideoDataAtom)
   const videoId = youtubeVideoData?.url
-  logger.log('videoId', videoId)
+
   const [transcriptHTML, setTranscriptHTML] = useState<TranscriptItem[]>([])
 
-  const [open, setOpen] = React.useState(true)
-  const [langOptions, setLangOptions] = useState<LangOption[]>([])
+  const [open, setOpen] = React.useState(false)
+
   const [currentLangOption, setCurrentLangOption] = useState<LangOption>()
-  const { t } = useTranslation()
 
   // make useEffect to get langOptions  when videoId changes
   useEffect(() => {
@@ -48,7 +46,6 @@ export const ContentScript: React.FC = () => {
           logger.log('no langOptionsWithLink')
           return
         }
-        setLangOptions(langOptionsWithLink)
 
         setCurrentLangOption(langOptionsWithLink[0])
       } catch (error) {
