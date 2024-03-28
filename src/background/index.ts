@@ -27,10 +27,25 @@ async function openAppPage({ agentId, botId }: { agentId?: string; botId?: strin
   const hash = startupPage === ALL_IN_ONE_PAGE_ID ? '' : `#/chat/${startupPage}`
   await Browser.tabs.create({ url: `app.html${hash}` })
 }
+function storagePageContent() {
+  const documentText = document.body.innerText || ''
+  console.log(`==== documentText ===`)
+  console.log(documentText)
+  console.log('==== end log ===')
+}
 
-Browser.action.onClicked.addListener(async () => {
+Browser.action.onClicked.addListener(async (tab) => {
   openSidePanel()
   // openAppPage()
+  if (tab.url && !tab.url.includes('chrome://')) {
+    if (!tab.id) {
+      return
+    }
+    chrome.scripting.executeScript({
+      target: { tabId: tab.id },
+      func: storagePageContent,
+    })
+  }
 })
 
 Browser.contextMenus.onClicked.addListener(async (info, tab) => {

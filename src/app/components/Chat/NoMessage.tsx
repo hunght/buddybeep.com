@@ -29,7 +29,7 @@ export const NoMessage: FC<{ onClick: (prompt: string) => void }> = ({ onClick }
                 onClick={() => {
                   onClick(text)
                 }}
-                className="text-left w-full py-2 focus:outline-none hover:bg-gray-100 transition-colors flex flex-row justify-center items-center px-1"
+                className="text-left w-full py-2 focus:outline-none hover:bg-gray-100 dark:hover:bg-primary-blue transition-colors flex flex-row justify-center items-center px-1"
               >
                 {text} <FaArrowRightLong />
               </button>

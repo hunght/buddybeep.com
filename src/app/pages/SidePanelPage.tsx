@@ -199,6 +199,14 @@ function SidePanelPage() {
           {tab === 'chat' ? (
             <div className="flex flex-col mx-3 my-3 gap-3">
               <hr className="grow border-primary-border" />
+              <PrimaryButton
+                title={t('Summary Web Content')}
+                onClick={() => {
+                  console.log(`==== summaryText ===`)
+                  console.log(summaryText)
+                  console.log('==== end log ===')
+                }}
+              />
               <ChatMessageInput
                 mode="compact"
                 disabled={chat.generating}
