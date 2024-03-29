@@ -47,7 +47,12 @@ export default defineManifest(async () => {
         js: ['src/content-script/chatgpt-inpage-proxy.ts'],
       },
       {
-        matches: ['https://medium.com/*'],
+        matches: [
+          'https://google.com/*',
+          'https://www.google.com/*',
+          'https://www.bing.com/*',
+          'https://www.duckduckgo.com/*',
+        ],
         js: ['src/content-script/side-bar/index.tsx'],
       },
       {

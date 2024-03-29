@@ -6,7 +6,12 @@ import injectedStyle from './google-sidebar.css?inline'
 import GoogleSidebar from './google-sidebar'
 
 function mount() {
-  if (document.getElementById('plasmo-google-sidebar')) {
+  const existingElement = document.getElementById('plasmo-google-sidebar')
+  if (existingElement) {
+    //remove the existing sidebar
+    existingElement?.remove()
+  }
+  if (existingElement) {
     return
   }
   const root = document.createElement('div')

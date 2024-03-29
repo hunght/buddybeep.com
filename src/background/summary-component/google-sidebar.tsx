@@ -87,6 +87,7 @@ const GoogleSidebar: React.FC = () => {
                   borderRadius: '24px',
                   boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)',
                   cursor: 'pointer',
+                  color: 'white',
                 }}
                 onClick={async () => {
                   const prompt = `Get key points from web:Title:${document.title},Link:${window.location.href} content:${getDocumentTextFromDOM()}`
@@ -103,7 +104,7 @@ const GoogleSidebar: React.FC = () => {
 
                 <img src={chrome.runtime.getURL('src/assets/icon.png')} style={{ width: 25, height: 25 }} />
               </div>
-              <span style={{ fontSize: 12, marginLeft: 5 }}>{`${t('Title')}: ` + document.title}</span>
+              <span style={{ fontSize: 12, marginLeft: 5, color: 'white' }}>{`${t('Title')}: ` + document.title}</span>
             </div>
           )}
         </div>

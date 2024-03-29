@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react'
 // Inject to the webpage itself
 import './google-sidebar-base.css'
 
-import { getDocumentTextFromDOM } from '~content-script/helper/dom'
 import { useTranslation } from 'react-i18next'
 
 // Inject into the ShadowDOM
@@ -89,13 +88,8 @@ const GoogleSidebar: React.FC = () => {
                   cursor: 'pointer',
                 }}
                 onClick={async () => {
-                  const prompt = `Get key points from web:Title:${document.title},Link:${window.location.href} content:${getDocumentTextFromDOM()}`
                   await chrome.runtime.sendMessage({
-                    action: 'openSidePanel',
-                    content: prompt,
-                    link: window.location.href,
-                    title: document.title,
-                    type: 'summary-web-content',
+                    action: 'openSidePanelOnly',
                   })
                 }}
               >

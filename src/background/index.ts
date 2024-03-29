@@ -31,6 +31,10 @@ async function openAppPage({ agentId, botId }: { agentId?: string; botId?: strin
 Browser.action.onClicked.addListener(async (tab) => {
   openSidePanel()
   // openAppPage()
+  executeContentScript(tab)
+})
+
+function executeContentScript(tab: Browser.Tabs.Tab) {
   if (tab.url && !tab.url.includes('chrome://')) {
     if (!tab.id) {
       return
@@ -41,8 +45,7 @@ Browser.action.onClicked.addListener(async (tab) => {
     })
     chrome.tabs.sendMessage(tab.id, { type: 'mountApp' })
   }
-})
-
+}
 Browser.contextMenus.onClicked.addListener(async (info, tab) => {
   const message = {
     content: info.selectionText ?? '',
@@ -120,6 +123,9 @@ Browser.commands.onCommand.addListener(async (command) => {
   logger.debug(`Command: ${command}`)
   if (command === 'open-app') {
     openSidePanel()
+    chrome.tabs.query({ active: true, currentWindow: true }, async ([tab]) => {
+      executeContentScript(tab)
+    })
   }
 })
 

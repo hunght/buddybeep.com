@@ -5,7 +5,6 @@ import { createRoot } from 'react-dom/client'
 import injectedStyle from './summary-component/google-sidebar.css?inline'
 import GoogleSidebar from './summary-component/google-sidebar'
 
-mount()
 function mount() {
   const root = document.createElement('div')
   root.id = 'plasmo-google-sidebar'
@@ -22,6 +21,9 @@ function mount() {
   const styleElement = document.createElement('style')
   styleElement.innerHTML = injectedStyle
   shadowRoot.appendChild(styleElement)
+  console.log(`==== document.getElementById('plasmo-google-sidebar') ===`)
+  console.log(document.getElementById('plasmo-google-sidebar'))
+  console.log('==== end log ===')
 
   /**
    * https://github.com/Jonghakseo/chrome-extension-boilerplate-react-vite/pull/174
@@ -31,8 +33,13 @@ function mount() {
    */
   createRoot(rootIntoShadow).render(<GoogleSidebar />)
 }
+
+mount()
 // re-mount the app on each message
 chrome.runtime.onMessage.addListener((msg) => {
+  if (document.getElementById('plasmo-google-sidebar')) {
+    return
+  }
   if (msg.type === 'mountApp') {
     mount()
   }
