@@ -6,6 +6,9 @@ import injectedStyle from './google-sidebar.css?inline'
 import GoogleSidebar from './google-sidebar'
 
 function mount() {
+  if (document.getElementById('plasmo-google-sidebar')) {
+    return
+  }
   const root = document.createElement('div')
   root.id = 'plasmo-google-sidebar'
 

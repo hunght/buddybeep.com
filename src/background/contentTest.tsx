@@ -2,8 +2,8 @@ import React from 'react'
 
 import { createRoot } from 'react-dom/client'
 
-import injectedStyle from '~content-script/side-bar/google-sidebar.css?inline'
-import GoogleSidebar from '~content-script/side-bar/google-sidebar'
+import injectedStyle from './summary-component/google-sidebar.css?inline'
+import GoogleSidebar from './summary-component/google-sidebar'
 
 mount()
 function mount() {
