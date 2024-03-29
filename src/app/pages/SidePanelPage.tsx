@@ -14,11 +14,13 @@ import { sidePanelBotAtom, sidePanelSummaryAtom } from '~app/state/sidePanelAtom
 import { LanguageSelection } from './LanguageSelection'
 
 import logo from '~/assets/santa-logo.png'
+import guildeWebContent from '~/assets/screen/guilde-web-content.png'
 
 import { WritingPresetModal } from '~app/components/write-reply/modal'
 import { PrimaryButton } from '~app/components/PrimaryButton'
 import { buildPromptWithLang } from '~app/utils/lang'
 import { composeTextAtom, originalTextAtom, subTabAtom } from '~app/state/writingAssistantAtom'
+import Dialog from '~app/components/Dialog'
 
 function SidePanelPage() {
   const [tab, setTab] = useState<'chat' | 'write'>('chat')
@@ -26,6 +28,7 @@ function SidePanelPage() {
   const [botId, setBotId] = useAtom(sidePanelBotAtom)
   const [summaryText, setSummaryText] = useAtom(sidePanelSummaryAtom)
   const [openWritingPreset, setOpenWritingPreset] = useState(false)
+  const [openSummaryModal, setOpenSummaryModal] = useState(false)
   const [, setOriginalTextAtom] = useAtom(originalTextAtom)
   const [, setComposeTextAtom] = useAtom(composeTextAtom)
 
@@ -197,31 +200,41 @@ function SidePanelPage() {
             className="mx-3"
           />
           {tab === 'chat' ? (
-            <div className="flex flex-col mx-3 my-3 gap-3">
-              <hr className="grow border-primary-border" />
-              <PrimaryButton
-                title={t('Summary Web Content')}
-                onClick={() => {
-                  console.log(`==== summaryText ===`)
-                  console.log(summaryText)
-                  console.log('==== end log ===')
+            <>
+              <Dialog
+                title={t('Generate Draft')}
+                open={openSummaryModal}
+                onClose={() => {
+                  setOpenSummaryModal(false)
                 }}
-              />
-              <ChatMessageInput
-                mode="compact"
-                disabled={chat.generating}
-                autoFocus={true}
-                placeholder={t('Ask me anything...')}
-                onSubmit={onSubmit}
-                actionButton={
-                  chat.generating ? (
-                    <Button text={t('Stop')} color="flat" size="small" onClick={chat.stopGenerating} />
-                  ) : (
-                    <Button text={t('Send')} color="primary" type="submit" size="small" />
-                  )
-                }
-              />
-            </div>
+                className="w-full mx-1 "
+              >
+                <img src={guildeWebContent} className="w-full  " />
+              </Dialog>
+              <div className="flex flex-col mx-3 my-3 gap-3">
+                <hr className="grow border-primary-border" />
+                <PrimaryButton
+                  title={t('Summary Web Content')}
+                  onClick={() => {
+                    setOpenSummaryModal(true)
+                  }}
+                />
+                <ChatMessageInput
+                  mode="compact"
+                  disabled={chat.generating}
+                  autoFocus={true}
+                  placeholder={t('Ask me anything...')}
+                  onSubmit={onSubmit}
+                  actionButton={
+                    chat.generating ? (
+                      <Button text={t('Stop')} color="flat" size="small" onClick={chat.stopGenerating} />
+                    ) : (
+                      <Button text={t('Send')} color="primary" type="submit" size="small" />
+                    )
+                  }
+                />
+              </div>
+            </>
           ) : (
             <>
               <WritingPresetModal

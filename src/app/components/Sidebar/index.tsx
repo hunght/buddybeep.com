@@ -32,6 +32,9 @@ import { getAllAgentsAtom } from '~app/state/agentAtom'
 import { InsertPropmtType } from '~app/types/InsertPropmtType'
 import { useEnabledBots } from '~app/hooks/use-enabled-bots'
 import { IconButton } from './IconButton'
+import Button from '../Button'
+import { PrimaryButton } from '../PrimaryButton'
+import { RoundedSecondaryButton } from '../RoundedSecondaryButton'
 
 function Sidebar() {
   const { t } = useTranslation()
@@ -142,6 +145,8 @@ function Sidebar() {
             />
           )
         })}
+
+        <RoundedSecondaryButton title={t('Create prompt bot +')} onClick={openPromptLibrary} />
       </div>
 
       <div className="mt-auto pt-2">{!collapsed && <hr className="border-[#ffffff4d]" />}</div>

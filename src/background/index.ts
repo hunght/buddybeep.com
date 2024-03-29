@@ -85,7 +85,7 @@ Browser.contextMenus.onClicked.addListener(async (info, tab) => {
 })
 Browser.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
-    Browser.tabs.create({ url: 'app.html#/setting' })
+    Browser.tabs.create({ url: 'app.html#' })
     trackInstallSource()
   }
   chrome.contextMenus.create({

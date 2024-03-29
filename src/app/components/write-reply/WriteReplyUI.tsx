@@ -113,7 +113,7 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
           className={cx(
             'relative -ml-px inline-flex items-center  px-3 py-2 text-sm font-semibold  text-primary-text ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10 rounded-tr-2xl',
             tab === 'reply'
-              ? 'bg-indigo-600 text-primary-text hover:bg-indigo-500'
+              ? 'bg-indigo-600 text-white hover:bg-indigo-500'
               : 'ring-1 ring-inset ring-gray-300 bg-white  text-primary-text dark:text-black hover:bg-gray-50',
           )}
         >
