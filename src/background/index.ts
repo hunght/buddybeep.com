@@ -3,7 +3,7 @@ import { ALL_IN_ONE_PAGE_ID } from '~app/consts'
 import { getUserConfig } from '~services/user-config'
 import { trackInstallSource } from './source'
 import { readTwitterCsrfToken } from './twitter-cookie'
-
+import contentTest from './contentTest?script'
 import logger from '~utils/logger'
 import { SidePanelMessageType } from '~app/types/sidePanel'
 
@@ -27,12 +27,6 @@ async function openAppPage({ agentId, botId }: { agentId?: string; botId?: strin
   const hash = startupPage === ALL_IN_ONE_PAGE_ID ? '' : `#/chat/${startupPage}`
   await Browser.tabs.create({ url: `app.html${hash}` })
 }
-function storagePageContent() {
-  const documentText = document.body.innerText || ''
-  console.log(`==== documentText ===`)
-  console.log(documentText)
-  console.log('==== end log ===')
-}
 
 Browser.action.onClicked.addListener(async (tab) => {
   openSidePanel()
@@ -43,8 +37,9 @@ Browser.action.onClicked.addListener(async (tab) => {
     }
     chrome.scripting.executeScript({
       target: { tabId: tab.id },
-      func: storagePageContent,
+      files: [contentTest],
     })
+    chrome.tabs.sendMessage(tab.id, { type: 'mountApp' })
   }
 })
 
