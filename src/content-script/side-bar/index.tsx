@@ -31,8 +31,3 @@ function mount() {
   createRoot(rootIntoShadow).render(<GoogleSidebar />)
 }
 mount()
-chrome.runtime.onMessage.addListener((msg) => {
-  if (msg.type === 'mountApp') {
-    mount()
-  }
-})

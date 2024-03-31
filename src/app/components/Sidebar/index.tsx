@@ -12,7 +12,7 @@ import settingIcon from '~/assets/icons/setting.svg'
 import logo from '~/assets/santa-logo.png'
 import { cx } from '~/utils'
 import { FaRegEdit } from 'react-icons/fa'
-
+import { FiSettings } from 'react-icons/fi'
 import { releaseNotesAtom, showDiscountModalAtom, sidebarCollapsedAtom } from '~app/state'
 import { getPremiumActivation } from '~services/premium'
 import { checkReleaseNotes } from '~services/release-notes'
@@ -35,7 +35,7 @@ import { IconButton } from './IconButton'
 import Button from '../Button'
 import { PrimaryButton } from '../PrimaryButton'
 import { RoundedSecondaryButton } from '../RoundedSecondaryButton'
-
+import { BiCollapse } from 'react-icons/bi'
 function Sidebar() {
   const { t } = useTranslation()
   const [collapsed, setCollapsed] = useAtom(sidebarCollapsedAtom)
@@ -96,17 +96,21 @@ function Sidebar() {
           {collapsed ? <img src={logo} className="w-[30px]" /> : <img src={logo} className="w-[50px] ml-2" />}
         </div>
         <div className="flex flex-row justify-center items-center gap-2">
-          <Tooltip content={t('Settings')}>
-            <Link to="/setting">
-              <IconButton icon={settingIcon} />
-            </Link>
-          </Tooltip>
-          <FaRegEdit
+          <Link to="/setting">
+            <FiSettings
+              size={34}
+              className="cursor-pointer p-[6px] rounded-[10px] w-fit  hover:opacity-80 bg-secondary"
+              title={t('Prompt Library')}
+            />
+          </Link>
+          <BiCollapse
             size={34}
-            color="#ffffffb3"
-            className="cursor-pointer p-[6px] rounded-[10px] w-fit  hover:opacity-80 bg-secondary bg-opacity-20"
-            onClick={openPromptLibrary}
-            title={t('Prompt Library')}
+            className="cursor-pointer p-[6px] rounded-[10px] w-fit  hover:opacity-80 bg-secondary"
+            onClick={() => {
+              chrome.runtime.sendMessage({
+                action: 'openSidePanelOnly',
+              })
+            }}
           />
         </div>
         {isPromptLibraryDialogOpen && (
@@ -117,7 +121,7 @@ function Sidebar() {
           />
         )}
       </div>
-      <div className="flex flex-col gap-[13px] mt-10 overflow-y-auto scrollbar-none">
+      <div className="flex flex-col gap-[13px] mt-4 overflow-y-auto scrollbar-none">
         <span>{t('Original bots')}</span>
         {enabledBots.map(({ botId, bot }) => {
           return (
@@ -131,7 +135,16 @@ function Sidebar() {
             />
           )
         })}
-        <span>{t('Prompt bots')}</span>
+        <div className="flex flex-row justify-between items-center ">
+          <span>{t('Prompt bots')}</span>
+          <FaRegEdit
+            size={34}
+            color="#000000"
+            className="cursor-pointer p-[6px] rounded-[10px] w-fit  hover:opacity-80 bg-secondary"
+            onClick={openPromptLibrary}
+            title={t('Prompt Library')}
+          />
+        </div>
         {chatStatesArray.map(({ botId, agentId, lastMessage }) => {
           const agent = allAgents[agentId ?? '']
 
@@ -146,7 +159,9 @@ function Sidebar() {
           )
         })}
 
-        <RoundedSecondaryButton title={t('Create prompt bot +')} onClick={openPromptLibrary} />
+        {/* {chatStatesArray.length !== 0 && (
+          <RoundedSecondaryButton title={t('Create prompt bot +')} onClick={openPromptLibrary} />
+        )} */}
       </div>
 
       <div className="mt-auto pt-2">{!collapsed && <hr className="border-[#ffffff4d]" />}</div>

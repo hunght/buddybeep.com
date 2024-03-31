@@ -140,6 +140,10 @@ Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 
   if (message.action === 'openSidePanelOnly') {
     const tabId = sender.tab?.id
+    if (tabId) {
+      chrome.tabs.remove(tabId)
+    }
+
     await openSidePanelWithTabId(tabId)
   }
 

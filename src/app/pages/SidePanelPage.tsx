@@ -215,8 +215,20 @@ function SidePanelPage() {
                 <hr className="grow border-primary-border" />
                 <PrimaryButton
                   title={t('Summary Web Content')}
-                  onClick={() => {
-                    setOpenSummaryModal(true)
+                  onClick={async () => {
+                    chrome.tabs.query({ active: true, currentWindow: true }, async ([tab]) => {
+                      if (!tab.id) {
+                        return
+                      }
+                      const result = await chrome.tabs.sendMessage(tab.id, { type: 'mountApp' })
+                      console.log(`==== result ===`)
+                      console.log(result)
+                      console.log('==== end log ===')
+
+                      if (result && result.type === 'mounted') {
+                        setOpenSummaryModal(true)
+                      }
+                    })
                   }}
                 />
                 <ChatMessageInput

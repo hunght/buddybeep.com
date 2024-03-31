@@ -5,6 +5,7 @@ export const RoundedSecondaryButton: React.FunctionComponent<{
   disabled?: boolean
   title: string
   onClick: () => void
+  className?: string
 }> = ({ title, disabled, onClick }) => {
   return (
     <button

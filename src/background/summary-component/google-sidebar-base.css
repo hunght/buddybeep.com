@@ -14,3 +14,7 @@ body.plasmo-google-sidebar-show * {
   top: 0px;
   right: 0px;
 }
+
+.highlight-border {
+  border: 1px solid red !important; /* Use !important to override any existing border styles */
+}

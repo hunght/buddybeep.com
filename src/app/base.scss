@@ -38,13 +38,13 @@ body {
 
 @mixin light-theme {
   color-scheme: light;
-  --color-primary-blue: 73 135 252; // #4987FC
+  --color-primary-blue: 0 132 255; // #4987FC
   --color-secondary: 242 242 242; // #F2F2F2
   --color-primary-purple: 103 86 189; // #6756BD
   --primary-background: 255 255 255; // #FFFFFF
-  --primary-text: 48 48 48; // #303030
+  --primary-text: 5 5 5; // #303030
   --secondary-text: 128 128 128; // #808080
-  --light-text: 190 190 190; // #BEBEBE
+  --light-text: 101 103 107; // #BEBEBE
   --primary-border: 237 237 237; // #EDEDED
 }
 
