@@ -37,7 +37,7 @@ interface Props {
 
 const ChatMessageInput: FC<Props> = (props) => {
   const { t } = useTranslation()
-  const { placeholder = t('Use / to select prompts, Shift+Enter to add new line') } = props
+  const { placeholder = t('Shift+Enter to add new line') } = props
 
   const [value, setValue] = useState('')
   const [image, setImage] = useState<File | undefined>(undefined)
@@ -59,16 +59,10 @@ const ChatMessageInput: FC<Props> = (props) => {
   const floatingListRef = useRef([])
 
   const handleSelect = useCallback((p: Prompt) => {
-    if (p.agentId === 'PROMPT_LIBRARY') {
-      setIsPromptLibraryDialogOpen(true)
-      setIsComboboxOpen(false)
-      trackEvent('open_prompt_library', { source: 'combobox' })
-    } else {
-      setValue(p.prompt)
-      setIsComboboxOpen(false)
-      inputRef.current?.focus()
-      trackEvent('use_prompt', { source: 'combobox' })
-    }
+    setValue(p.prompt)
+    setIsComboboxOpen(false)
+    inputRef.current?.focus()
+    trackEvent('use_prompt', { source: 'combobox' })
   }, [])
 
   const listNavigation = useListNavigation(context, {
@@ -116,7 +110,6 @@ const ChatMessageInput: FC<Props> = (props) => {
 
   const onValueChange = useCallback((v: string) => {
     setValue(v)
-    setIsComboboxOpen(v === '/')
   }, [])
 
   const selectImage = useCallback(async () => {

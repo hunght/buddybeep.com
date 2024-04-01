@@ -53,7 +53,7 @@
   "Quick access in Chrome side bar": "在Chrome侧边栏快速访问",
   "You have opened BuddyBeep {{openTimes}} times, consider unlock all features?": "哇！你已经打开BuddyBeep {{openTimes}}次了，是否要解锁全部功能呢？🥺",
   "Open Prompt Library": "管理提示词",
-  "Use / to select prompts, Shift+Enter to add new line": "使用 / 选择提示词，Shift+Enter添加换行",
+  "Shift+Enter to add new line": "Shift+Enter添加换行",
   "Your Prompts": "你的提示词",
   "Community Prompts": "提示词社区",
   "Create new prompt": "创建提示词",
@@ -204,5 +204,8 @@
   "Tell me something about the Big Bang so that I can explain it to my 5-year-old child": "告诉我有关大爆炸的事情，这样我就可以向我5岁的孩子解释。",
   "Please provide me with 10 gift ideas for my friend's birthday": "请为我提供10个朋友生日礼物的想法。",
   "Generate five catchy titles for my writing about the use case of ChatGPT": "为我关于ChatGPT用例的写作生成五个吸引人的标题。",
-  "How can I assist you today?": "我今天怎么帮助您？"
+  "How can I assist you today?": "我今天怎么帮助您？",
+  "Expand": "展开",
+  "Clear history": "清空历史",
+  "Summary Web Content": "摘要网页内容"
 }

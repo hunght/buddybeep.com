@@ -53,7 +53,7 @@
   "Quick access in Chrome side bar": "Akses cepat di bilah sisi Chrome",
   "You have opened BuddyBeep {{openTimes}} times, consider unlock all features?": "Anda telah membuka BuddyBeep {{openTimes}} kali, pertimbangkan untuk membuka semua fitur?",
   "Open Prompt Library": "Buka Perpustakaan Prompt",
-  "Use / to select prompts, Shift+Enter to add new line": "Gunakan / untuk memilih prompt, Shift+Enter untuk menambahkan baris baru",
+  "Shift+Enter to add new line": "Shift+Enter untuk menambahkan baris baru",
   "Your Prompts": "Prompt Anda",
   "Community Prompts": "Prompt Komunitas",
   "Create new prompt": "Buat prompt baru",
@@ -191,5 +191,8 @@
   "Tell me something about the Big Bang so that I can explain it to my 5-year-old child": "Ceritakan sesuatu tentang Big Bang agar saya dapat menjelaskannya kepada anak saya yang berusia 5 tahun.",
   "Please provide me with 10 gift ideas for my friend's birthday": "Tolong berikan saya 10 ide kado untuk ulang tahun teman saya.",
   "Generate five catchy titles for my writing about the use case of ChatGPT": "Buatlah lima judul menarik untuk tulisan saya tentang kasus penggunaan ChatGPT.",
-  "How can I assist you today?": "Bagaimana saya bisa membantu Anda hari ini?"
+  "How can I assist you today?": "Bagaimana saya bisa membantu Anda hari ini?",
+  "Expand": "Perluas",
+  "Clear history": "Hapus riwayat",
+  "Summary Web Content": "Ringkasan Konten Web"
 }

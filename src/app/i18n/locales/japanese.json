@@ -53,7 +53,7 @@
   "Quick access in Chrome side bar": "Chromeサイドバーでのクイックアクセス",
   "You have opened BuddyBeep {{openTimes}} times, consider unlock all features?": "BuddyBeepを{{openTimes}}回開いています。すべての機能を解除しますか？🥺",
   "Open Prompt Library": "プロンプトライブラリを開く",
-  "Use / to select prompts, Shift+Enter to add new line": "プロンプトを選択するには/を使用し、Shift+Enterで新しい行を追加します",
+  "Shift+Enter to add new line": "Shift+Enterで新しい行を追加します",
   "Your Prompts": "あなたのプロンプト",
   "Community Prompts": "コミュニティプロンプト",
   "Create new prompt": "新しいプロンプトを作成する",
@@ -203,5 +203,8 @@
   "Tell me something about the Big Bang so that I can explain it to my 5-year-old child": "ビッグバンについて何か教えてください。それを5歳の子供に説明できるように。",
   "Please provide me with 10 gift ideas for my friend's birthday": "友達の誕生日のための10個のギフトアイデアを教えてください。",
   "Generate five catchy titles for my writing about the use case of ChatGPT": "ChatGPTの使用例についての私の文章のための魅力的なタイトルを5つ生成してください。",
-  "How can I assist you today?": "今日はどのようにお手伝いできますか？"
+  "How can I assist you today?": "今日はどのようにお手伝いできますか？",
+  "Expand": "展開する",
+  "Clear history": "履歴をクリアする",
+  "Summary Web Content": "要約ウェブコンテンツ"
 }

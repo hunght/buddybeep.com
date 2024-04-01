@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import clearIcon from '~/assets/icons/clear.svg'
+
 import { cx } from '~/utils'
 import Button from '~app/components/Button'
 import ChatMessageInput from '~app/components/Chat/ChatMessageInput'
@@ -124,34 +124,19 @@ function SidePanelPage() {
     }
   }, [resetConversation])
 
+  const openMainApp = () => {
+    chrome.runtime.sendMessage({
+      action: 'openMainApp',
+      agentId: agentId,
+      botId: botId,
+    })
+  }
   return (
     <ConversationContext.Provider value={context}>
       <div className="flex flex-col overflow-hidden bg-primary-background h-full">
         <div className="border-b border-solid border-primary-border flex flex-row items-center justify-between gap-2 pt-3 mx-3">
           <div className="flex flex-row items-center gap-1">
-            <img
-              src={logo}
-              className="w-[30px] cursor-pointer"
-              onClick={() => {
-                chrome.runtime.sendMessage({
-                  action: 'openMainApp',
-                  agentId: agentId,
-                  botId: botId,
-                })
-              }}
-            />
-
-            <BiExpand
-              size={24}
-              className="cursor-pointer bg-secondary p-1 rounded-[10px] w-fit  hover:opacity-80"
-              onClick={() => {
-                chrome.runtime.sendMessage({
-                  action: 'openMainApp',
-                  agentId: agentId,
-                  botId: botId,
-                })
-              }}
-            />
+            <img src={logo} className="w-[30px] cursor-pointer" onClick={openMainApp} />
           </div>
           <span className="isolate inline-flex rounded-md shadow-sm">
             <button
@@ -193,11 +178,9 @@ function SidePanelPage() {
             <img src={botInfo.avatar} className="w-4 h-4 object-contain rounded-full" />
             <ChatbotName botId={botId} name={botInfo.name} onSwitchBot={setBotId} />
           </div>
-          <div className="w-30">
-            <LanguageSelection />
-          </div>
+
           <div className="flex flex-row items-center gap-3">
-            <MenuDropDown />
+            <MenuDropDown onExpand={openMainApp} clearHistory={resetConversation} />
           </div>
         </div>
         <>
@@ -232,9 +215,6 @@ function SidePanelPage() {
                         return
                       }
                       const result = await chrome.tabs.sendMessage(tab.id, { type: 'mountApp' })
-                      console.log(`==== result ===`)
-                      console.log(result)
-                      console.log('==== end log ===')
 
                       if (result && result.type === 'mounted') {
                         setOpenSummaryModal(true)
@@ -282,7 +262,7 @@ function SidePanelPage() {
                   mode="compact"
                   disabled={chat.generating}
                   autoFocus={true}
-                  placeholder="Ask me anything..."
+                  placeholder={t('Ask me anything...')}
                   onSubmit={onSubmit}
                   actionButton={
                     chat.generating ? (

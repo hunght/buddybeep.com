@@ -53,7 +53,7 @@
     "Quick access in Chrome side bar": "Truy cập nhanh trong thanh bên Chrome",
     "You have opened BuddyBeep {{openTimes}} times, consider unlock all features?": "Bạn đã mở BuddyBeep {{openTimes}} lần, xem xét mở khóa tất cả các tính năng? 🥺",
     "Open Prompt Library": "Mở Thư viện Lời nhắc",
-    "Use / to select prompts, Shift+Enter to add new line": "Sử dụng / để chọn lời nhắc, Shift+Enter để thêm dòng mới",
+    "Shift+Enter to add new line": "Shift+Enter để thêm dòng mới",
     "Your Prompts": "Lời nhắc của bạn",
     "Community Prompts": "Lời nhắc cộng đồng",
     "Create new prompt": "Tạo lời nhắc mới",
@@ -194,5 +194,8 @@
     "Tell me something about the Big Bang so that I can explain it to my 5-year-old child": "Hãy kể cho tôi nghe về Vụ Nổ Lớn để tôi có thể giải thích nó cho đứa trẻ 5 tuổi của tôi.",
     "Please provide me with 10 gift ideas for my friend's birthday": "Xin vui lòng đưa ra 10 ý tưởng quà tặng cho sinh nhật bạn tôi.",
     "Generate five catchy titles for my writing about the use case of ChatGPT": "Tạo ra năm tiêu đề hấp dẫn cho bài viết của tôi về trường hợp sử dụng ChatGPT.",
-    "How can I assist you today?": "Tôi có thể giúp gì cho bạn hôm nay?"
+    "How can I assist you today?": "Tôi có thể giúp gì cho bạn hôm nay?",
+    "Expand": "Mở rộng",
+    "Clear history": "Xóa lịch sử",
+    "Summary Web Content": "Tóm tắt Nội dung Web"
 }

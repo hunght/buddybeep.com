@@ -53,7 +53,7 @@
   "Quick access in Chrome side bar": "Acesso rápido na barra lateral do Chrome",
   "You have opened BuddyBeep {{openTimes}} times, consider unlock all features?": "Você abriu o BuddyBeep {{openTimes}} vezes, considere desbloquear todos os recursos? 🥺",
   "Open Prompt Library": "Abrir biblioteca de prompts",
-  "Use / to select prompts, Shift+Enter to add new line": "Use / para selecionar prompts, Shift+Enter para adicionar nova linha",
+  "Shift+Enter to add new line": "Shift+Enter para adicionar nova linha",
   "Your Prompts": "Seus prompts",
   "Community Prompts": "Prompts da comunidade",
   "Create new prompt": "Criar novo prompt",
@@ -191,5 +191,8 @@
   "Tell me something about the Big Bang so that I can explain it to my 5-year-old child": "Diga-me algo sobre o Big Bang para que eu possa explicar ao meu filho de 5 anos.",
   "Please provide me with 10 gift ideas for my friend's birthday": "Por favor, dê-me 10 ideias de presentes para o aniversário do meu amigo.",
   "Generate five catchy titles for my writing about the use case of ChatGPT": "Gere cinco títulos atraentes para o meu texto sobre o caso de uso do ChatGPT.",
-  "How can I assist you today?": "Como posso ajudá-lo hoje?"
+  "How can I assist you today?": "Como posso ajudá-lo hoje?",
+  "Expand": "Expandir",
+  "Clear history": "Limpar histórico",
+  "Summary Web Content": "Resumo de conteúdo da web"
 }
