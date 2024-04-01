@@ -21,7 +21,8 @@ import { PrimaryButton } from '~app/components/PrimaryButton'
 import { buildPromptWithLang } from '~app/utils/lang'
 import { composeTextAtom, originalTextAtom, subTabAtom } from '~app/state/writingAssistantAtom'
 import Dialog from '~app/components/Dialog'
-
+import { BiExpand } from 'react-icons/bi'
+import MenuDropDown from '~app/components/side-panel/MenuDropDown'
 function SidePanelPage() {
   const [tab, setTab] = useState<'chat' | 'write'>('chat')
   const { t } = useTranslation()
@@ -127,17 +128,31 @@ function SidePanelPage() {
     <ConversationContext.Provider value={context}>
       <div className="flex flex-col overflow-hidden bg-primary-background h-full">
         <div className="border-b border-solid border-primary-border flex flex-row items-center justify-between gap-2 pt-3 mx-3">
-          <img
-            src={logo}
-            className="w-[30px] cursor-pointer"
-            onClick={() => {
-              chrome.runtime.sendMessage({
-                action: 'openMainApp',
-                agentId: agentId,
-                botId: botId,
-              })
-            }}
-          />
+          <div className="flex flex-row items-center gap-1">
+            <img
+              src={logo}
+              className="w-[30px] cursor-pointer"
+              onClick={() => {
+                chrome.runtime.sendMessage({
+                  action: 'openMainApp',
+                  agentId: agentId,
+                  botId: botId,
+                })
+              }}
+            />
+
+            <BiExpand
+              size={24}
+              className="cursor-pointer bg-secondary p-1 rounded-[10px] w-fit  hover:opacity-80"
+              onClick={() => {
+                chrome.runtime.sendMessage({
+                  action: 'openMainApp',
+                  agentId: agentId,
+                  botId: botId,
+                })
+              }}
+            />
+          </div>
           <span className="isolate inline-flex rounded-md shadow-sm">
             <button
               type="button"
@@ -182,11 +197,7 @@ function SidePanelPage() {
             <LanguageSelection />
           </div>
           <div className="flex flex-row items-center gap-3">
-            <img
-              src={clearIcon}
-              className={cx('w-4 h-4', chat.generating ? 'cursor-not-allowed' : 'cursor-pointer')}
-              onClick={resetConversation}
-            />
+            <MenuDropDown />
           </div>
         </div>
         <>
