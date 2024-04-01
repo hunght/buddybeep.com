@@ -44,7 +44,7 @@ function NavLink(props: {
       <div className="w-full">
         <span className="font-medium text-sm w-full line-clamp-1">{iconOnly ? '' : title}</span>
         {props.lastMessage ? (
-          <div className="flex flex-row w-full pr-1 text-secondary-text">
+          <div className="flex flex-row w-full pr-1 text-secondary-text dark:text-gray-400">
             <span className="text-sm w-full line-clamp-1">{iconOnly ? '' : props.lastMessage.text}</span>
             <span className="text-sm  text-right">{iconOnly ? '' : formatTimestamp(props.lastMessage.time)}</span>
           </div>

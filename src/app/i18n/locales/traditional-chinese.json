@@ -197,5 +197,8 @@
   "Tell me something about the Big Bang so that I can explain it to my 5-year-old child": "告訴我關於大爆炸的事情，這樣我就可以向我5歲的孩子解釋。",
   "Please provide me with 10 gift ideas for my friend's birthday": "請為我提供10個朋友生日禮物的想法。",
   "Generate five catchy titles for my writing about the use case of ChatGPT": "為我關於ChatGPT用例的寫作生成五個吸引人的標題。",
-  "How can I assist you today?": "我今天如何幫助您？"
+  "How can I assist you today?": "我今天如何幫助您？",
+  "anwser_reply_prompt": "例如，“聽說您對我們的服務不滿意，我感到非常遺憾。我們努力提供最好的服務，很抱歉我們沒有達到您的期望。”",
+  "title_reply_prompt": "例如，“我寫信給您是為了表達我對貴公司提供的服務感到不滿。”",
+  "title_compose_prompt": "例如，“氣候變化對經濟的影響。”"
 }

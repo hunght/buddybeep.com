@@ -194,5 +194,8 @@
   "How can I assist you today?": "Bagaimana saya bisa membantu Anda hari ini?",
   "Expand": "Perluas",
   "Clear history": "Hapus riwayat",
-  "Summary Web Content": "Ringkasan Konten Web"
+  "Summary Web Content": "Ringkasan Konten Web",
+  "anwser_reply_prompt": "Sebagai contoh, \"Saya sangat menyesal mendengar bahwa Anda tidak puas dengan layanan kami. Kami berusaha untuk menyediakan layanan terbaik yang mungkin dan kami menyesal karena tidak memenuhi harapan Anda.\"",
+  "title_reply_prompt": "Sebagai contoh, \"Saya menulis kepada Anda untuk menyatakan ketidakpuasan saya dengan layanan yang saya terima dari perusahaan Anda.\"",
+  "title_compose_prompt": "Sebagai contoh, \"Dampak perubahan iklim terhadap ekonomi.\""
 }

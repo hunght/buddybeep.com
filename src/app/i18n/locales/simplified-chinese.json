@@ -207,5 +207,8 @@
   "How can I assist you today?": "我今天怎么帮助您？",
   "Expand": "展开",
   "Clear history": "清空历史",
-  "Summary Web Content": "摘要网页内容"
+  "Summary Web Content": "摘要网页内容",
+  "anwser_reply_prompt": "例如，“听说您对我们的服务不满意，我感到非常遗憾。我们努力提供可能的最佳服务，很抱歉我们没有达到您的期望。”",
+  "title_reply_prompt": "例如，“我写信给您是要表达我对贵公司提供的服务感到不满。”",
+  "title_compose_prompt": "例如，“气候变化对经济的影响。”"
 }

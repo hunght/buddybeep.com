@@ -133,7 +133,7 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
             id="original-text"
             value={originalText}
             onChange={(e) => setOriginalText(e.target.value)}
-            placeholder='For example, "I am writing to you to express my dissatisfaction with the service I received from your company."'
+            placeholder={t('title_reply_prompt')}
             className="shadow appearance-none border rounded w-full py-2 px-3  text-primary-text  dark:text-black leading-tight focus:outline-none focus:shadow-outline h-36"
           ></textarea>
         </div>
@@ -146,7 +146,7 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
             id="original-text"
             value={composeText}
             onChange={(e) => setComposeText(e.target.value)}
-            placeholder='For example, "The impact of climate change on the economy."'
+            placeholder={t('title_compose_prompt')}
             className="shadow appearance-none border rounded w-full py-2 px-3  text-primary-text dark:text-black leading-tight focus:outline-none focus:shadow-outline h-36"
           ></textarea>
         </div>
@@ -161,7 +161,7 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
             id="reply-content"
             value={replyContent}
             onChange={(e) => setReplyContent(e.target.value)}
-            placeholder='Press Enter to generate draft suggestions based on the content you write. For example, "I am sorry to hear that you are dissatisfied with our service. We strive to provide the best service possible and we are sorry that we did not meet your expectations."'
+            placeholder={t('anwser_reply_prompt')}
             className="shadow appearance-none border rounded w-full py-2 px-3  text-primary-text dark:text-black mb-3 leading-tight focus:outline-none focus:shadow-outline h-44"
           ></textarea>
         </div>

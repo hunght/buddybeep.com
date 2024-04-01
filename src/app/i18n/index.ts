@@ -13,6 +13,7 @@ import thai from './locales/thai.json'
 import vietnamese from './locales/vietnamese.json'
 import traditionalChinese from './locales/traditional-chinese.json'
 import russian from './locales/russian.json'
+import english from './locales/english.json'
 import { LANGUAGE_KEY } from '~app/state/langAtom'
 
 const resources: Resource = {
@@ -27,6 +28,7 @@ const resources: Resource = {
   th: { translation: thai },
   vi: { translation: vietnamese },
   ru: { translation: russian },
+  en: { translation: english },
 }
 
 export const languageCodes = Object.keys(resources)

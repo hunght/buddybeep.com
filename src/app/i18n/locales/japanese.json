@@ -206,5 +206,8 @@
   "How can I assist you today?": "今日はどのようにお手伝いできますか？",
   "Expand": "展開する",
   "Clear history": "履歴をクリアする",
-  "Summary Web Content": "要約ウェブコンテンツ"
+  "Summary Web Content": "要約ウェブコンテンツ",
+  "anwser_reply_prompt": "例えば、「私たちのサービスにご不満をお持ちいただいたと聞いて残念です。私たちは可能な限り最高のサービスを提供するよう努めており、ご期待に添えなかったことをお詫び申し上げます。」",
+  "title_reply_prompt": "例えば、「貴社の提供したサービスに対する不満を表明するために、この手紙を書いています。」",
+  "title_compose_prompt": "例えば、「経済への気候変動の影響。」"
 }

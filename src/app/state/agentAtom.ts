@@ -14,6 +14,7 @@ import { atom } from 'jotai'
 import { agentsCategorization } from './data/categoriesData'
 
 import { languageAtom } from './langAtom'
+import { omit } from 'lodash-es'
 
 type AgentType = {
   agentId: string
@@ -32,9 +33,6 @@ export const searchQueryAtom = atom<string>('')
 export const getAllAgentsAtom = atom<Record<string, AgentType>>((get) => {
   const allAgents = jsonData as unknown as Record<string, AgentType>
   const lang = get(languageAtom)
-  console.log(`==== lang ===`)
-  console.log(lang)
-  console.log('==== end log ===')
 
   if (lang === 'en') {
     return allAgents
@@ -87,9 +85,6 @@ export const getAllAgentsAtom = atom<Record<string, AgentType>>((get) => {
       name: object[key] ?? value.name,
     }
   })
-  console.log(`==== result ===`)
-  console.log(result)
-  console.log('==== end log ===')
 
   return result
 })
@@ -103,7 +98,9 @@ export const agentsByCategoryAtom = atom<AgentType[]>((get) => {
   const subcategory = cat.subcategory
   let results: AgentType[] = []
   if (category === null) {
-    results = Object.values(allAgents)
+    const idsToRemove = ['explain-a-concept', 'writing-assistant', 'summary-web-content', 'summary-youtube-videos']
+
+    results = Object.values(omit(allAgents, idsToRemove))
   } else if (subcategory === null) {
     const filteredAgents = agentsCategorization.filter((agent) => agent.category === category)
 
