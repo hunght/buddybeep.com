@@ -13,7 +13,7 @@ import { useChat } from '~app/hooks/use-chat'
 import { sidePanelBotAtom, sidePanelSummaryAtom } from '~app/state/sidePanelAtom'
 import { LanguageSelection } from './LanguageSelection'
 
-import logo from '~/assets/santa-logo.png'
+import logo from '~/assets/logo-64.png'
 import guildeWebContent from '~/assets/screen/guilde-web-content.png'
 
 import { WritingPresetModal } from '~app/components/write-reply/modal'

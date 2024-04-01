@@ -110,7 +110,7 @@ export const ContentScript: React.FC = () => {
         >
           <div className="flex items-center flex-1 text-white py-2 px-4 rounded w-full">
             <img
-              src={chrome.runtime.getURL('src/assets/icon.png')}
+              src={chrome.runtime.getURL('src/assets/logo-32.png')}
               style={{ width: 25, height: 25, cursor: 'pointer' }}
               onClick={() => {
                 chrome.runtime.sendMessage({

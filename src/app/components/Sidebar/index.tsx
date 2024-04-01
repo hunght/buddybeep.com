@@ -9,7 +9,7 @@ import feedbackIcon from '~/assets/icons/feedback.svg'
 import githubIcon from '~/assets/icons/github.svg'
 import settingIcon from '~/assets/icons/setting.svg'
 
-import logo from '~/assets/santa-logo.png'
+import logo from '~/assets/logo-64.png'
 import { cx } from '~/utils'
 import { FaRegEdit } from 'react-icons/fa'
 import { FiSettings } from 'react-icons/fi'
@@ -93,7 +93,7 @@ function Sidebar() {
             })
           }}
         >
-          {collapsed ? <img src={logo} className="w-[30px]" /> : <img src={logo} className="w-[50px] ml-2" />}
+          {collapsed ? <img src={logo} className="w-[30px]" /> : <img src={logo} className=" ml-2 w-16" />}
         </div>
         <div className="flex flex-row justify-center items-center gap-2">
           <Link to="/setting">
@@ -139,8 +139,7 @@ function Sidebar() {
           <span>{t('Prompt bots')}</span>
           <FaRegEdit
             size={34}
-            color="#000000"
-            className="cursor-pointer p-[6px] rounded-[10px] w-fit  hover:opacity-80 bg-secondary"
+            className="cursor-pointer p-[6px] rounded-[10px] w-fit  hover:opacity-80 bg-secondary text-primary-text"
             onClick={openPromptLibrary}
             title={t('Prompt Library')}
           />
@@ -159,9 +158,14 @@ function Sidebar() {
           )
         })}
 
-        {/* {chatStatesArray.length !== 0 && (
-          <RoundedSecondaryButton title={t('Create prompt bot +')} onClick={openPromptLibrary} />
-        )} */}
+        {chatStatesArray.length === 0 && (
+          //  no prompts message
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-row justify-center items-center text-secondary">
+              <span>{t('No prompts')}</span>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="mt-auto pt-2">{!collapsed && <hr className="border-[#ffffff4d]" />}</div>

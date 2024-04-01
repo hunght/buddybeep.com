@@ -93,7 +93,7 @@ const GoogleSidebar: React.FC = () => {
                   })
                 }}
               >
-                <img src={chrome.runtime.getURL('src/assets/icon.png')} style={{ width: 25, height: 25 }} />
+                <img src={chrome.runtime.getURL('src/assets/logo-32.png')} style={{ width: 25, height: 25 }} />
               </div>
             </div>
           )}

@@ -1,5 +1,5 @@
 import React, { FC, useMemo } from 'react'
-import logo from '~/assets/santa-logo.png'
+import logo from '~/assets/logo-128.png'
 import { FaArrowRightLong } from 'react-icons/fa6'
 import { useTranslation } from 'react-i18next'
 
