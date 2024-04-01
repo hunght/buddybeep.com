@@ -28,10 +28,10 @@ export const CHATBOTS: Record<BotId, { name: string; avatar: string }> = {
     name: 'Bing',
     avatar: bingLogo,
   },
-  chatgpt: {
-    name: 'ChatGPT',
-    avatar: chatgptLogo,
-  },
+  // chatgpt: {
+  //   name: 'ChatGPT',
+  //   avatar: chatgptLogo,
+  // },
 
   claude: {
     name: 'Claude',

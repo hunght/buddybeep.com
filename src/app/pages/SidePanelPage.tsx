@@ -214,9 +214,13 @@ function SidePanelPage() {
                       if (!tab.id) {
                         return
                       }
-                      const result = await chrome.tabs.sendMessage(tab.id, { type: 'mountApp' })
+                      try {
+                        const result = await chrome.tabs.sendMessage(tab.id, { type: 'mountApp' })
 
-                      if (result && result.type === 'mounted') {
+                        if (result && result.type !== 'mounted') {
+                          setOpenSummaryModal(true)
+                        }
+                      } catch (error) {
                         setOpenSummaryModal(true)
                       }
                     })

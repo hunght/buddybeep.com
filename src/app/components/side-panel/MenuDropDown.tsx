@@ -26,13 +26,13 @@ const MenuDropDown: FC<{ onExpand: () => void; clearHistory: () => void }> = ({ 
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md  shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none bg-secondary px-2 py-3 gap-1">
+        <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md  shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none bg-secondary px-2 py-3 gap-2">
           <Menu.Item>
             <LanguageSelection />
           </Menu.Item>
           <Menu.Item>
             <div
-              className="flex flex-row hover:bg-primary-blue   cursor-pointer items-center gap-1 rounded  py-2"
+              className="flex flex-row hover:bg-primary-blue  cursor-pointer items-center gap-1 rounded  py-2"
               onClick={() => {
                 onExpand()
               }}

@@ -33,7 +33,7 @@ function NavLink(props: {
       activeProps={{ className: 'bg-white text-primary-text dark:bg-primary-blue' }}
       inactiveProps={{
         className:
-          'bg-secondary bg-opacity-20 text-primary-text hover:bg-opacity-80 dark:bg-opacity-30 dark:text-primary-text',
+          'bg-secondary bg-opacity-20 text-primary-text hover:bg-opacity-80 dark:bg-opacity-30 dark:text-primary-text dark:hover:bg-opacity-80',
       }}
       title={agent ? agent.name : botId}
       params={{ botId, agentId: agent ? agent.agentId : undefined }}

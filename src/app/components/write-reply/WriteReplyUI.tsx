@@ -19,10 +19,11 @@ import {
   composeTextAtom,
   subTabAtom,
 } from '~app/state/writingAssistantAtom'
+import { HiOutlineFaceSmile } from 'react-icons/hi2'
 import { FormatWritingType } from '~app/types/writing'
 import { cx } from '~utils'
 import { createComposePrompt } from './createComposePrompt'
-
+import { MdFormatAlignJustify, MdFormatAlignLeft } from 'react-icons/md'
 export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = ({ onGenerate }) => {
   const { t } = useTranslation()
 
@@ -175,7 +176,8 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
         </div>
       ) : (
         <div className="mb-4  ">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1">
+            <MdFormatAlignJustify />
             <h2 className="text-sm font-medium leading-6  text-primary-text">{t('Format')}</h2>
           </div>
           <RadioGroupView
@@ -187,14 +189,16 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
       )}
 
       <div className="mb-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center gap-1">
+          <HiOutlineFaceSmile />
           <h2 className="text-sm font-medium leading-6  text-primary-text">{t('Tone')}</h2>
         </div>
         <RadioGroupView options={toneOptions} value={tone} onChange={setTone} />
       </div>
 
       <div className="mb-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center gap-1">
+          <MdFormatAlignLeft />
           <h2 className="text-sm font-medium leading-6  text-primary-text">{t('Length')}</h2>
         </div>
         <RadioGroupView options={lengthOptions} value={length} onChange={setLength} />
