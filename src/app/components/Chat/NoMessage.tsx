@@ -14,8 +14,8 @@ export const NoMessage: FC<{ onClick: (prompt: string) => void }> = ({ onClick }
     [t],
   )
   return (
-    <div className="bg-gray-100 dark:bg-gray-800 self-center rounded-xl mt-auto mb-auto  flex justify-center items-center ">
-      <div className="bg-white p-6 rounded-lg shadow-lg dark:bg-gray-800">
+    <div className="  self-center rounded-xl mt-auto mb-auto  flex justify-center items-center shadow-xl  ">
+      <div className="bg-gray-50 p-6 rounded-lg dark:bg-gray-800">
         <div className="flex flex-col items-center">
           <div className="mb-4">
             {/* Replace with your actual logo */}
@@ -29,7 +29,7 @@ export const NoMessage: FC<{ onClick: (prompt: string) => void }> = ({ onClick }
                 onClick={() => {
                   onClick(text)
                 }}
-                className="text-left w-full py-2 focus:outline-none hover:bg-gray-100 dark:hover:bg-primary-blue transition-colors flex flex-row justify-center items-center px-1"
+                className="text-left w-full py-2 focus:outline-none hover:bg-gray-200 dark:hover:bg-primary-blue transition-colors flex flex-row justify-center items-center px-1"
               >
                 {text} <FaArrowRightLong />
               </button>
