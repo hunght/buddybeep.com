@@ -113,7 +113,7 @@ const GoogleSidebar: React.FC = () => {
             >
               {t('Summary')}
 
-              <img src={chrome.runtime.getURL('src/assets/logo-32.png')} style={{ width: 25, height: 25 }} />
+              <img src={chrome.runtime.getURL('src/assets/logo-64.png')} style={{ width: 25, height: 25 }} />
             </div>
             <span style={{ fontSize: 12, marginLeft: 5, color: 'white' }}>{`${t('Title')}: ` + document.title}</span>
           </div>
