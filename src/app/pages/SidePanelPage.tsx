@@ -196,7 +196,7 @@ function SidePanelPage() {
           {tab === 'chat' ? (
             <>
               <Dialog
-                title={t('Generate Draft')}
+                title={t('Summary Web Content')}
                 open={openSummaryModal}
                 onClose={() => {
                   setOpenSummaryModal(false)

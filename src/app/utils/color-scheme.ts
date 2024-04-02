@@ -1,4 +1,4 @@
-import { ThemeMode } from '~services/theme'
+import { ThemeMode, getUserThemeMode } from '~services/theme'
 
 const COLOR_SCHEME_QUERY = '(prefers-color-scheme: dark)'
 
@@ -48,7 +48,15 @@ function applyThemeMode(mode: ThemeMode) {
 }
 
 function getDefaultThemeColor() {
-  return '#7EB8D6FF'
+  const themeMode = getUserThemeMode()
+  console.log(`==== themeMode ===`)
+  console.log(themeMode)
+  console.log('==== end log ===')
+
+  if (themeMode === ThemeMode.Dark) {
+    return ''
+  }
+  return '#e7e7e7'
 }
 
 export { applyThemeMode, getDefaultThemeColor }

@@ -31,7 +31,7 @@ const Button: FC<ComponentPropsWithoutRef<'button'>> = (props) => {
 }
 
 const THEME_COLORS = [
-  '#7EB8D6',
+  '#e7e7e7',
   '#FF6900',
   '#7BDCB5',
   '#00D084',
@@ -102,43 +102,6 @@ const ThemeSettingModal: FC<Props> = (props) => {
             value={themeMode}
             onChange={onThemeModeChange}
           />
-        </div>
-        <div>
-          <div className={cx('flex flex-col gap-3', !premiumState.activated && 'opacity-50 pointer-events-none')}>
-            {isArcBrowser() && (
-              <div className="flex flex-row items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="arc-theme-check"
-                  checked={followArcTheme}
-                  onChange={(e) => setFollowArcTheme(e.target.checked)}
-                  disabled={!premiumState.activated}
-                />
-                <label htmlFor="arc-theme-check">{t('Follow Arc browser theme')}</label>
-              </div>
-            )}
-            {!followArcTheme && (
-              <TwitterPicker
-                colors={THEME_COLORS}
-                color={themeColor}
-                onChange={onThemeColorChange}
-                triangle="hide"
-                width="300px"
-              />
-            )}
-          </div>
-        </div>
-        <div>
-          <p className="font-bold text-lg mb-3">{t('Display size')}</p>
-          <span className="isolate inline-flex rounded-md shadow-sm">
-            <Button className="rounded-l-md" onClick={() => updateZoomLevel('-')}>
-              -
-            </Button>
-            <Button className="-ml-px cursor-default">{zoomLevel === null ? '-' : Math.floor(zoomLevel * 100)}%</Button>
-            <Button className="-ml-px rounded-r-md" onClick={() => updateZoomLevel('+')}>
-              +
-            </Button>
-          </span>
         </div>
       </div>
     </>

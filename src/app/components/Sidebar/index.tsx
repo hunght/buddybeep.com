@@ -78,15 +78,10 @@ function Sidebar() {
   }
   const enabledBots = useEnabledBots()
   return (
-    <motion.aside
-      className={cx(
-        'flex flex-col bg-primary-background bg-opacity-40 overflow-hidden',
-        collapsed ? 'items-center px-[15px]' : 'w-96 px-4',
-      )}
-    >
+    <motion.aside className={cx('flex flex-col  overflow-hidden', collapsed ? 'items-center px-[15px]' : 'w-96 px-4')}>
       <div className={cx('flex mt-8 gap-3 items-center', collapsed ? 'flex-col' : 'flex-row justify-between')}>
         <div
-          className="cursor-pointer"
+          className="cursor-pointer flex items-center gap-1"
           onClick={() => {
             chrome.runtime.sendMessage({
               action: 'openSidePanelOnly',
@@ -94,7 +89,12 @@ function Sidebar() {
           }}
         >
           {collapsed ? <img src={logo} className="w-[30px]" /> : <img src={logo} className=" ml-2 w-16" />}
+          <div className="flex flex-col font-bold">
+            <span>Buddy </span>
+            <span>Beep</span>
+          </div>
         </div>
+
         <div className="flex flex-row justify-center items-center gap-2">
           <Link to="/setting">
             <FiSettings
@@ -161,7 +161,7 @@ function Sidebar() {
         {chatStatesArray.length === 0 && (
           //  no prompts message
           <div className="flex flex-col gap-2">
-            <div className="flex flex-row justify-center items-center text-secondary">
+            <div className="flex flex-row justify-center items-center  text-secondary-text">
               <span>{t('No prompts')}</span>
             </div>
           </div>

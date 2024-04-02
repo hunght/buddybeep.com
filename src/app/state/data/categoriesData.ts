@@ -84,7 +84,6 @@ export const agentsCategorization = [
   { agentId: 'scientific-data-visualizer', category: 'Technology', subCategory: 'Information Technology' },
   { agentId: 'classical-music-composer', category: 'Art & Design', subCategory: 'Music Composition' },
   { agentId: 'ascii-artist', category: 'Art & Design', subCategory: 'Digital Art' },
-  { agentId: 'svg-designer', category: 'Art & Design', subCategory: 'Digital Art' },
   { agentId: 'stackoverflow-post', category: 'Technology', subCategory: 'Software Development' },
   { agentId: 'language-detector', category: 'Technology', subCategory: 'Artificial Intelligence' },
   { agentId: 'product-manager', category: 'Productivity', subCategory: 'Project Management' },

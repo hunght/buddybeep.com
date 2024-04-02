@@ -8,7 +8,7 @@ function Layout() {
   const themeColor = useAtomValue(themeColorAtom)
 
   return (
-    <main className="h-screen grid grid-cols-[auto_1fr]" style={{ backgroundColor: themeColor }}>
+    <main className="h-screen grid grid-cols-[auto_1fr] bg-[#e7e7e7] dark:bg-primary-background">
       <Sidebar />
       <div className="px-[15px] py-3 h-full overflow-hidden">
         <Outlet />
