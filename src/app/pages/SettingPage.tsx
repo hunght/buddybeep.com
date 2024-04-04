@@ -106,7 +106,7 @@ function SettingPage() {
           <EnabledBotsSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
         </div>
         <div className="flex flex-col gap-5 w-fit max-w-[700px]">
-          <ChatBotSettingPanel title="ChatGPT">
+          {/* <ChatBotSettingPanel title="ChatGPT">
             <RadioGroup
               options={Object.entries(ChatGPTMode).map(([k, v]) => ({ label: `${k} ${t('Mode')}`, value: v }))}
               value={userConfig.chatgptMode}
@@ -123,7 +123,7 @@ function SettingPage() {
             ) : (
               <ChatGPWebSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
             )}
-          </ChatBotSettingPanel>
+          </ChatBotSettingPanel> */}
 
           <ChatBotSettingPanel title="Gemini Pro">
             <div className="flex flex-col gap-1">
