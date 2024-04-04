@@ -30,10 +30,10 @@ function NavLink(props: {
         iconOnly && 'justify-center',
       )}
       activeOptions={{ exact: true }}
-      activeProps={{ className: 'bg-white text-primary-text dark:bg-secondary' }}
+      activeProps={{ className: '  text-primary-blue dark:bg-secondary' }}
       inactiveProps={{
         className:
-          'bg-secondary bg-opacity-20 text-primary-text hover:bg-opacity-80 dark:bg-opacity-30 dark:text-primary-text dark:hover:bg-opacity-80',
+          'bg-secondary bg-opacity-20 text-primary-text hover:bg-opacity-80 hover:text-primary-blue dark:bg-opacity-30 dark:text-primary-text dark:hover:bg-opacity-80',
       }}
       title={agent ? agent.name : botId}
       params={{ botId, agentId: agent ? agent.agentId : undefined }}
@@ -42,9 +42,9 @@ function NavLink(props: {
       {renderIcon()}
 
       <div className="w-full">
-        <span className="font-medium text-sm w-full line-clamp-1">{iconOnly ? '' : title}</span>
+        <span className="font-medium text-base w-full line-clamp-1">{iconOnly ? '' : title}</span>
         {props.lastMessage ? (
-          <div className="flex flex-row w-full pr-1 text-secondary-text dark:text-gray-400">
+          <div className="flex flex-row w-full pr-1 ">
             <span className="text-sm w-full line-clamp-1">{iconOnly ? '' : props.lastMessage.text}</span>
             <span className="text-sm  text-right">{iconOnly ? '' : formatTimestamp(props.lastMessage.time)}</span>
           </div>
