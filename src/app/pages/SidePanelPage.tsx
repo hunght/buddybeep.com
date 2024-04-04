@@ -11,9 +11,8 @@ import { CHATBOTS } from '~app/consts'
 import { ConversationContext, ConversationContextValue } from '~app/context'
 import { useChat } from '~app/hooks/use-chat'
 import { sidePanelBotAtom, sidePanelSummaryAtom } from '~app/state/sidePanelAtom'
-import { LanguageSelection } from './LanguageSelection'
 
-import logo from '~/assets/logo-64.png'
+import logo from '~/assets/logo-48.png'
 import guildeWebContent from '~/assets/screen/guilde-web-content.png'
 
 import { WritingPresetModal } from '~app/components/write-reply/modal'

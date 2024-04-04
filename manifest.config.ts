@@ -8,8 +8,8 @@ export default defineManifest(async () => {
     default_locale: 'en',
     version: '1.7.1',
     icons: {
-      '16': 'src/assets/logo-16.png',
-      '32': 'src/assets/logo-32.png',
+      '16': 'src/assets/logo-64.png',
+      '32': 'src/assets/logo-64.png',
       '48': 'src/assets/logo-48.png',
       '128': 'src/assets/logo-128.png',
     },
