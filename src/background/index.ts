@@ -84,6 +84,19 @@ Browser.contextMenus.onClicked.addListener(async (info, tab) => {
     }
   }
 })
+
+function launchWebAuthFlow(url: string, interactive: boolean): Promise<string> {
+  return new Promise((resolve, reject) => {
+    chrome.identity.launchWebAuthFlow({ url, interactive }, async (redirectedTo) => {
+      if (chrome.runtime.lastError) {
+        reject(chrome.runtime.lastError)
+      } else {
+        resolve(redirectedTo)
+      }
+    })
+  })
+}
+
 Browser.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
     Browser.tabs.create({ url: 'app.html#' })
@@ -134,6 +147,17 @@ Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   logger.debug('onMessage', message, sender)
 
   if (message.action === 'openSidePanel') {
+    const tabId = sender.tab?.id
+    await openSidePanelWithTabId(tabId)
+    const {
+      data: { session },
+    } = await supabase.auth.getSession()
+    if (session) {
+      const userId = session.user.id
+
+      await saveNoteAndProcessSummary(message, userId)
+      return
+    }
     const manifest = chrome.runtime.getManifest()
 
     const url = new URL('https://accounts.google.com/o/oauth2/auth')
@@ -150,58 +174,31 @@ Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     console.log('==== end log ===')
 
     try {
-      chrome.identity.launchWebAuthFlow(
-        {
-          url: url.href,
-          interactive: true,
-        },
-        async (redirectedTo) => {
-          console.log(`==== redirectedTo ===`)
-          console.log(redirectedTo)
-          console.log('==== end log ===')
+      const redirectedTo = await launchWebAuthFlow(url.toString(), true)
+      console.log(`==== redirectedTo ===`)
+      console.log(redirectedTo)
+      console.log('==== end log ===')
 
-          if (chrome.runtime.lastError) {
-            // auth was not successful
-          } else {
-            // auth was successful, extract the ID token from the redirectedTo URL
-            if (!redirectedTo) {
-              return
-            }
-            const url = new URL(redirectedTo)
+      // auth was successful, extract the ID token from the redirectedTo URL
+      if (!redirectedTo) {
+        return
+      }
+      const redirectedUrl = new URL(redirectedTo)
 
-            const params = new URLSearchParams(url.hash.replace('#', ''))
-            const idToken = params.get('id_token')
-            if (!idToken) {
-              return
-            }
-            const { data, error } = await supabase.auth.signInWithIdToken({
-              provider: 'google',
-              token: idToken,
-            })
-            if (error) {
-              console.error('Error logging in:', error.message)
-            } else {
-              console.log('User logged in:', data?.user)
-              console.log(`==== message ===`)
-              console.log(message)
-              console.log('==== end log ===')
-              const prompt = `Get key points from web:Title:${message.title},Link:${message.link} content:${message.content}`
-              const { data: note } = await supabase
-                .from('notes')
-                .insert({ title: message.title, content: message.content, user_id: data.user.id })
-                .select('id')
-                .single()
-              console.log(`==== note ===`)
-              console.log(note)
-              console.log('==== end log ===')
-
-              const tabId = sender.tab?.id
-              await openSidePanelWithTabId(tabId)
-              Browser.storage.local.set({ sidePanelSummaryAtom: { ...message, noteId: note?.id, content: prompt } })
-            }
-          }
-        },
-      )
+      const params = new URLSearchParams(redirectedUrl.hash.replace('#', ''))
+      const idToken = params.get('id_token')
+      if (!idToken) {
+        return
+      }
+      const { data, error } = await supabase.auth.signInWithIdToken({
+        provider: 'google',
+        token: idToken,
+      })
+      if (error) {
+        console.error('Error logging in:', error.message)
+      } else {
+        await saveNoteAndProcessSummary(message, data.user.id)
+      }
     } catch (error) {
       console.error('Error logging in:', error)
     }
@@ -230,6 +227,17 @@ Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     return readTwitterCsrfToken(message.data)
   }
 })
+
+async function saveNoteAndProcessSummary(message: any, userId: string) {
+  const prompt = `Get key points from web:Title:${message.title},Link:${message.link} content:${message.content}`
+  const { data: note } = await supabase
+    .from('notes')
+    .insert({ title: message.title, content: message.content, user_id: userId })
+    .select('id')
+    .single()
+
+  Browser.storage.local.set({ sidePanelSummaryAtom: { ...message, noteId: note?.id, content: prompt } })
+}
 
 async function openSidePanelWithTabId(tabId: number | undefined) {
   if (tabId) {
