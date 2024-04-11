@@ -6,6 +6,7 @@ import { readTwitterCsrfToken } from './twitter-cookie'
 import contentTest from './contentTest?script'
 import logger from '~utils/logger'
 import { SidePanelMessageType } from '~app/types/sidePanel'
+import supabase from '~lib/supabase/client'
 
 // expose storage.session to content scripts
 // using `chrome.*` API because `setAccessLevel` is not supported by `Browser.*` API
@@ -133,9 +134,77 @@ Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   logger.debug('onMessage', message, sender)
 
   if (message.action === 'openSidePanel') {
-    const tabId = sender.tab?.id
-    await openSidePanelWithTabId(tabId)
-    Browser.storage.local.set({ sidePanelSummaryAtom: message })
+    const manifest = chrome.runtime.getManifest()
+
+    const url = new URL('https://accounts.google.com/o/oauth2/auth')
+
+    url.searchParams.set('client_id', manifest.oauth2.client_id)
+    url.searchParams.set('response_type', 'id_token')
+    url.searchParams.set('access_type', 'offline')
+    const redirectURI = `https://${chrome.runtime.id}.chromiumapp.org`
+    url.searchParams.set('redirect_uri', redirectURI)
+    url.searchParams.set('scope', manifest.oauth2.scopes.join(' '))
+    console.log(`==== redirectURI ===`)
+    console.log(redirectURI)
+    console.log(manifest.oauth2.client_id)
+    console.log('==== end log ===')
+
+    try {
+      chrome.identity.launchWebAuthFlow(
+        {
+          url: url.href,
+          interactive: true,
+        },
+        async (redirectedTo) => {
+          console.log(`==== redirectedTo ===`)
+          console.log(redirectedTo)
+          console.log('==== end log ===')
+
+          if (chrome.runtime.lastError) {
+            // auth was not successful
+          } else {
+            // auth was successful, extract the ID token from the redirectedTo URL
+            if (!redirectedTo) {
+              return
+            }
+            const url = new URL(redirectedTo)
+
+            const params = new URLSearchParams(url.hash.replace('#', ''))
+            const idToken = params.get('id_token')
+            if (!idToken) {
+              return
+            }
+            const { data, error } = await supabase.auth.signInWithIdToken({
+              provider: 'google',
+              token: idToken,
+            })
+            if (error) {
+              console.error('Error logging in:', error.message)
+            } else {
+              console.log('User logged in:', data?.user)
+              console.log(`==== message ===`)
+              console.log(message)
+              console.log('==== end log ===')
+              const prompt = `Get key points from web:Title:${message.title},Link:${message.link} content:${message.content}`
+              const { data: note } = await supabase
+                .from('notes')
+                .insert({ title: message.title, content: message.content, user_id: data.user.id })
+                .select('id')
+                .single()
+              console.log(`==== note ===`)
+              console.log(note)
+              console.log('==== end log ===')
+
+              const tabId = sender.tab?.id
+              await openSidePanelWithTabId(tabId)
+              Browser.storage.local.set({ sidePanelSummaryAtom: { ...message, noteId: note?.id, content: prompt } })
+            }
+          }
+        },
+      )
+    } catch (error) {
+      console.error('Error logging in:', error)
+    }
   }
 
   if (message.action === 'openSidePanelOnly') {

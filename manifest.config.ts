@@ -6,7 +6,7 @@ export default defineManifest(async () => {
     name: '__MSG_appName__',
     description: '__MSG_appDesc__',
     default_locale: 'en',
-    version: '1.7.2',
+    version: '1.8.0',
     icons: {
       '16': 'src/assets/logo-64.png',
       '32': 'src/assets/logo-64.png',
@@ -30,6 +30,7 @@ export default defineManifest(async () => {
     ],
     optional_host_permissions: ['wss://*/*'],
     permissions: [
+      'identity',
       'contextMenus',
       'storage',
       'unlimitedStorage',
@@ -38,6 +39,10 @@ export default defineManifest(async () => {
       'scripting',
       'activeTab',
     ],
+    oauth2: {
+      client_id: '13736349601-9nol47qdus5r0ou75dmjjk11l8fqcub8.apps.googleusercontent.com',
+      scopes: ['openid', 'email', 'profile'],
+    },
     side_panel: {
       default_path: 'sidepanel.html',
     },
@@ -71,7 +76,7 @@ export default defineManifest(async () => {
         description: 'Open BuddyBeep app',
       },
     },
-
+    key: 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApCt1ng0yJkefftGa3vC9Ase22Ii+h5M2Ap58ZEGwkI+9tpeTZzJQmJCdt8jW+Gu+11WO0n7iUKk8larF+Hk7B501EK2IX8enZpCot2bvwNOtRNOdpHfA1Wd6yvyG0sp/s2ddNCgw7PoQtG0rvc84CiNY+VteR+Yb2N27pw2xVuzBuxgTrxhElM92sHkqa392kIxI0YYMrkaamR6zlafqm8d9OHCsSP3uh9mF/rNgb1bF9n6/eC2M7BVtCcTPay94F53ds8uzXtZZD1LK4RstYVTCYxzBhrsi/PllTClep6Jw+TUoIUF+e/Ly2/6ijhLb3DnIswIzWi6S+xWZBtzscQIDAQAB',
     declarative_net_request: {
       rule_resources: [
         {

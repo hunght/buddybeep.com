@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build;rm -f buddybeep.zip; zip -r buddybeep.zip dist"
+    "build": "vite build;rm -f buddybeep.zip; zip -r buddybeep.zip dist",
+    "db": "supabase gen types typescript --project-id xigrnhxrexexsfrkmogd --schema public > src/lib/supabase/schema.ts"
   },
   "devDependencies": {
     "@crxjs/vite-plugin": "2.0.0-beta.21",
@@ -56,6 +57,7 @@
     "@radix-ui/react-tooltip": "^1.0.7",
     "@sentry/integrations": "^7.90.0",
     "@sentry/react": "^7.90.0",
+    "@supabase/supabase-js": "^2.42.0",
     "@tailwindcss/forms": "^0.5.7",
     "@tanstack/react-router": "^1.19.1",
     "async-cache-dedupe": "^2.0.0",

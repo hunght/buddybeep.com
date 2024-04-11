@@ -5,6 +5,7 @@ import './google-sidebar-base.css'
 
 import { getDocumentTextFromDOM } from '~content-script/helper/dom'
 import { useTranslation } from 'react-i18next'
+import { supabase } from '~lib/supabase/client'
 
 // Inject into the ShadowDOM
 
@@ -101,10 +102,9 @@ const GoogleSidebar: React.FC = () => {
                 color: 'white',
               }}
               onClick={async () => {
-                const prompt = `Get key points from web:Title:${document.title},Link:${window.location.href} content:${getDocumentTextFromDOM()}`
                 await chrome.runtime.sendMessage({
                   action: 'openSidePanel',
-                  content: prompt,
+                  content: getDocumentTextFromDOM(),
                   link: window.location.href,
                   title: document.title,
                   type: 'summary-web-content',
