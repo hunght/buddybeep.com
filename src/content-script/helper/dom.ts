@@ -1,5 +1,5 @@
 import { Readability } from '@mozilla/readability'
-
+import TurndownService from 'turndown'
 export function getDocumentTextFromDOM(): string {
   const clone = document.documentElement.cloneNode(true)
 
@@ -19,4 +19,13 @@ export function getDocumentTextFromDOM(): string {
   return [document.body.innerText, ...Array.from(document.querySelectorAll('svg text')).map((e) => e.innerHTML)].join(
     ' ',
   )
+}
+
+export function getStyledHtml(element: HTMLElement | null): string {
+  const htmlContent = element?.innerHTML || ''
+
+  const turndownService = new TurndownService()
+  const markdown = turndownService.turndown(htmlContent)
+
+  return markdown
 }

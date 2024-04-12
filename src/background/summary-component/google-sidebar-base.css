@@ -15,6 +15,6 @@ body.plasmo-google-sidebar-show * {
   right: 0px;
 }
 
-.highlight-border {
-  border: 1px solid red !important; /* Use !important to override any existing border styles */
+.buddy-beep-highlight-border {
+  border: 1px solid #872DD3 !important; /* Use !important to override any existing border styles */
 }

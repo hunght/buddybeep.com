@@ -3,12 +3,15 @@ import { useEffect, useState } from 'react'
 // Inject to the webpage itself
 import './google-sidebar-base.css'
 
-import { getDocumentTextFromDOM } from '~content-script/helper/dom'
+import { getDocumentTextFromDOM, getStyledHtml } from '~content-script/helper/dom'
 import { useTranslation } from 'react-i18next'
 import { supabase } from '~lib/supabase/client'
-
+let currentNodeSelected: HTMLElement | null = null
 // Inject into the ShadowDOM
 function highlightTextSelection() {
+  if (currentNodeSelected) {
+    currentNodeSelected.classList.remove('buddy-beep-highlight-border')
+  }
   const selection = window.getSelection()
   if (!selection || selection.toString().trim() === '') return
 
@@ -17,17 +20,18 @@ function highlightTextSelection() {
     const commonAncestorContainer = range.commonAncestorContainer
     const selectedElement =
       commonAncestorContainer.nodeType === 3 ? commonAncestorContainer.parentNode : range.commonAncestorContainer
-    selectedElement?.classList.add('highlight-border')
+
+    addHighlightBorder(selectedElement)
   }
 }
 
 const removeHighlightSelections = function (): void {
-  // Find all elements with the 'highlight-border' class
-  const highlightedElements = document.querySelectorAll('.highlight-border')
+  // Find all elements with the 'buddy-beep-highlight-border' class
+  const highlightedElements = document.querySelectorAll('.buddy-beep-highlight-border')
 
   // Remove the class from all such elements
   highlightedElements.forEach(function (element) {
-    element.classList.remove('highlight-border')
+    element.classList.remove('buddy-beep-highlight-border')
   })
 }
 
@@ -35,20 +39,18 @@ const removeHighlightSelections = function (): void {
 function addHighlightListener() {
   document.addEventListener('mouseup', highlightTextSelection)
   // To remove the highlight, you can define another event listener as mentioned
-  document.addEventListener('mousedown', removeHighlightSelections)
 }
 
 // Function to remove text selection highlight listener
 function removeHighlightListener() {
   document.removeEventListener('mouseup', highlightTextSelection)
-  document.removeEventListener('mousedown', removeHighlightSelections)
 }
 
 const GoogleSidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true)
   const { t } = useTranslation()
   const isPrintLayout = document.body.id === 'print-layout'
-  const [selectedOption, setSelectedOption] = useState('')
+  const [selectedOption, setSelectedOption] = useState('article')
 
   // Function to handle option selection
   const handleSelectOption = (option: string) => {
@@ -56,7 +58,9 @@ const GoogleSidebar: React.FC = () => {
   }
   useEffect(() => {
     removeHighlightListener()
+    removeHighlightSelections()
     if (selectedOption === 'selection') {
+      highlightTextSelection()
       addHighlightListener()
       return
     }
@@ -66,16 +70,14 @@ const GoogleSidebar: React.FC = () => {
       if (!article) {
         // find main in document
         const main = document.querySelector('main')
-        if (main) {
-          main.classList.add('highlight-border')
-        }
+        addHighlightBorder(main)
       }
-
-      article?.classList.add('highlight-border')
+      addHighlightBorder(article)
+      return
     }
     if (selectedOption === 'full-page') {
       const body = document.querySelector('body')
-      body?.classList.add('highlight-border')
+      addHighlightBorder(body)
     }
   }, [selectedOption])
 
@@ -83,6 +85,10 @@ const GoogleSidebar: React.FC = () => {
     const existingElement = document.getElementById('plasmo-google-sidebar')
     if (existingElement) {
       existingElement.style.display = isOpen ? 'block' : 'none'
+    }
+    if (!isOpen) {
+      removeHighlightListener()
+      removeHighlightSelections()
     }
   }, [isOpen])
 
@@ -163,13 +169,20 @@ const GoogleSidebar: React.FC = () => {
                 color: 'white',
               }}
               onClick={async () => {
+                const content = getStyledHtml(currentNodeSelected)
+                console.log(`==== content ===`)
+                console.log(content)
+                console.log(currentNodeSelected)
+                console.log('==== end log ===')
+
                 await chrome.runtime.sendMessage({
                   action: 'openSidePanel',
-                  content: getDocumentTextFromDOM(),
+                  content,
                   link: window.location.href,
                   title: document.title,
                   type: 'summary-web-content',
                 })
+                setIsOpen(false)
               }}
             >
               {t('Summary')}
@@ -209,3 +222,9 @@ const GoogleSidebar: React.FC = () => {
   )
 }
 export default GoogleSidebar
+function addHighlightBorder(main: HTMLElement | null) {
+  if (main) {
+    currentNodeSelected = main
+    main.classList.add('buddy-beep-highlight-border')
+  }
+}
