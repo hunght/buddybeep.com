@@ -168,16 +168,9 @@ Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     const redirectURI = `https://${chrome.runtime.id}.chromiumapp.org`
     url.searchParams.set('redirect_uri', redirectURI)
     url.searchParams.set('scope', manifest.oauth2.scopes.join(' '))
-    console.log(`==== redirectURI ===`)
-    console.log(redirectURI)
-    console.log(manifest.oauth2.client_id)
-    console.log('==== end log ===')
 
     try {
       const redirectedTo = await launchWebAuthFlow(url.toString(), true)
-      console.log(`==== redirectedTo ===`)
-      console.log(redirectedTo)
-      console.log('==== end log ===')
 
       // auth was successful, extract the ID token from the redirectedTo URL
       if (!redirectedTo) {

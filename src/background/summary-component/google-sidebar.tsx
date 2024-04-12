@@ -8,17 +8,78 @@ import { useTranslation } from 'react-i18next'
 import { supabase } from '~lib/supabase/client'
 
 // Inject into the ShadowDOM
+function highlightTextSelection() {
+  const selection = window.getSelection()
+  if (!selection || selection.toString().trim() === '') return
+
+  const range = selection.getRangeAt(0)
+  if (range && range.commonAncestorContainer) {
+    const commonAncestorContainer = range.commonAncestorContainer
+    const selectedElement =
+      commonAncestorContainer.nodeType === 3 ? commonAncestorContainer.parentNode : range.commonAncestorContainer
+    selectedElement?.classList.add('highlight-border')
+  }
+}
+
+const removeHighlightSelections = function (): void {
+  // Find all elements with the 'highlight-border' class
+  const highlightedElements = document.querySelectorAll('.highlight-border')
+
+  // Remove the class from all such elements
+  highlightedElements.forEach(function (element) {
+    element.classList.remove('highlight-border')
+  })
+}
+
+// Function to add text selection highlight listener
+function addHighlightListener() {
+  document.addEventListener('mouseup', highlightTextSelection)
+  // To remove the highlight, you can define another event listener as mentioned
+  document.addEventListener('mousedown', removeHighlightSelections)
+}
+
+// Function to remove text selection highlight listener
+function removeHighlightListener() {
+  document.removeEventListener('mouseup', highlightTextSelection)
+  document.removeEventListener('mousedown', removeHighlightSelections)
+}
 
 const GoogleSidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true)
   const { t } = useTranslation()
   const isPrintLayout = document.body.id === 'print-layout'
+  const [selectedOption, setSelectedOption] = useState('')
+
+  // Function to handle option selection
+  const handleSelectOption = (option: string) => {
+    setSelectedOption(option)
+  }
+  useEffect(() => {
+    removeHighlightListener()
+    if (selectedOption === 'selection') {
+      addHighlightListener()
+      return
+    }
+    if (selectedOption === 'article') {
+      // find article in document
+      const article = document.querySelector('article')
+      if (!article) {
+        // find main in document
+        const main = document.querySelector('main')
+        if (main) {
+          main.classList.add('highlight-border')
+        }
+      }
+
+      article?.classList.add('highlight-border')
+    }
+    if (selectedOption === 'full-page') {
+      const body = document.querySelector('body')
+      body?.classList.add('highlight-border')
+    }
+  }, [selectedOption])
 
   useEffect(() => {
-    console.log(`==== isOpen ===`)
-    console.log(isOpen)
-    console.log('==== end log ===')
-
     const existingElement = document.getElementById('plasmo-google-sidebar')
     if (existingElement) {
       existingElement.style.display = isOpen ? 'block' : 'none'
@@ -115,6 +176,31 @@ const GoogleSidebar: React.FC = () => {
 
               <img src={chrome.runtime.getURL('src/assets/logo-64.png')} style={{ width: 25, height: 25 }} />
             </div>
+            <ul>
+              <li
+                className={selectedOption === 'article' ? 'selected' : ''}
+                onClick={() => {
+                  handleSelectOption('article')
+                }}
+              >
+                Article
+              </li>
+              <li
+                className={selectedOption === 'selection' ? 'selected' : ''}
+                onClick={() => {
+                  handleSelectOption('selection')
+                }}
+              >
+                Selection
+              </li>
+              <li
+                className={selectedOption === 'full-page' ? 'selected' : ''}
+                onClick={() => handleSelectOption('full-page')}
+              >
+                Full Page
+              </li>
+            </ul>
+
             <span style={{ fontSize: 12, marginLeft: 5, color: 'white' }}>{`${t('Title')}: ` + document.title}</span>
           </div>
         </div>
