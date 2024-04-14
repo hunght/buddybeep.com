@@ -99,7 +99,7 @@
     "remark-gfm": "^3.0.1",
     "remark-math": "^5.1.1",
     "remark-parse": "^10.0.2",
-    "remark-rehype": "^10.1.0",
+    "remark-rehype": "^11.1.0",
     "remark-supersub": "^1.0.0",
     "slashes": "^3.0.12",
     "swr": "^2.2.4",
