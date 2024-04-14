@@ -94,7 +94,7 @@
     "react-textarea-autosize": "^8.5.3",
     "react-viewport-list": "^7.1.2",
     "rehype-highlight": "^6.0.0",
-    "rehype-stringify": "^9.0.4",
+    "rehype-stringify": "^10.0.0",
     "remark-breaks": "^3.0.3",
     "remark-gfm": "^3.0.1",
     "remark-math": "^5.1.1",
