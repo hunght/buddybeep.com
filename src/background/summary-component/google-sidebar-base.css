@@ -15,7 +15,5 @@ body.buddy-beep-google-sidebar-show * {
   right: 0px;
 }
 
-.buddy-beep-highlight-border {
-  border: 1px solid #872DD3 !important; /* Use !important to override any existing border styles */
-}
+
 

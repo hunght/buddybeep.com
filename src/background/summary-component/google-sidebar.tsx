@@ -3,65 +3,70 @@ import { useEffect, useState } from 'react'
 // Inject to the webpage itself
 import './google-sidebar-base.css'
 
-import { getDocumentTextFromDOM, getStyledHtml } from '~content-script/helper/dom'
+import { getStyledHtml } from '~content-script/helper/dom'
 import { useTranslation } from 'react-i18next'
-
-let currentNodeSelected: HTMLElement | null = null
-// Inject into the ShadowDOM
-function highlightTextSelection() {
-  if (currentNodeSelected) {
-    currentNodeSelected.classList.remove('buddy-beep-highlight-border')
-  }
-  const selection = window.getSelection()
-  if (!selection || selection.toString().trim() === '') return
-
-  const range = selection.getRangeAt(0)
-  if (range && range.commonAncestorContainer) {
-    const commonAncestorContainer = range.commonAncestorContainer
-    const selectedElement =
-      commonAncestorContainer.nodeType === 3 ? commonAncestorContainer.parentNode : range.commonAncestorContainer
-
-    addHighlightBorder(selectedElement)
-  }
-}
-
-const removeHighlightSelections = function (): void {
-  // Find all elements with the 'buddy-beep-highlight-border' class
-  const highlightedElements = document.querySelectorAll('.buddy-beep-highlight-border')
-
-  // Remove the class from all such elements
-  highlightedElements.forEach(function (element) {
-    element.classList.remove('buddy-beep-highlight-border')
-  })
-}
-
-// Function to add text selection highlight listener
-function addHighlightListener() {
-  document.addEventListener('mouseup', highlightTextSelection)
-  // To remove the highlight, you can define another event listener as mentioned
-}
-
-// Function to remove text selection highlight listener
-function removeHighlightListener() {
-  document.removeEventListener('mouseup', highlightTextSelection)
-}
 
 const GoogleSidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true)
+  const [currentNodeSelected, setCurrentNodeSelected] = useState<HTMLElement | null>(null)
   const { t } = useTranslation()
   const isPrintLayout = document.body.id === 'print-layout'
   const [selectedOption, setSelectedOption] = useState('article')
+
+  useEffect(() => {
+    // Inject into the ShadowDOM
+    if (selectedOption !== 'selection') {
+      return
+    }
+    function highlightTextSelection(event: { target: any }) {
+      const hoveredElement = event.target
+      if (hoveredElement) {
+        setCurrentNodeSelected(hoveredElement)
+      }
+    }
+    document.addEventListener('mouseover', highlightTextSelection)
+
+    return () => {
+      document.removeEventListener('mouseover', highlightTextSelection)
+    }
+  }, [selectedOption])
+
+  useEffect(() => {
+    if (!currentNodeSelected) {
+      return
+    }
+
+    const shadowHost = document.getElementById('buddy-beep-google-sidebar')?.shadowRoot
+
+    const overlay = shadowHost?.getElementById('buddy-beep-overlay-hole') ?? null
+    updateOverlay()
+    window.addEventListener('resize', updateOverlay) // Update on resize
+    window.addEventListener('scroll', updateOverlay) // Update on scroll
+
+    function updateOverlay() {
+      if (!overlay || !currentNodeSelected) {
+        return
+      }
+
+      const rect = currentNodeSelected.getBoundingClientRect()
+
+      overlay.style.top = `${rect.top + window.scrollY}px`
+      overlay.style.left = `${rect.left + window.scrollX}px`
+      overlay.style.width = `${rect.width}px`
+      overlay.style.height = `${rect.height}px`
+    }
+    return () => {
+      window.removeEventListener('resize', updateOverlay)
+      window.removeEventListener('scroll', updateOverlay)
+    }
+  }, [currentNodeSelected])
 
   // Function to handle option selection
   const handleSelectOption = (option: string) => {
     setSelectedOption(option)
   }
   useEffect(() => {
-    removeHighlightListener()
-    removeHighlightSelections()
     if (selectedOption === 'selection') {
-      highlightTextSelection()
-      addHighlightListener()
       return
     }
     if (selectedOption === 'article') {
@@ -70,14 +75,14 @@ const GoogleSidebar: React.FC = () => {
       if (!article) {
         // find main in document
         const main = document.querySelector('main')
-        addHighlightBorder(main)
+        setCurrentNodeSelected(main)
       }
-      addHighlightBorder(article)
+      setCurrentNodeSelected(article)
       return
     }
     if (selectedOption === 'full-page') {
       const body = document.querySelector('body')
-      addHighlightBorder(body)
+      setCurrentNodeSelected(body)
     }
   }, [selectedOption])
 
@@ -87,8 +92,6 @@ const GoogleSidebar: React.FC = () => {
       existingElement.style.display = isOpen ? 'block' : 'none'
     }
     if (!isOpen) {
-      removeHighlightListener()
-      removeHighlightSelections()
     }
   }, [isOpen])
 
@@ -117,17 +120,66 @@ const GoogleSidebar: React.FC = () => {
             <div id="buddy-beep-overlay-hole">
               <div
                 style={{
-                  backgroundColor: 'red',
-                  width: '50px',
+                  width: '44px',
                   alignSelf: 'center',
                   marginLeft: 'auto',
                   marginRight: 'auto',
                   pointerEvents: 'visible',
-
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  display: 'flex',
                   marginTop: -10,
                 }}
               >
-                <button onClick={() => setIsOpen(false)}>Close</button>
+                <button
+                  style={{
+                    width: 20,
+                    height: 20,
+                    backgroundColor: 'gray',
+                    fontWeight: 'bold',
+                    color: 'white',
+                    textAlign: 'center',
+                    padding: 0,
+                    paddingBottom: 2,
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => {
+                    //find parent note of current node
+                    const parent = currentNodeSelected?.parentElement
+                    console.log(`==== currentNodeSelected ===`)
+                    console.log(currentNodeSelected)
+                    console.log('==== end log ===')
+
+                    if (parent) {
+                      setCurrentNodeSelected(parent)
+                    }
+                  }}
+                >
+                  +
+                </button>
+                <button
+                  style={{
+                    width: 20,
+                    height: 20,
+                    backgroundColor: 'gray',
+                    fontWeight: 'bold',
+                    color: 'white',
+                    textAlign: 'center',
+                    padding: 0,
+                    paddingBottom: 4,
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => {
+                    //find first child note of current node
+                    const child = currentNodeSelected?.children[0]
+
+                    if (child) {
+                      setCurrentNodeSelected(child)
+                    }
+                  }}
+                >
+                  -
+                </button>
               </div>
             </div>
           </div>
@@ -243,31 +295,3 @@ const GoogleSidebar: React.FC = () => {
   )
 }
 export default GoogleSidebar
-
-function addHighlightBorder(main: HTMLElement | null) {
-  if (!main) {
-    return
-  }
-
-  currentNodeSelected = main
-
-  const shadowHost = document.getElementById('buddy-beep-google-sidebar')?.shadowRoot
-
-  const overlay = shadowHost?.getElementById('buddy-beep-overlay-hole') ?? null
-  updateOverlay()
-  window.addEventListener('resize', updateOverlay) // Update on resize
-  window.addEventListener('scroll', updateOverlay) // Update on scroll
-
-  function updateOverlay() {
-    if (!overlay || !main) {
-      return
-    }
-
-    const rect = main.getBoundingClientRect()
-
-    overlay.style.top = `${rect.top + window.scrollY}px`
-    overlay.style.left = `${rect.left + window.scrollX}px`
-    overlay.style.width = `${rect.width}px`
-    overlay.style.height = `${rect.height}px`
-  }
-}
