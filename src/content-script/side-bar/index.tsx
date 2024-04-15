@@ -7,7 +7,7 @@ import GoogleSidebar from './google-sidebar'
 
 function mount() {
   const root = document.createElement('div')
-  root.id = 'plasmo-google-sidebar'
+  root.id = 'buddy-beep-google-sidebar'
 
   document.body.append(root)
 

@@ -51,15 +51,15 @@ export default defineManifest(async () => {
         matches: ['https://chat.openai.com/*'],
         js: ['src/content-script/chatgpt-inpage-proxy.ts'],
       },
-      {
-        matches: [
-          'https://google.com/*',
-          'https://www.google.com/*',
-          'https://www.bing.com/*',
-          'https://www.duckduckgo.com/*',
-        ],
-        js: ['src/content-script/side-bar/index.tsx'],
-      },
+      // {
+      //   matches: [
+      //     'https://google.com/*',
+      //     'https://www.google.com/*',
+      //     'https://www.bing.com/*',
+      //     'https://www.duckduckgo.com/*',
+      //   ],
+      //   js: ['src/content-script/side-bar/index.tsx'],
+      // },
       {
         matches: ['https://www.youtube.com/*'],
         js: ['src/content-script/youtube-caption/index.tsx'],

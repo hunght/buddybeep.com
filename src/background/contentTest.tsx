@@ -8,13 +8,13 @@ import GoogleSidebar from './summary-component/google-sidebar'
 function mount() {
   // Remove the existing element if it exists
 
-  const existingElement = document.getElementById('plasmo-google-sidebar')
+  const existingElement = document.getElementById('buddy-beep-google-sidebar')
   if (existingElement) {
     existingElement.remove()
   }
 
   const root = document.createElement('div')
-  root.id = 'plasmo-google-sidebar'
+  root.id = 'buddy-beep-google-sidebar'
 
   document.body.append(root)
 
@@ -43,7 +43,7 @@ mount()
 // re-mount the app on each message
 chrome.runtime.onMessage.addListener((msg, sender, response) => {
   if (msg.type === 'mountApp') {
-    document.getElementById('plasmo-google-sidebar')?.remove()
+    document.getElementById('buddy-beep-google-sidebar')?.remove()
     mount()
 
     return response({ type: 'mounted' })

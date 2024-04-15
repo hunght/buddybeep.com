@@ -5,7 +5,7 @@ import './google-sidebar-base.css'
 
 import { getDocumentTextFromDOM, getStyledHtml } from '~content-script/helper/dom'
 import { useTranslation } from 'react-i18next'
-import { supabase } from '~lib/supabase/client'
+
 let currentNodeSelected: HTMLElement | null = null
 // Inject into the ShadowDOM
 function highlightTextSelection() {
@@ -82,7 +82,7 @@ const GoogleSidebar: React.FC = () => {
   }, [selectedOption])
 
   useEffect(() => {
-    const existingElement = document.getElementById('plasmo-google-sidebar')
+    const existingElement = document.getElementById('buddy-beep-google-sidebar')
     if (existingElement) {
       existingElement.style.display = isOpen ? 'block' : 'none'
     }
@@ -101,6 +101,7 @@ const GoogleSidebar: React.FC = () => {
       style={{
         zIndex: 2147483647,
         position: 'relative',
+        backgroundColor: 'red',
       }}
     >
       <div
@@ -111,6 +112,26 @@ const GoogleSidebar: React.FC = () => {
           left: '0px',
         }}
       >
+        <div id="buddy-beep-overlay-container">
+          <div id="buddy-beep-overlay">
+            <div id="buddy-beep-overlay-hole">
+              <div
+                style={{
+                  backgroundColor: 'red',
+                  width: '50px',
+                  alignSelf: 'center',
+                  marginLeft: 'auto',
+                  marginRight: 'auto',
+                  pointerEvents: 'visible',
+
+                  marginTop: -10,
+                }}
+              >
+                <button onClick={() => setIsOpen(false)}>Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
         <div id="sidebar">
           <div className="sidebar-toggle">
             <span
@@ -222,9 +243,31 @@ const GoogleSidebar: React.FC = () => {
   )
 }
 export default GoogleSidebar
+
 function addHighlightBorder(main: HTMLElement | null) {
-  if (main) {
-    currentNodeSelected = main
-    main.classList.add('buddy-beep-highlight-border')
+  if (!main) {
+    return
+  }
+
+  currentNodeSelected = main
+
+  const shadowHost = document.getElementById('buddy-beep-google-sidebar')?.shadowRoot
+
+  const overlay = shadowHost?.getElementById('buddy-beep-overlay-hole') ?? null
+  updateOverlay()
+  window.addEventListener('resize', updateOverlay) // Update on resize
+  window.addEventListener('scroll', updateOverlay) // Update on scroll
+
+  function updateOverlay() {
+    if (!overlay || !main) {
+      return
+    }
+
+    const rect = main.getBoundingClientRect()
+
+    overlay.style.top = `${rect.top + window.scrollY}px`
+    overlay.style.left = `${rect.left + window.scrollX}px`
+    overlay.style.width = `${rect.width}px`
+    overlay.style.height = `${rect.height}px`
   }
 }

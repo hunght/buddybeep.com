@@ -37,12 +37,12 @@ export const Transcript: React.FC<Props> = ({ transcriptHTML, videoId }) => {
           }
           return currentTranscriptItem
         })
-        if (!isSame && count % LAST_ITEM_TO_JUMP === 0) {
-          const element = getElementById(lastItem ? lastItem.start : currentTranscriptItem.start)
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
-          }
-        }
+        // if (!isSame && count % LAST_ITEM_TO_JUMP === 0) {
+        //   const element = getElementById(lastItem ? lastItem.start : currentTranscriptItem.start)
+        //   if (element) {
+        //     element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
+        //   }
+        // }
         count++
       }
       if (nextItem) {

@@ -1,14 +1,14 @@
 :root,
-#plasmo-google-sidebar:host {
-  --plasmo-google-sidebar-width: 420px;
+#buddy-beep-google-sidebar:host {
+  --buddy-beep-google-sidebar-width: 420px;
 }
 
-body.plasmo-google-sidebar-show,
-body.plasmo-google-sidebar-show * {
-  max-width: calc(100vw - var(--plasmo-google-sidebar-width));
+body.buddy-beep-google-sidebar-show,
+body.buddy-beep-google-sidebar-show * {
+  max-width: calc(100vw - var(--buddy-beep-google-sidebar-width));
 }
 
-#plasmo-google-sidebar {
+#buddy-beep-google-sidebar {
   position: fixed;
   z-index: 240;
   top: 0px;
@@ -18,3 +18,4 @@ body.plasmo-google-sidebar-show * {
 .buddy-beep-highlight-border {
   border: 1px solid #872DD3 !important; /* Use !important to override any existing border styles */
 }
+
