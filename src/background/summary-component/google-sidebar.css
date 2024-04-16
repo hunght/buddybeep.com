@@ -49,7 +49,7 @@
   flex-direction: column;
   gap: 8px;
   justify-content: center;
-  max-width: 20rem;
+  width: 10rem;
   background-color: #1b141d;
   padding: 1rem;
   border-radius: 8px;
@@ -66,9 +66,13 @@
 
 #buddy-beep-overlay-hole {
   position: absolute;
-  box-shadow: 0 0 0 99999px rgba(0, 0, 0, .7);
-  border: solid 1px red;
+  border: solid 4px green;
 
+}
+#buddy-beep-overlay-hole-selected {
+  position: absolute;
+  box-shadow: 0 0 0 99999px rgba(255, 255, 255, 0.3);
+  border: solid 4px rgb(135, 29, 211);
 }
 
 ul {
@@ -91,7 +95,7 @@ li:hover {
 }
 
 li.selected {
-  background-color: #61dafb; /* A light blue to indicate selection */
+  background-color: rgb(135, 29, 211); /* A light blue to indicate selection */
 }
 
 p {

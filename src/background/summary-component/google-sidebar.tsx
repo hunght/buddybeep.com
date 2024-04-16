@@ -5,9 +5,18 @@ import './google-sidebar-base.css'
 
 import { getStyledHtml } from '~content-script/helper/dom'
 import { useTranslation } from 'react-i18next'
+// Debounce function with TypeScript type annotations
+function debounce<F extends (...args: any[]) => any>(func: F, wait: number): F {
+  let timeoutId: number | null = null
+  return function (this: ThisParameterType<F>, ...args: Parameters<F>) {
+    clearTimeout(timeoutId!)
+    timeoutId = window.setTimeout(() => func.apply(this, args), wait) as unknown as number
+  } as F
+}
 
 const GoogleSidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true)
+  const [currentNode, setCurrentNode] = useState<HTMLElement | null>(null)
   const [currentNodeSelected, setCurrentNodeSelected] = useState<HTMLElement | null>(null)
   const { t } = useTranslation()
   const isPrintLayout = document.body.id === 'print-layout'
@@ -15,21 +24,69 @@ const GoogleSidebar: React.FC = () => {
 
   useEffect(() => {
     // Inject into the ShadowDOM
+    const highlightOverSelection = (event: { target: any }) => {
+      const hoveredElement = event.target
+      if (hoveredElement) {
+        setCurrentNode(hoveredElement)
+      }
+    }
+    const debounceHighlightOverSelection = debounce(highlightOverSelection, 100)
+
+    document.removeEventListener('mouseover', debounceHighlightOverSelection)
     if (selectedOption !== 'selection') {
       return
     }
-    function highlightTextSelection(event: { target: any }) {
-      const hoveredElement = event.target
-      if (hoveredElement) {
-        setCurrentNodeSelected(hoveredElement)
-      }
-    }
-    document.addEventListener('mouseover', highlightTextSelection)
 
+    document.addEventListener('mouseover', debounceHighlightOverSelection)
     return () => {
-      document.removeEventListener('mouseover', highlightTextSelection)
+      document.removeEventListener('mouseover', debounceHighlightOverSelection)
     }
   }, [selectedOption])
+
+  useEffect(() => {
+    const mouseDownHandler = () => {
+      setCurrentNodeSelected(currentNode)
+    }
+    document.removeEventListener('mousedown', mouseDownHandler)
+    if (selectedOption !== 'selection') {
+      return
+    }
+
+    document.addEventListener('mousedown', mouseDownHandler)
+    return () => {
+      document.removeEventListener('mousedown', mouseDownHandler)
+    }
+  }, [currentNode, selectedOption])
+
+  useEffect(() => {
+    if (!currentNode) {
+      return
+    }
+
+    const shadowHost = document.getElementById('buddy-beep-google-sidebar')?.shadowRoot
+
+    const overlay = shadowHost?.getElementById('buddy-beep-overlay-hole') ?? null
+    updateOverlay()
+    window.addEventListener('resize', updateOverlay) // Update on resize
+    window.addEventListener('scroll', updateOverlay) // Update on scroll
+
+    function updateOverlay() {
+      if (!overlay || !currentNode) {
+        return
+      }
+
+      const rect = currentNode.getBoundingClientRect()
+
+      overlay.style.top = `${rect.top}px`
+      overlay.style.left = `${rect.left}px`
+      overlay.style.width = `${rect.width}px`
+      overlay.style.height = `${rect.height}px`
+    }
+    return () => {
+      window.removeEventListener('resize', updateOverlay)
+      window.removeEventListener('scroll', updateOverlay)
+    }
+  }, [currentNode])
 
   useEffect(() => {
     if (!currentNodeSelected) {
@@ -38,7 +95,7 @@ const GoogleSidebar: React.FC = () => {
 
     const shadowHost = document.getElementById('buddy-beep-google-sidebar')?.shadowRoot
 
-    const overlay = shadowHost?.getElementById('buddy-beep-overlay-hole') ?? null
+    const overlay = shadowHost?.getElementById('buddy-beep-overlay-hole-selected') ?? null
     updateOverlay()
     window.addEventListener('resize', updateOverlay) // Update on resize
     window.addEventListener('scroll', updateOverlay) // Update on scroll
@@ -118,70 +175,73 @@ const GoogleSidebar: React.FC = () => {
         <div id="buddy-beep-overlay-container">
           <div id="buddy-beep-overlay">
             <div id="buddy-beep-overlay-hole">
-              <div
-                style={{
-                  width: '44px',
-                  alignSelf: 'center',
-                  marginLeft: 'auto',
-                  marginRight: 'auto',
-                  pointerEvents: 'visible',
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  display: 'flex',
-                  marginTop: -10,
-                }}
-              >
-                <button
+              {selectedOption !== 'selection' && (
+                <div
                   style={{
-                    width: 20,
-                    height: 20,
-                    backgroundColor: 'gray',
-                    fontWeight: 'bold',
-                    color: 'white',
-                    textAlign: 'center',
-                    padding: 0,
-                    paddingBottom: 2,
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => {
-                    //find parent note of current node
-                    const parent = currentNodeSelected?.parentElement
-                    console.log(`==== currentNodeSelected ===`)
-                    console.log(currentNodeSelected)
-                    console.log('==== end log ===')
-
-                    if (parent) {
-                      setCurrentNodeSelected(parent)
-                    }
+                    width: '44px',
+                    alignSelf: 'center',
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    pointerEvents: 'visible',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    display: 'flex',
+                    marginTop: -10,
                   }}
                 >
-                  +
-                </button>
-                <button
-                  style={{
-                    width: 20,
-                    height: 20,
-                    backgroundColor: 'gray',
-                    fontWeight: 'bold',
-                    color: 'white',
-                    textAlign: 'center',
-                    padding: 0,
-                    paddingBottom: 4,
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => {
-                    //find first child note of current node
-                    const child = currentNodeSelected?.children[0]
+                  <button
+                    style={{
+                      width: 20,
+                      height: 20,
+                      backgroundColor: 'gray',
+                      fontWeight: 'bold',
+                      color: 'white',
+                      textAlign: 'center',
+                      padding: 0,
+                      paddingBottom: 2,
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => {
+                      //find parent note of current node
+                      const parent = currentNodeSelected?.parentElement
+                      console.log(`==== currentNodeSelected ===`)
+                      console.log(currentNode)
+                      console.log('==== end log ===')
 
-                    if (child) {
-                      setCurrentNodeSelected(child)
-                    }
-                  }}
-                >
-                  -
-                </button>
-              </div>
+                      if (parent) {
+                        setCurrentNode(parent)
+                      }
+                    }}
+                  >
+                    +
+                  </button>
+                  <button
+                    style={{
+                      width: 20,
+                      height: 20,
+                      backgroundColor: 'gray',
+                      fontWeight: 'bold',
+                      color: 'white',
+                      textAlign: 'center',
+                      padding: 0,
+                      paddingBottom: 4,
+                      cursor: 'pointer',
+                    }}
+                    onClick={() => {
+                      //find first child note of current node
+                      const child = currentNodeSelected?.children[0]
+
+                      if (child) {
+                        setCurrentNode(child)
+                      }
+                    }}
+                  >
+                    -
+                  </button>
+                </div>
+              )}
             </div>
+            <div id="buddy-beep-overlay-hole-selected" />
           </div>
         </div>
         <div id="sidebar">
@@ -243,10 +303,6 @@ const GoogleSidebar: React.FC = () => {
               }}
               onClick={async () => {
                 const content = getStyledHtml(currentNodeSelected)
-                console.log(`==== content ===`)
-                console.log(content)
-                console.log(currentNodeSelected)
-                console.log('==== end log ===')
 
                 await chrome.runtime.sendMessage({
                   action: 'openSidePanel',
@@ -262,6 +318,7 @@ const GoogleSidebar: React.FC = () => {
 
               <img src={chrome.runtime.getURL('src/assets/logo-64.png')} style={{ width: 25, height: 25 }} />
             </div>
+
             <ul>
               <li
                 className={selectedOption === 'article' ? 'selected' : ''}
@@ -288,6 +345,9 @@ const GoogleSidebar: React.FC = () => {
             </ul>
 
             <span style={{ fontSize: 12, marginLeft: 5, color: 'white' }}>{`${t('Title')}: ` + document.title}</span>
+            {selectedOption === 'selection' && !currentNodeSelected && (
+              <p style={{ fontSize: 13, color: 'red' }}>Hover and click to make selection.</p>
+            )}
           </div>
         </div>
       </div>
