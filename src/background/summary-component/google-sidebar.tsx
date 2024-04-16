@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 // Inject to the webpage itself
 import './google-sidebar-base.css'
 
-import { getStyledHtml } from '~content-script/helper/dom'
+import { getDocumentTextFromDOM, getStyledHtml } from '~content-script/helper/dom'
 import { useTranslation } from 'react-i18next'
 import logger from '~utils/logger'
 import LoadingOverlay from './loading-overlay'
@@ -185,7 +185,7 @@ const GoogleSidebar: React.FC = () => {
   const onClickSaveAndAsk = async () => {
     try {
       setLoading(true)
-      const content = getStyledHtml(currentNodeSelected)
+      const content = getDocumentTextFromDOM(currentNodeSelected)
 
       await chrome.runtime.sendMessage({
         action: 'openSidePanel',

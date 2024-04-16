@@ -1,7 +1,10 @@
 import { Readability } from '@mozilla/readability'
 import TurndownService from 'turndown'
-export function getDocumentTextFromDOM(): string {
-  const clone = document.documentElement.cloneNode(true)
+export function getDocumentTextFromDOM(fromElement: HTMLElement | null): string {
+  if (!fromElement) {
+    return ''
+  }
+  const clone = fromElement.cloneNode(true)
 
   // Create a new document
   const newDoc = document.implementation.createHTMLDocument('title')
@@ -16,9 +19,7 @@ export function getDocumentTextFromDOM(): string {
 
     return articleContent
   }
-  return [document.body.innerText, ...Array.from(document.querySelectorAll('svg text')).map((e) => e.innerHTML)].join(
-    ' ',
-  )
+  return [fromElement.innerText, ...Array.from(document.querySelectorAll('svg text')).map((e) => e.innerHTML)].join(' ')
 }
 
 export function getStyledHtml(element: HTMLElement | null): string {
