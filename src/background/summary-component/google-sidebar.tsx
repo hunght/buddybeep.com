@@ -6,7 +6,7 @@ import './google-sidebar-base.css'
 import { getStyledHtml } from '~content-script/helper/dom'
 import { useTranslation } from 'react-i18next'
 import logger from '~utils/logger'
-import LoadingOverlay from '~app/components/loading-overlay'
+import LoadingOverlay from './loading-overlay'
 // Debounce function with TypeScript type annotations
 function debounce<F extends (...args: any[]) => any>(func: F, wait: number): F {
   let timeoutId: number | null = null
@@ -227,15 +227,15 @@ const GoogleSidebar: React.FC = () => {
               {selectedOption === 'selection' && <div id="buddy-beep-overlay-hole"></div>}
               <div id="buddy-beep-overlay-hole-selected">
                 {selectedOption === 'article' && (
-                  <div className="w-44 self-center mx-auto pointer-events-auto flex justify-between">
+                  <div className="w-10 mx-auto pointer-events-auto flex justify-between">
                     <button
-                      className="w-20 h-20 bg-gray-500 font-bold text-white text-center p-0 pb-2 cursor-pointer"
+                      className="w-5 h-5 bg-gray-500 font-bold text-white text-center  cursor-pointer"
                       onClick={onClickExpandElement}
                     >
                       +
                     </button>
                     <button
-                      className="w-20 h-20 bg-gray-500 font-bold text-white text-center p-0 pb-4 cursor-pointer"
+                      className="w-5 h-5 bg-gray-500 font-bold text-white text-center p-0  cursor-pointer"
                       onClick={onClickCollapseElement}
                     >
                       -
@@ -247,7 +247,7 @@ const GoogleSidebar: React.FC = () => {
           )}
         </div>
         <div id="sidebar">
-          <div className="sidebar-toggle">
+          <div className="sidebar-toggle text-xl">
             <span
               className="text-white font-bold cursor-pointer transition-colors duration-300 bg-opacity-50 absolute right-0 top-0 mr-1 rounded-full w-15 h-15 items-center content-center text-center text-12"
               onClick={() => {
@@ -271,7 +271,7 @@ const GoogleSidebar: React.FC = () => {
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'rgb(99, 102, 241)' // Reset to white
               }}
-              className="bg-indigo-500 flex items-center justify-center  rounded-full shadow-md cursor-pointer text-white py-2 px-1"
+              className="bg-indigo-500 flex items-center justify-center  rounded-full shadow-md cursor-pointer text-white py-2 px-1 text-lg gap-1.5"
               onClick={onClickSaveAndAsk}
             >
               {t('Save & Ask')}
