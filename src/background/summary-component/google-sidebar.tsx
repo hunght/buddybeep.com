@@ -129,13 +129,18 @@ const GoogleSidebar: React.FC = () => {
     if (selectedOption === 'article') {
       // find article in document
       const article = document.querySelector('article')
-      if (!article) {
-        // find main in document
-        const main = document.querySelector('main')
-        setCurrentNodeSelected(main)
+      if (article) {
+        setCurrentNodeSelected(article)
+        return
       }
-      setCurrentNodeSelected(article)
-      return
+      // find main in document
+      const main = document.querySelector('main')
+      if (main) {
+        setCurrentNodeSelected(main)
+        return
+      }
+      const body = document.querySelector('body')
+      setCurrentNodeSelected(body)
     }
     if (selectedOption === 'full-page') {
       const body = document.querySelector('body')
@@ -147,8 +152,6 @@ const GoogleSidebar: React.FC = () => {
     const existingElement = document.getElementById('buddy-beep-google-sidebar')
     if (existingElement) {
       existingElement.style.display = isOpen ? 'block' : 'none'
-    }
-    if (!isOpen) {
     }
   }, [isOpen])
 
@@ -173,76 +176,76 @@ const GoogleSidebar: React.FC = () => {
         }}
       >
         <div id="buddy-beep-overlay-container">
-          <div id="buddy-beep-overlay">
-            <div id="buddy-beep-overlay-hole">
-              {selectedOption !== 'selection' && (
-                <div
-                  style={{
-                    width: '44px',
-                    alignSelf: 'center',
-                    marginLeft: 'auto',
-                    marginRight: 'auto',
-                    pointerEvents: 'visible',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    display: 'flex',
-                    marginTop: -10,
-                  }}
-                >
-                  <button
+          {currentNodeSelected && (
+            <div id="buddy-beep-overlay">
+              {selectedOption === 'selection' && <div id="buddy-beep-overlay-hole"></div>}
+              <div id="buddy-beep-overlay-hole-selected">
+                {' '}
+                {selectedOption === 'article' && (
+                  <div
                     style={{
-                      width: 20,
-                      height: 20,
-                      backgroundColor: 'gray',
-                      fontWeight: 'bold',
-                      color: 'white',
-                      textAlign: 'center',
-                      padding: 0,
-                      paddingBottom: 2,
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => {
-                      //find parent note of current node
-                      const parent = currentNodeSelected?.parentElement
-                      console.log(`==== currentNodeSelected ===`)
-                      console.log(currentNode)
-                      console.log('==== end log ===')
-
-                      if (parent) {
-                        setCurrentNode(parent)
-                      }
+                      width: '44px',
+                      alignSelf: 'center',
+                      marginLeft: 'auto',
+                      marginRight: 'auto',
+                      pointerEvents: 'visible',
+                      flexDirection: 'row',
+                      justifyContent: 'space-between',
+                      display: 'flex',
+                      marginTop: -10,
                     }}
                   >
-                    +
-                  </button>
-                  <button
-                    style={{
-                      width: 20,
-                      height: 20,
-                      backgroundColor: 'gray',
-                      fontWeight: 'bold',
-                      color: 'white',
-                      textAlign: 'center',
-                      padding: 0,
-                      paddingBottom: 4,
-                      cursor: 'pointer',
-                    }}
-                    onClick={() => {
-                      //find first child note of current node
-                      const child = currentNodeSelected?.children[0]
+                    <button
+                      style={{
+                        width: 20,
+                        height: 20,
+                        backgroundColor: 'gray',
+                        fontWeight: 'bold',
+                        color: 'white',
+                        textAlign: 'center',
+                        padding: 0,
+                        paddingBottom: 2,
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => {
+                        //find parent note of current node
+                        const parent = currentNodeSelected?.parentElement
 
-                      if (child) {
-                        setCurrentNode(child)
-                      }
-                    }}
-                  >
-                    -
-                  </button>
-                </div>
-              )}
+                        if (parent) {
+                          setCurrentNodeSelected(parent)
+                        }
+                      }}
+                    >
+                      +
+                    </button>
+                    <button
+                      style={{
+                        width: 20,
+                        height: 20,
+                        backgroundColor: 'gray',
+                        fontWeight: 'bold',
+                        color: 'white',
+                        textAlign: 'center',
+                        padding: 0,
+                        paddingBottom: 4,
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => {
+                        //find first child note of current node
+                        const child = currentNodeSelected?.children[0]
+
+                        if (child) {
+                          setCurrentNodeSelected(child)
+                        }
+                      }}
+                    >
+                      -
+                    </button>
+                  </div>
+                )}{' '}
+              </div>
             </div>
-            <div id="buddy-beep-overlay-hole-selected" />
-          </div>
+          )}
         </div>
         <div id="sidebar">
           <div className="sidebar-toggle">
@@ -314,7 +317,7 @@ const GoogleSidebar: React.FC = () => {
                 setIsOpen(false)
               }}
             >
-              {t('Summary')}
+              {t('Save & Ask')}
 
               <img src={chrome.runtime.getURL('src/assets/logo-64.png')} style={{ width: 25, height: 25 }} />
             </div>
