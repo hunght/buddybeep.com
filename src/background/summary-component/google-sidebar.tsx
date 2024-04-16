@@ -5,6 +5,8 @@ import './google-sidebar-base.css'
 
 import { getStyledHtml } from '~content-script/helper/dom'
 import { useTranslation } from 'react-i18next'
+import logger from '~utils/logger'
+import LoadingOverlay from '~app/components/loading-overlay'
 // Debounce function with TypeScript type annotations
 function debounce<F extends (...args: any[]) => any>(func: F, wait: number): F {
   let timeoutId: number | null = null
@@ -16,11 +18,32 @@ function debounce<F extends (...args: any[]) => any>(func: F, wait: number): F {
 
 const GoogleSidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [currentNode, setCurrentNode] = useState<HTMLElement | null>(null)
   const [currentNodeSelected, setCurrentNodeSelected] = useState<HTMLElement | null>(null)
   const { t } = useTranslation()
   const isPrintLayout = document.body.id === 'print-layout'
   const [selectedOption, setSelectedOption] = useState('article')
+
+  useEffect(() => {
+    function highlightTextSelection() {
+      const selection = window.getSelection()
+      if (!selection || selection.toString().trim() === '') return
+
+      const range = selection.getRangeAt(0)
+      if (range && range.commonAncestorContainer) {
+        const commonAncestorContainer = range.commonAncestorContainer
+        const selectedElement =
+          commonAncestorContainer.nodeType === 3 ? commonAncestorContainer.parentNode : range.commonAncestorContainer
+
+        setCurrentNodeSelected(selectedElement)
+      }
+    }
+    document.addEventListener('mouseup', highlightTextSelection)
+    return () => {
+      document.removeEventListener('mouseup', highlightTextSelection)
+    }
+  }, [])
 
   useEffect(() => {
     // Inject into the ShadowDOM
@@ -86,7 +109,7 @@ const GoogleSidebar: React.FC = () => {
       window.removeEventListener('resize', updateOverlay)
       window.removeEventListener('scroll', updateOverlay)
     }
-  }, [currentNode])
+  }, [currentNode, selectedOption])
 
   useEffect(() => {
     if (!currentNodeSelected) {
@@ -116,7 +139,7 @@ const GoogleSidebar: React.FC = () => {
       window.removeEventListener('resize', updateOverlay)
       window.removeEventListener('scroll', updateOverlay)
     }
-  }, [currentNodeSelected])
+  }, [currentNodeSelected, selectedOption])
 
   // Function to handle option selection
   const handleSelectOption = (option: string) => {
@@ -159,90 +182,66 @@ const GoogleSidebar: React.FC = () => {
     return <div />
   }
 
+  const onClickSaveAndAsk = async () => {
+    try {
+      setLoading(true)
+      const content = getStyledHtml(currentNodeSelected)
+
+      await chrome.runtime.sendMessage({
+        action: 'openSidePanel',
+        content,
+        link: window.location.href,
+        title: document.title,
+        type: 'summary-web-content',
+      })
+      setIsOpen(false)
+      setLoading(false)
+    } catch (error) {
+      logger.error(error)
+    } finally {
+      setLoading(false)
+    }
+  }
+  const onClickExpandElement = () => {
+    //find parent note of current node
+    const parent = currentNodeSelected?.parentElement
+
+    if (parent) {
+      setCurrentNodeSelected(parent)
+    }
+  }
+  const onClickCollapseElement = () => {
+    //find first child note of current node
+    const child = currentNodeSelected?.children[0]
+
+    if (child) {
+      setCurrentNodeSelected(child)
+    }
+  }
   return (
-    <div
-      style={{
-        zIndex: 2147483647,
-        position: 'relative',
-        backgroundColor: 'red',
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          position: 'absolute',
-          top: '0px',
-          left: '0px',
-        }}
-      >
+    <div className="z-50 relative bg-red-500">
+      <div className="flex absolute top-0 left-0">
         <div id="buddy-beep-overlay-container">
           {currentNodeSelected && (
             <div id="buddy-beep-overlay">
               {selectedOption === 'selection' && <div id="buddy-beep-overlay-hole"></div>}
               <div id="buddy-beep-overlay-hole-selected">
-                {' '}
                 {selectedOption === 'article' && (
-                  <div
-                    style={{
-                      width: '44px',
-                      alignSelf: 'center',
-                      marginLeft: 'auto',
-                      marginRight: 'auto',
-                      pointerEvents: 'visible',
-                      flexDirection: 'row',
-                      justifyContent: 'space-between',
-                      display: 'flex',
-                      marginTop: -10,
-                    }}
-                  >
+                  <div className="w-44 self-center mx-auto pointer-events-auto flex justify-between">
                     <button
-                      style={{
-                        width: 20,
-                        height: 20,
-                        backgroundColor: 'gray',
-                        fontWeight: 'bold',
-                        color: 'white',
-                        textAlign: 'center',
-                        padding: 0,
-                        paddingBottom: 2,
-                        cursor: 'pointer',
-                      }}
-                      onClick={() => {
-                        //find parent note of current node
-                        const parent = currentNodeSelected?.parentElement
-
-                        if (parent) {
-                          setCurrentNodeSelected(parent)
-                        }
-                      }}
+                      className="w-20 h-20 bg-gray-500 font-bold text-white text-center p-0 pb-2 cursor-pointer"
+                      onClick={onClickExpandElement}
                     >
                       +
                     </button>
                     <button
-                      style={{
-                        width: 20,
-                        height: 20,
-                        backgroundColor: 'gray',
-                        fontWeight: 'bold',
-                        color: 'white',
-                        textAlign: 'center',
-                        padding: 0,
-                        paddingBottom: 4,
-                        cursor: 'pointer',
-                      }}
-                      onClick={() => {
-                        //find first child note of current node
-                        const child = currentNodeSelected?.children[0]
-
-                        if (child) {
-                          setCurrentNodeSelected(child)
-                        }
-                      }}
+                      className="w-20 h-20 bg-gray-500 font-bold text-white text-center p-0 pb-4 cursor-pointer"
+                      onClick={onClickCollapseElement}
                     >
                       -
                     </button>
                   </div>
-                )}{' '}
+                )}
               </div>
             </div>
           )}
@@ -250,23 +249,7 @@ const GoogleSidebar: React.FC = () => {
         <div id="sidebar">
           <div className="sidebar-toggle">
             <span
-              style={{
-                color: 'white',
-                fontWeight: 'bold',
-                cursor: 'pointer',
-                transition: 'color 0.3s',
-                backgroundColor: 'rgba(0, 0, 0,0.5)',
-                position: 'absolute',
-                top: '-7px',
-                left: '-7px',
-                borderRadius: '50%',
-                width: '15px',
-                height: '15px',
-                alignItems: 'center',
-                alignContent: 'center',
-                textAlign: 'center',
-                fontSize: '12px',
-              }}
+              className="text-white font-bold cursor-pointer transition-colors duration-300 bg-opacity-50 absolute right-0 top-0 mr-1 rounded-full w-15 h-15 items-center content-center text-center text-12"
               onClick={() => {
                 setIsOpen(false)
               }}
@@ -283,48 +266,21 @@ const GoogleSidebar: React.FC = () => {
             <div
               onMouseEnter={(e) => {
                 // change to indigo color
-
                 e.currentTarget.style.backgroundColor = '#4B0082' // Pink color on hover
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'rgb(99, 102, 241)' // Reset to white
               }}
-              style={{
-                backgroundColor: 'rgb(99, 102, 241)',
-
-                alignItems: 'center',
-                textAlign: 'center',
-                justifyContent: 'center',
-                display: 'flex',
-                padding: '4px 6px',
-                flexDirection: 'row',
-                gap: '5px',
-                borderRadius: '24px',
-                boxShadow: '0 2px 5px rgba(0, 0, 0, 0.3)',
-                cursor: 'pointer',
-                color: 'white',
-              }}
-              onClick={async () => {
-                const content = getStyledHtml(currentNodeSelected)
-
-                await chrome.runtime.sendMessage({
-                  action: 'openSidePanel',
-                  content,
-                  link: window.location.href,
-                  title: document.title,
-                  type: 'summary-web-content',
-                })
-                setIsOpen(false)
-              }}
+              className="bg-indigo-500 flex items-center justify-center  rounded-full shadow-md cursor-pointer text-white py-2 px-1"
+              onClick={onClickSaveAndAsk}
             >
               {t('Save & Ask')}
-
-              <img src={chrome.runtime.getURL('src/assets/logo-64.png')} style={{ width: 25, height: 25 }} />
+              <img src={chrome.runtime.getURL('src/assets/logo-64.png')} className="w-6 h-6" />
             </div>
 
             <ul>
               <li
-                className={selectedOption === 'article' ? 'selected' : ''}
+                className={` ${selectedOption === 'article' ? 'selected' : ''}`}
                 onClick={() => {
                   handleSelectOption('article')
                 }}
@@ -351,6 +307,7 @@ const GoogleSidebar: React.FC = () => {
             {selectedOption === 'selection' && !currentNodeSelected && (
               <p style={{ fontSize: 13, color: 'red' }}>Hover and click to make selection.</p>
             )}
+            <LoadingOverlay loading={loading} />
           </div>
         </div>
       </div>
