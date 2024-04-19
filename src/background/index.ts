@@ -134,8 +134,8 @@ Browser.runtime.onInstalled.addListener((details) => {
 })
 
 Browser.commands.onCommand.addListener(async (command) => {
-  logger.debug(`Command: ${command}`)
   if (command === 'open-app') {
+    logger.debug(`Command: ${command}`)
     openSidePanel()
     chrome.tabs.query({ active: true, currentWindow: true }, async ([tab]) => {
       executeContentScript(tab)
@@ -155,8 +155,9 @@ Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     if (session) {
       const userId = session.user.id
 
-      await saveNoteAndProcessSummary(message, userId)
-      return
+      const id = await saveNoteAndProcessSummary(message, userId)
+
+      return { noteId: id }
     }
     const manifest = chrome.runtime.getManifest()
 
@@ -190,7 +191,9 @@ Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
       if (error) {
         console.error('Error logging in:', error.message)
       } else {
-        await saveNoteAndProcessSummary(message, data.user.id)
+        const id = await saveNoteAndProcessSummary(message, data.user.id)
+
+        return { noteId: id }
       }
     } catch (error) {
       console.error('Error logging in:', error)
@@ -225,11 +228,12 @@ async function saveNoteAndProcessSummary(message: any, userId: string) {
   const prompt = `Get key points from web:Title:${message.title},Link:${message.link} content:${message.content}`
   const { data: note } = await supabase
     .from('notes')
-    .insert({ title: message.title, content: message.content, user_id: userId })
+    .insert({ title: message.title, content: message.content, user_id: userId, source_url: message.link })
     .select('id')
     .single()
 
   Browser.storage.local.set({ sidePanelSummaryAtom: { ...message, noteId: note?.id, content: prompt } })
+  return note?.id
 }
 
 async function openSidePanelWithTabId(tabId: number | undefined) {

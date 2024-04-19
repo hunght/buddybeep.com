@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 // Inject to the webpage itself
 import './google-sidebar-base.css'
 
-import { getDocumentTextFromDOM, getStyledHtml } from '~content-script/helper/dom'
+import { getDocumentDescription, getDocumentTextFromDOM, getStyledHtml } from '~content-script/helper/dom'
 import { useTranslation } from 'react-i18next'
 import logger from '~utils/logger'
 import LoadingOverlay from './loading-overlay'
@@ -24,6 +24,33 @@ const GoogleSidebar: React.FC = () => {
   const { t } = useTranslation()
   const isPrintLayout = document.body.id === 'print-layout'
   const [selectedOption, setSelectedOption] = useState('article')
+  const [showSuccess, setShowSuccess] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (showSuccess) {
+      const popup = document.createElement('div')
+      popup.innerText = 'Note created successfully! Click to view.'
+      popup.style.position = 'fixed'
+      popup.style.top = '20px'
+      popup.style.right = '20px'
+      popup.style.transform = 'translate(-50%, -50%)'
+      popup.style.backgroundColor = '#872DD3'
+      popup.style.color = 'white'
+      popup.style.padding = '10px'
+      popup.style.borderRadius = '5px'
+      popup.style.zIndex = '9999'
+      popup.style.cursor = 'pointer'
+      popup.onclick = () => {
+        //Open the note in seperate tab
+        window.open(`https://www.buddybeep.com/dashboard?noteId=${showSuccess}`, '_blank')
+      }
+      document.body.appendChild(popup)
+
+      setTimeout(() => {
+        document.body.removeChild(popup)
+      }, 5000)
+    }
+  }, [showSuccess])
 
   useEffect(() => {
     function highlightTextSelection(event: { target: any }) {
@@ -60,11 +87,11 @@ const GoogleSidebar: React.FC = () => {
     }
 
     // Adding event listener during component mount
-    document.addEventListener('click', preventClick, true)
+    document.addEventListener('click', preventClick)
 
     // Cleanup listener when component unmounts
     return () => {
-      document.removeEventListener('click', preventClick, true)
+      document.removeEventListener('click', preventClick)
     }
   }, [])
   useEffect(() => {
@@ -137,8 +164,8 @@ const GoogleSidebar: React.FC = () => {
 
       const rect = currentNodeSelected.getBoundingClientRect()
 
-      overlay.style.top = `${rect.top + window.scrollY}px`
-      overlay.style.left = `${rect.left + window.scrollX}px`
+      overlay.style.top = `${rect.top}px`
+      overlay.style.left = `${rect.left}px`
       overlay.style.width = `${rect.width}px`
       overlay.style.height = `${rect.height}px`
     }
@@ -194,15 +221,21 @@ const GoogleSidebar: React.FC = () => {
       setLoading(true)
       const content = getStyledHtml(currentNodeSelected)
 
-      await chrome.runtime.sendMessage({
+      const data = await chrome.runtime.sendMessage({
         action: 'openSidePanel',
         content,
         link: window.location.href,
         title: document.title,
         type: 'summary-web-content',
+        description: getDocumentDescription(),
       })
+      console.log(`==== data ===`)
+      console.log(data)
+      console.log('==== end log ===')
+
       setIsOpen(false)
       setLoading(false)
+      setShowSuccess(data?.noteId ?? '')
     } catch (error) {
       logger.error(error)
     } finally {
