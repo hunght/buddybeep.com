@@ -26,9 +26,15 @@ const GoogleSidebar: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState('article')
 
   useEffect(() => {
-    function highlightTextSelection() {
+    function highlightTextSelection(event: { target: any }) {
       const selection = window.getSelection()
-      if (!selection || selection.toString().trim() === '') return
+      if (!selection || selection.toString().trim() === '') {
+        const hoveredElement = event.target
+        if (hoveredElement) {
+          setCurrentNodeSelected(hoveredElement)
+        }
+        return
+      }
 
       const range = selection.getRangeAt(0)
       if (range && range.commonAncestorContainer) {
@@ -44,7 +50,23 @@ const GoogleSidebar: React.FC = () => {
       document.removeEventListener('mouseup', highlightTextSelection)
     }
   }, [])
+  useEffect(() => {
+    const preventClick = (event: MouseEvent): void => {
+      if (event.target !== document.getElementById('buddy-beep-google-sidebar')) {
+        event.preventDefault()
+        event.stopPropagation()
+        console.log('Clicked but prevented!')
+      }
+    }
 
+    // Adding event listener during component mount
+    document.addEventListener('click', preventClick, true)
+
+    // Cleanup listener when component unmounts
+    return () => {
+      document.removeEventListener('click', preventClick, true)
+    }
+  }, [])
   useEffect(() => {
     // Inject into the ShadowDOM
     const highlightOverSelection = (event: { target: any }) => {
@@ -53,7 +75,7 @@ const GoogleSidebar: React.FC = () => {
         setCurrentNode(hoveredElement)
       }
     }
-    const debounceHighlightOverSelection = debounce(highlightOverSelection, 100)
+    const debounceHighlightOverSelection = debounce(highlightOverSelection, 300)
 
     document.removeEventListener('mouseover', debounceHighlightOverSelection)
     if (selectedOption !== 'selection') {
@@ -65,21 +87,6 @@ const GoogleSidebar: React.FC = () => {
       document.removeEventListener('mouseover', debounceHighlightOverSelection)
     }
   }, [selectedOption])
-
-  useEffect(() => {
-    const mouseDownHandler = () => {
-      setCurrentNodeSelected(currentNode)
-    }
-    document.removeEventListener('mousedown', mouseDownHandler)
-    if (selectedOption !== 'selection') {
-      return
-    }
-
-    document.addEventListener('mousedown', mouseDownHandler)
-    return () => {
-      document.removeEventListener('mousedown', mouseDownHandler)
-    }
-  }, [currentNode, selectedOption])
 
   useEffect(() => {
     if (!currentNode) {
@@ -185,7 +192,7 @@ const GoogleSidebar: React.FC = () => {
   const onClickSaveAndAsk = async () => {
     try {
       setLoading(true)
-      const content = getDocumentTextFromDOM(currentNodeSelected)
+      const content = getStyledHtml(currentNodeSelected)
 
       await chrome.runtime.sendMessage({
         action: 'openSidePanel',
@@ -210,7 +217,7 @@ const GoogleSidebar: React.FC = () => {
       setCurrentNodeSelected(parent)
     }
   }
-  const onClickCollapseElement = () => {
+  const onClickCollapseElement = (event) => {
     //find first child note of current node
     const child = currentNodeSelected?.children[0]
 
@@ -218,8 +225,14 @@ const GoogleSidebar: React.FC = () => {
       setCurrentNodeSelected(child)
     }
   }
+  const handleMouseUpButton = (event) => {
+    event.stopPropagation()
+  }
   return (
-    <div className="z-50 relative bg-red-500">
+    <div
+      onMouseUp={handleMouseUpButton} // Stop propagation
+      className="z-50 relative bg-red-500"
+    >
       <div className="flex absolute top-0 left-0">
         <div id="buddy-beep-overlay-container">
           {currentNodeSelected && (

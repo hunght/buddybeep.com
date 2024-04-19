@@ -10,7 +10,7 @@ body.buddy-beep-google-sidebar-show * {
 
 #buddy-beep-google-sidebar {
   position: fixed;
-  z-index: 240;
+  z-index: 2147483645;
   top: 0px;
   right: 0px;
 }

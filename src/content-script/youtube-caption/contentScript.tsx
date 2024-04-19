@@ -77,11 +77,11 @@ export const ContentScript: React.FC = () => {
 
     fetchTranscript()
   }, [currentLangOption])
-
-  if (!videoId) {
+  const isHasTranscripts = transcriptHTML.length > 0 && !!videoId
+  if (!videoId || !isHasTranscripts) {
     return <div></div>
   }
-  const isHasTranscripts = transcriptHTML.length > 0 && !!videoId
+
   return (
     <div
       style={{
@@ -125,9 +125,6 @@ export const ContentScript: React.FC = () => {
                   className="px-4 items-center justify-center py-2 bg-indigo-500  hover:bg-blue-700 text-white font-bold rounded-xl"
                   onClick={() => {
                     const prompt = copyTranscriptAndPrompt(transcriptHTML, document.title)
-                    console.log(`==== prompt ===`)
-                    console.log(prompt)
-                    console.log('==== end log ===')
 
                     chrome.runtime.sendMessage({
                       action: 'openSidePanel',
