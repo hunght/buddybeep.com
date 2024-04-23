@@ -228,7 +228,13 @@ async function saveNoteAndProcessSummary(message: any, userId: string) {
   const prompt = `Get key points from web:Title:${message.title},Link:${message.link} content:${message.content}`
   const { data: note } = await supabase
     .from('notes')
-    .insert({ title: message.title, content: message.content, user_id: userId, source_url: message.link })
+    .insert({
+      title: message.title,
+      content: message.content,
+      user_id: userId,
+      source_url: message.link,
+      description: message.description,
+    })
     .select('id')
     .single()
 
