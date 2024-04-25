@@ -1,13 +1,12 @@
 import { defineManifest } from '@crxjs/vite-plugin'
-
+import keyJson from './key.json'
 export default defineManifest(async () => {
-  const key = import.meta.env.EXT_KEY as string
   return {
+    ...keyJson,
     manifest_version: 3,
     name: '__MSG_appName__',
     description: '__MSG_appDesc__',
     default_locale: 'en',
-    version: '1.8.2',
     icons: {
       '16': 'src/assets/logo-64.png',
       '32': 'src/assets/logo-64.png',
@@ -77,7 +76,6 @@ export default defineManifest(async () => {
         description: 'Open BuddyBeep app',
       },
     },
-    key: key,
     declarative_net_request: {
       rule_resources: [
         {
