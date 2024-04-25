@@ -4,5 +4,8 @@
   },
   "appDesc": {
     "message": "Verbessert das Surfen im Web mit KI-gestützten Zusammenfassungen, Videoeinsichten, einer kuratierten Prompt-Bibliothek, anpassbaren Abfragen und direkten Chats mit führenden KI-Modellen."
+  },
+  "Save & Ask": {
+    "message": "Speichern & Fragen"
   }
 }

@@ -321,7 +321,6 @@ const GoogleSidebar: React.FC = () => {
               onClick={onClickSaveAndAsk}
             >
               {t('Save & Ask')}
-              <img src={chrome.runtime.getURL('src/assets/logo-64.png')} className="w-6 h-6" />
             </div>
 
             <ul>
