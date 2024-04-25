@@ -13,5 +13,8 @@
   },
   "Summary": {
     "message": "Summary"
+  },
+  "save_and_ask": {
+    "message": "Save & Ask"
   }
 }

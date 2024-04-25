@@ -320,7 +320,7 @@ const GoogleSidebar: React.FC = () => {
               className="bg-indigo-500 flex items-center justify-center  rounded-full shadow-md cursor-pointer text-white py-2 px-1 text-lg gap-1.5"
               onClick={onClickSaveAndAsk}
             >
-              {t('Save & Ask')}
+              {t('save_and_ask')}
             </div>
 
             <ul>
