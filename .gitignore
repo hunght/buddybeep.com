@@ -21,7 +21,7 @@ dist-ssr
 *.sln
 *.sw?
 
-.env
+.env*
 
 .yarn/*
 !.yarn/cache
