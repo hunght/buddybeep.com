@@ -15,8 +15,8 @@ vite build
 zip -r build/buddybeep-$new_version.zip dist
 key.json backup to key.json.bak
 cp key.json key.json.bak
-# Remove EXT_KEY from key.json
-jq 'del(.EXT_KEY)' key.json >temp.json && mv temp.json key.json
+# Remove key from key.json
+jq 'del(.key)' key.json >temp.json && mv temp.json key.json
 
 vite build
 

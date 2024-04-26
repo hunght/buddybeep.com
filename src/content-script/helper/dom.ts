@@ -1,27 +1,51 @@
 import { Readability } from '@mozilla/readability'
 import { isEmpty } from 'lodash-es'
 import TurndownService from 'turndown'
+
 export function getDocumentTextFromDOM(fromElement: HTMLElement | null): string {
   if (!fromElement) {
     return ''
   }
   const clone = fromElement.cloneNode(true)
 
-  // Create a new document
+  // Create a new document and append cloned content
   const newDoc = document.implementation.createHTMLDocument('title')
+  newDoc.body.innerHTML = clone.outerHTML // Changed to use outerHTML
 
-  // Replace the newly created document's html with the clone
-  newDoc.replaceChild(clone, newDoc.documentElement)
-  const doc = new Readability(newDoc)
-  const article = doc.parse()
+  // Logging for debugging
+  console.log('Cloned HTML:', newDoc.body.innerHTML)
+
+  const readability = new Readability(newDoc)
+  const article = readability.parse()
 
   if (article) {
-    const articleContent = article.textContent
-
-    return articleContent
+    return getStyledHtml(article.content)
   }
-  return [fromElement.innerText, ...Array.from(document.querySelectorAll('svg text')).map((e) => e.innerHTML)].join(' ')
+
+  return getStyledHtml(fromElement.outerHTML)
 }
+
+function getStyledHtml(htmlContent: string): string {
+  const turndownService = new TurndownService({
+    headingStyle: 'atx',
+  })
+  turndownService.addRule('absoluteLinks', {
+    filter: 'a',
+    replacement: function (content: string, node: any) {
+      const href = node.getAttribute('href')
+      if (!href || isEmpty(content.trim())) {
+        return ''
+      }
+      if (href && !href.includes('://')) {
+        const baseURL = `${window.location.protocol}//${window.location.host}`
+        return `[${content}](${baseURL}${href.startsWith('/') ? '' : '/'}${href})`
+      }
+      return `[${content}](${href})`
+    },
+  })
+  return turndownService.turndown(htmlContent)
+}
+
 export function getDocumentDescription() {
   // Get all meta elements from the document
   const metaElements = document.getElementsByTagName('meta')
@@ -37,31 +61,4 @@ export function getDocumentDescription() {
 
   // Return a default message or null if no description meta tag is found
   return null
-}
-export function getStyledHtml(element: HTMLElement | null): string {
-  const htmlContent = element?.innerHTML || ''
-
-  const turndownService = new TurndownService()
-  turndownService.addRule('absoluteLinks', {
-    filter: 'a',
-    replacement: function (content: string, node: any) {
-      const href = node.getAttribute('href')
-      if (!href || isEmpty(content.trim())) {
-        return ''
-      }
-      console.log(`==== content ===`)
-      console.log(content)
-      console.log('==== end log ===')
-
-      // Check if the link is relative and not an absolute URL
-      if (href && !href.includes('://')) {
-        const baseURL = `${window.location.protocol}//${window.location.host}`
-        return `[${content}](${baseURL}${href.startsWith('/') ? '' : '/'}${href})`
-      }
-      return `[${content}](${href})`
-    },
-  })
-  const markdown = turndownService.turndown(htmlContent)
-
-  return markdown
 }

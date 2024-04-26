@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 // Inject to the webpage itself
 import './google-sidebar-base.css'
 
-import { getDocumentDescription, getDocumentTextFromDOM, getStyledHtml } from '~content-script/helper/dom'
+import { getDocumentDescription, getDocumentTextFromDOM } from '~content-script/helper/dom'
 import { useTranslation } from 'react-i18next'
 import logger from '~utils/logger'
 import LoadingOverlay from './loading-overlay'
@@ -48,7 +48,7 @@ const GoogleSidebar: React.FC = () => {
 
       setTimeout(() => {
         document.body.removeChild(popup)
-      }, 5000)
+      }, 10000)
     }
   }, [showSuccess])
 
@@ -219,7 +219,7 @@ const GoogleSidebar: React.FC = () => {
   const onClickSaveAndAsk = async () => {
     try {
       setLoading(true)
-      const content = getStyledHtml(currentNodeSelected)
+      const content = getDocumentTextFromDOM(currentNodeSelected)
 
       const data = await chrome.runtime.sendMessage({
         action: 'openSidePanel',
@@ -320,7 +320,7 @@ const GoogleSidebar: React.FC = () => {
               className="bg-indigo-500 flex items-center justify-center  rounded-full shadow-md cursor-pointer text-white py-2 px-1 text-lg gap-1.5"
               onClick={onClickSaveAndAsk}
             >
-              {t('save_and_ask')}
+              {chrome.i18n.getMessage('save_and_ask')}
             </div>
 
             <ul>
