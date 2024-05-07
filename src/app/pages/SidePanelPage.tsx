@@ -22,6 +22,8 @@ import { composeTextAtom, originalTextAtom, subTabAtom } from '~app/state/writin
 import Dialog from '~app/components/Dialog'
 
 import MenuDropDown from '~app/components/side-panel/MenuDropDown'
+import { SidePanelMessageType } from '~app/types/sidePanel'
+import { getLinkFromSummaryObject } from '~app/utils/summary'
 
 function SidePanelPage() {
   const [tab, setTab] = useState<'chat' | 'write'>('chat')
@@ -111,14 +113,16 @@ function SidePanelPage() {
         const content = `As language teacher. Explain this: ${buildPromptWithLang(summaryText.content)}. Make it fun, simple and engaging! Don't repeat my question.`
 
         chat
-          .sendMessage(content, undefined, { link: summaryText.link, title: summaryText.content })
+          .sendMessage(content, undefined, { link: getLinkFromSummaryObject(summaryText), title: summaryText.content })
           .then(createAnwserNote)
         setSummaryText((prev) => (!prev ? null : { ...prev, content: null }))
         return
       }
       const content = buildPromptWithLang(summaryText.content)
 
-      chat.sendMessage(content, undefined, { link: summaryText.link, title: summaryText.title }).then(createAnwserNote)
+      chat
+        .sendMessage(content, undefined, { link: getLinkFromSummaryObject(summaryText), title: summaryText.title })
+        .then(createAnwserNote)
       setSummaryText((prev) => (!prev ? null : { ...prev, content: null }))
     }
   }, [summaryText?.content, chat.generating, summaryText?.type, chat.agentId])
