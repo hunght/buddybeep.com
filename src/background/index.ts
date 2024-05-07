@@ -6,7 +6,7 @@ import { readTwitterCsrfToken } from './twitter-cookie'
 import contentTest from './contentTest?script'
 import logger from '~utils/logger'
 import { SidePanelMessageType } from '~app/types/sidePanel'
-import supabase from '~lib/supabase/client'
+import supabase, { getUserId } from '~lib/supabase/client'
 
 // expose storage.session to content scripts
 // using `chrome.*` API because `setAccessLevel` is not supported by `Browser.*` API
@@ -78,24 +78,26 @@ Browser.contextMenus.onClicked.addListener(async (info, tab) => {
       await chrome.sidePanel.open({ tabId: tab?.id })
 
       const composeMessage: SidePanelMessageType = { ...message, subType: null, type: 'explain-a-concept' }
-
+      const userId = await getUserId()
+      if (userId) {
+        const { data: note } = await supabase
+          .from('notes')
+          .insert({
+            title: message.content,
+            user_id: userId,
+            source_url: message.link,
+          })
+          .select('id')
+          .single()
+        if (note?.id) {
+          composeMessage.noteId = note?.id
+        }
+      }
       Browser.storage.local.set({ sidePanelSummaryAtom: composeMessage })
       break
     }
   }
 })
-
-function launchWebAuthFlow(url: string, interactive: boolean): Promise<string> {
-  return new Promise((resolve, reject) => {
-    chrome.identity.launchWebAuthFlow({ url, interactive }, async (redirectedTo) => {
-      if (chrome.runtime.lastError) {
-        reject(chrome.runtime.lastError)
-      } else {
-        resolve(redirectedTo)
-      }
-    })
-  })
-}
 
 Browser.runtime.onInstalled.addListener((details) => {
   if (details.reason === 'install') {
@@ -149,54 +151,33 @@ Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   if (message.action === 'openSidePanel') {
     const tabId = sender.tab?.id
     await openSidePanelWithTabId(tabId)
-    const {
-      data: { session },
-    } = await supabase.auth.getSession()
-    if (session) {
-      const userId = session.user.id
-
+    const userId = await getUserId()
+    if (userId) {
       const id = await saveNoteAndProcessSummary(message, userId)
-
       return { noteId: id }
     }
-    const manifest = chrome.runtime.getManifest()
+  }
+  if (message.action === 'createAnwserNote') {
+    const userId = await getUserId()
 
-    const url = new URL('https://accounts.google.com/o/oauth2/auth')
+    console.log('message', message)
+    console.log('userId', userId)
 
-    url.searchParams.set('client_id', manifest.oauth2.client_id)
-    url.searchParams.set('response_type', 'id_token')
-    url.searchParams.set('access_type', 'offline')
-    const redirectURI = `https://${chrome.runtime.id}.chromiumapp.org`
-    url.searchParams.set('redirect_uri', redirectURI)
-    url.searchParams.set('scope', manifest.oauth2.scopes.join(' '))
+    const note: {
+      content: string
+      title: string | null
+      parent_id: number
+    } = message.note
 
-    try {
-      const redirectedTo = await launchWebAuthFlow(url.toString(), true)
-
-      // auth was successful, extract the ID token from the redirectedTo URL
-      if (!redirectedTo) {
-        return
-      }
-      const redirectedUrl = new URL(redirectedTo)
-
-      const params = new URLSearchParams(redirectedUrl.hash.replace('#', ''))
-      const idToken = params.get('id_token')
-      if (!idToken) {
-        return
-      }
-      const { data, error } = await supabase.auth.signInWithIdToken({
-        provider: 'google',
-        token: idToken,
+    if (userId) {
+      const { data, error } = await supabase.from('notes').insert({
+        title: `Explain ${note.title}`,
+        content: note.content,
+        user_id: userId,
+        parent_id: note.parent_id,
       })
-      if (error) {
-        console.error('Error logging in:', error.message)
-      } else {
-        const id = await saveNoteAndProcessSummary(message, data.user.id)
-
-        return { noteId: id }
-      }
-    } catch (error) {
-      console.error('Error logging in:', error)
+      console.log('data', data)
+      console.log('error', error)
     }
   }
 
@@ -225,7 +206,7 @@ Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 })
 
 async function saveNoteAndProcessSummary(message: any, userId: string) {
-  const prompt = `Get key points from web:Title:${message.title},Link:${message.link} content:${message.content}`
+  const prompt = `Get key points from content: Title:${message.title},Link:${message.link} content:${message.content}`
   const { data: note } = await supabase
     .from('notes')
     .insert({

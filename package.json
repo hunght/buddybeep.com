@@ -119,6 +119,5 @@
     "webextension-polyfill": "^0.10.0",
     "websocket-as-promised": "^2.0.1",
     "xmldom": "^0.6.0"
-  },
-  "packageManager": "yarn@4.0.1"
+  }
 }

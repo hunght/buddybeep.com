@@ -69,28 +69,47 @@ export type Database = {
         Row: {
           content: string | null
           created_at: string
+          description: string | null
+          fts: unknown | null
           id: number
+          parent_id: number | null
           source_url: string | null
           title: string | null
+          updated_at: string
           user_id: string
         }
         Insert: {
           content?: string | null
           created_at?: string
+          description?: string | null
+          fts?: unknown | null
           id?: number
+          parent_id?: number | null
           source_url?: string | null
           title?: string | null
+          updated_at?: string
           user_id: string
         }
         Update: {
           content?: string | null
           created_at?: string
+          description?: string | null
+          fts?: unknown | null
           id?: number
+          parent_id?: number | null
           source_url?: string | null
           title?: string | null
+          updated_at?: string
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "notes_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "notes"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "public_notes_user_id_fkey"
             columns: ["user_id"]

@@ -20,8 +20,9 @@ import { PrimaryButton } from '~app/components/PrimaryButton'
 import { buildPromptWithLang } from '~app/utils/lang'
 import { composeTextAtom, originalTextAtom, subTabAtom } from '~app/state/writingAssistantAtom'
 import Dialog from '~app/components/Dialog'
-import { BiExpand } from 'react-icons/bi'
+
 import MenuDropDown from '~app/components/side-panel/MenuDropDown'
+
 function SidePanelPage() {
   const [tab, setTab] = useState<'chat' | 'write'>('chat')
   const { t } = useTranslation()
@@ -96,17 +97,28 @@ function SidePanelPage() {
       summaryText.type === 'summary-youtube-videos'
     ) {
       setTab('chat')
+      const createAnwserNote = async (answers: string) => {
+        const note = {
+          content: answers,
+          title: summaryText.content,
+          parent_id: Number(summaryText.noteId),
+        }
 
+        //send note data to background
+        chrome.runtime.sendMessage({ action: 'createAnwserNote', note })
+      }
       if (chat.agentId === 'explain-a-concept') {
         const content = `As language teacher. Explain this: ${buildPromptWithLang(summaryText.content)}. Make it fun, simple and engaging! Don't repeat my question.`
 
-        chat.sendMessage(content, undefined, { link: summaryText.link, title: summaryText.content })
+        chat
+          .sendMessage(content, undefined, { link: summaryText.link, title: summaryText.content })
+          .then(createAnwserNote)
         setSummaryText((prev) => (!prev ? null : { ...prev, content: null }))
         return
       }
       const content = buildPromptWithLang(summaryText.content)
 
-      chat.sendMessage(content, undefined, { link: summaryText.link, title: summaryText.title })
+      chat.sendMessage(content, undefined, { link: summaryText.link, title: summaryText.title }).then(createAnwserNote)
       setSummaryText((prev) => (!prev ? null : { ...prev, content: null }))
     }
   }, [summaryText?.content, chat.generating, summaryText?.type, chat.agentId])

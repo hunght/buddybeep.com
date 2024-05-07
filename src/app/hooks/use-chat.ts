@@ -64,7 +64,7 @@ export function useChat(botId: BotId, agentId: string | null) {
   )
 
   const sendMessage = useCallback(
-    async (input: string, image?: File, summary?: { link: string; title: string }): Promise<void> => {
+    async (input: string, image?: File, summary?: { link: string; title: string }): Promise<string> => {
       trackEvent('send_message', { botId, withImage: !!image, name: chatState.bot.name })
 
       const botMessageId = uuid()
@@ -91,9 +91,10 @@ export function useChat(botId: BotId, agentId: string | null) {
         image: compressedImage,
         signal: abortController.signal,
       })
-
+      let lastAnswer = ''
       try {
         for await (const answer of resp) {
+          lastAnswer = answer.text
           updateMessage(botMessageId, (message) => {
             message.text = answer.text
           })
@@ -117,6 +118,7 @@ export function useChat(botId: BotId, agentId: string | null) {
         draft.abortController = undefined
         draft.generatingMessageId = ''
       })
+      return lastAnswer
     },
     [botId, chatState.bot, setChatState, updateMessage],
   )

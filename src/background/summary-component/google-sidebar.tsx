@@ -42,7 +42,7 @@ const GoogleSidebar: React.FC = () => {
       popup.style.cursor = 'pointer'
       popup.onclick = () => {
         //Open the note in seperate tab
-        window.open(`https://www.buddybeep.com/dashboard?noteId=${showSuccess}`, '_blank')
+        window.open(`https://www.buddybeep.com/dashboard/${showSuccess}`, '_blank')
       }
       document.body.appendChild(popup)
 
