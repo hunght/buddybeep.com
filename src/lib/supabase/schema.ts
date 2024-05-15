@@ -50,13 +50,6 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "public_note_tags_note_id_fkey"
-            columns: ["note_id"]
-            isOneToOne: false
-            referencedRelation: "notes"
-            referencedColumns: ["id"]
-          },
-          {
             foreignKeyName: "public_note_tags_tag_id_fkey"
             columns: ["tag_id"]
             isOneToOne: false
@@ -71,8 +64,8 @@ export type Database = {
           created_at: string
           description: string | null
           fts: unknown | null
-          id: number
-          parent_id: number | null
+          id: string
+          parent_id: string | null
           source_url: string | null
           title: string | null
           updated_at: string
@@ -83,8 +76,8 @@ export type Database = {
           created_at?: string
           description?: string | null
           fts?: unknown | null
-          id?: number
-          parent_id?: number | null
+          id?: string
+          parent_id?: string | null
           source_url?: string | null
           title?: string | null
           updated_at?: string
@@ -95,8 +88,8 @@ export type Database = {
           created_at?: string
           description?: string | null
           fts?: unknown | null
-          id?: number
-          parent_id?: number | null
+          id?: string
+          parent_id?: string | null
           source_url?: string | null
           title?: string | null
           updated_at?: string

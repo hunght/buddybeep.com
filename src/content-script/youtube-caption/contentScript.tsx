@@ -109,16 +109,16 @@ export const ContentScript: React.FC = () => {
           onOpenChange={setOpen}
         >
           <div className="flex items-center flex-1 text-white py-2 px-4 rounded w-full">
-            <img
-              src={chrome.runtime.getURL('src/assets/logo-64.png')}
-              style={{ width: 25, height: 25, cursor: 'pointer' }}
+            <div
+              className="text-lg font-bold px-1 flex-1 cursor-pointer hover:text-blue-500"
               onClick={() => {
                 chrome.runtime.sendMessage({
                   action: 'openMainApp',
                 })
               }}
-            />
-            <div className="text-lg font-bold px-1 flex-1">{chrome.i18n.getMessage('Transcripts')} </div>
+            >
+              {chrome.i18n.getMessage('Transcripts')}{' '}
+            </div>
             <div className="flex justify-between items-center gap-2 px-4 py-1">
               <Tooltip text="Summary video with BuddyBeep">
                 <button

@@ -166,7 +166,7 @@ Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     const note: {
       content: string
       title: string | null
-      parent_id: number
+      parent_id: string
     } = message.note
 
     if (userId) {
