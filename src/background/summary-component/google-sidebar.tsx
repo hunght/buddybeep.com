@@ -285,7 +285,7 @@ const GoogleSidebar: React.FC = () => {
   return (
     <div
       onMouseUp={handleMouseUpButton} // Stop propagation
-      className="z-50 relative bg-red-500"
+      className="z-[9999] relative bg-red-500"
     >
       <div className="flex absolute top-0 left-0">
         <div id="buddy-beep-overlay-container">
