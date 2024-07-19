@@ -330,10 +330,11 @@ const GoogleSidebar: React.FC = () => {
               X
             </span>
 
-            <div style={{ display: 'flex', flexDirection: 'row', gap: '8px', marginBottom: '16px' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', gap: '8px', marginTop: '12px', marginBottom: '8px' }}>
               <button
                 style={{
                   display: 'flex',
+
                   alignItems: 'center',
                   justifyContent: 'center',
                   padding: '4px 8px',
@@ -360,6 +361,7 @@ const GoogleSidebar: React.FC = () => {
               <button
                 style={{
                   display: 'flex',
+                  flex: '1',
                   alignItems: 'center',
                   justifyContent: 'center',
                   padding: '4px 8px',
