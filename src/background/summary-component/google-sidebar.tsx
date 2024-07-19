@@ -215,7 +215,28 @@ const GoogleSidebar: React.FC = () => {
   if (isPrintLayout) {
     return <div />
   }
+  const onClickSave = async () => {
+    try {
+      setLoading(true)
+      const content = getDocumentTextFromDOM(currentNodeSelected)
 
+      const data = await chrome.runtime.sendMessage({
+        action: 'saveContent',
+        content,
+        link: window.location.href,
+        title: document.title,
+        description: getDocumentDescription(),
+      })
+
+      setIsOpen(false)
+      setLoading(false)
+      setShowSuccess(data?.noteId ?? '')
+    } catch (error) {
+      logger.error(error)
+    } finally {
+      setLoading(false)
+    }
+  }
   const onClickSaveAndAsk = async () => {
     try {
       setLoading(true)
@@ -309,20 +330,59 @@ const GoogleSidebar: React.FC = () => {
               X
             </span>
 
-            <div
-              onMouseEnter={(e) => {
-                // change to indigo color
-                e.currentTarget.style.backgroundColor = '#4B0082' // Pink color on hover
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgb(99, 102, 241)' // Reset to white
-              }}
-              className="bg-indigo-500 flex items-center justify-center  rounded-full shadow-md cursor-pointer text-white py-2 px-1 text-lg gap-1.5"
-              onClick={onClickSaveAndAsk}
-            >
-              {chrome.i18n.getMessage('save_and_ask')}
-            </div>
+            <div style={{ display: 'flex', flexDirection: 'row', gap: '8px', marginBottom: '16px' }}>
+              <button
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '4px 8px',
+                  backgroundColor: '#4F46E5',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '4px',
+                  fontWeight: '600',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#4338CA'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#4F46E5'
+                }}
+                onClick={onClickSave}
+              >
+                {chrome.i18n.getMessage('save')}
+              </button>
 
+              <button
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '4px 8px',
+                  backgroundColor: 'white',
+                  color: '#4F46E5',
+                  border: '1px solid #4F46E5',
+                  borderRadius: '4px',
+                  fontWeight: '600',
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  transition: 'background-color 0.2s, color 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#EEF2FF'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'white'
+                }}
+                onClick={onClickSaveAndAsk}
+              >
+                {chrome.i18n.getMessage('ask')}
+              </button>
+            </div>
             <ul>
               <li
                 className={` ${selectedOption === 'article' ? 'selected' : ''}`}

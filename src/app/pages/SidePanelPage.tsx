@@ -22,7 +22,7 @@ import { composeTextAtom, originalTextAtom, subTabAtom } from '~app/state/writin
 import Dialog from '~app/components/Dialog'
 
 import MenuDropDown from '~app/components/side-panel/MenuDropDown'
-import { SidePanelMessageType } from '~app/types/sidePanel'
+
 import { getLinkFromSummaryObject } from '~app/utils/summary'
 
 function SidePanelPage() {
@@ -49,16 +49,12 @@ function SidePanelPage() {
     }
     return agentType ?? null
   }, [agentType, tab])
-
   useEffect(() => {
-    chrome.storage.local.get('sidePanelSummaryAtom').then((data) => {
-      if (data.sidePanelSummaryAtom) {
-        setSummaryText(data.sidePanelSummaryAtom)
-        chrome.storage.local.set({ sidePanelSummaryAtom: { ...data.sidePanelSummaryAtom, content: null } })
-      }
-    })
-  }, [])
-
+    if (summaryText) {
+      console.log('Summary text updated:', summaryText)
+      // You can perform any actions based on the updated summaryText here
+    }
+  }, [summaryText])
   const chat = useChat(botId, agentId)
 
   useEffect(() => {
@@ -103,7 +99,7 @@ function SidePanelPage() {
         const note = {
           content: answers,
           title: summaryText.content,
-          parent_id: Number(summaryText.noteId),
+          parent_id: summaryText.noteId,
         }
 
         //send note data to background

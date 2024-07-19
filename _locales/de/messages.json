@@ -7,5 +7,11 @@
   },
   "save_and_ask": {
     "message": "Speichern & Fragen"
+  },
+  "ask": {
+    "message": "Fragen"
+  },
+  "save": {
+    "message": "Speichern"
   }
 }

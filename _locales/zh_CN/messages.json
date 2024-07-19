@@ -7,5 +7,11 @@
   },
   "save_and_ask": {
     "message": "保存并提问"
+  },
+  "save": {
+    "message": "保存"
+  },
+  "ask": {
+    "message": "提问"
   }
 }

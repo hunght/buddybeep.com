@@ -16,5 +16,11 @@
   },
   "save_and_ask": {
     "message": "保存して質問する"
+  },
+  "save": {
+    "message": "保存"
+  },
+  "ask": {
+    "message": "質問する"
   }
 }

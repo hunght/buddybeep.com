@@ -58,10 +58,14 @@ const ChatBotSettingPanel: FC<PropsWithChildren<{ title: string }>> = (props) =>
 function SettingPage() {
   const { t } = useTranslation()
   const [userConfig, setUserConfig] = useState<UserConfig | undefined>(undefined)
+  const [transcriptWidgetVisible, setTranscriptWidgetVisible] = useState(true)
   const [dirty, setDirty] = useState(false)
 
   useEffect(() => {
     getUserConfig().then((config) => setUserConfig(config))
+    chrome.storage.sync.get(['transcriptWidgetVisible'], (result) => {
+      setTranscriptWidgetVisible(result.transcriptWidgetVisible !== false)
+    })
   }, [])
 
   const updateConfigValue = useCallback(
@@ -71,6 +75,12 @@ function SettingPage() {
     },
     [userConfig],
   )
+
+  const handleTranscriptWidgetToggle = (isVisible: boolean) => {
+    setTranscriptWidgetVisible(isVisible)
+    chrome.storage.sync.set({ transcriptWidgetVisible: isVisible })
+    setDirty(true)
+  }
 
   const save = useCallback(async () => {
     let apiHost = userConfig?.openaiApiHost
@@ -89,10 +99,17 @@ function SettingPage() {
       apiHost = undefined
     }
     await updateUserConfig({ ...userConfig!, openaiApiHost: apiHost })
+    // Save transcript widget visibility
+    chrome.storage.sync.set({ transcriptWidgetVisible })
+
     setDirty(false)
     toast.success('Saved')
     setTimeout(() => location.reload(), 500)
-  }, [userConfig])
+  }, [userConfig, transcriptWidgetVisible])
+
+  if (!userConfig) {
+    return null
+  }
 
   if (!userConfig) {
     return null
@@ -196,6 +213,19 @@ function SettingPage() {
           <LanguageSelection />
         </div>
         <ThemeSettingModal />
+        <div className="flex flex-col gap-2 max-w-[700px]">
+          <p className="font-bold text-lg">{t('YouTube Transcript Widget')}</p>
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="transcriptWidgetToggle"
+              checked={transcriptWidgetVisible}
+              onChange={(e) => handleTranscriptWidgetToggle(e.target.checked)}
+              className="mr-2"
+            />
+            <label htmlFor="transcriptWidgetToggle">{t('Show YouTube Transcript Widget')}</label>
+          </div>
+        </div>
       </div>
       {dirty && (
         <motion.div

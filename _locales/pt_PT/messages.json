@@ -16,5 +16,11 @@
   },
   "save_and_ask": {
     "message": "Guardar & Perguntar"
+  },
+  "save": {
+    "message": "Guardar"
+  },
+  "ask": {
+    "message": "Perguntar"
   }
 }

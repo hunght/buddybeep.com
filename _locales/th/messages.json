@@ -16,5 +16,11 @@
   },
   "save_and_ask": {
     "message": "บันทึกและถาม"
+  },
+  "save": {
+    "message": "บันทึก"
+  },
+  "ask": {
+    "message": "ถาม"
   }
 }

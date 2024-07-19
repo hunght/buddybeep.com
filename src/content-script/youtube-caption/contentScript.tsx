@@ -4,6 +4,7 @@ import {
   ChevronUpIcon,
   DocumentTextIcon,
   PlayPauseIcon,
+  XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { Collapsible, CollapsibleContent } from '@radix-ui/react-collapsible'
 import React, { useEffect, useState } from 'react'
@@ -28,12 +29,16 @@ export const ContentScript: React.FC = () => {
   const videoId = youtubeVideoData?.url
 
   const [transcriptHTML, setTranscriptHTML] = useState<TranscriptItem[]>([])
-
   const [open, setOpen] = React.useState(false)
-
   const [currentLangOption, setCurrentLangOption] = useState<LangOption>()
+  const [isWidgetVisible, setIsWidgetVisible] = useState(true)
 
-  // make useEffect to get langOptions  when videoId changes
+  useEffect(() => {
+    chrome.storage.sync.get(['transcriptWidgetVisible'], (result) => {
+      setIsWidgetVisible(result.transcriptWidgetVisible !== false)
+    })
+  }, [])
+
   useEffect(() => {
     async function fetchTranscript() {
       try {
@@ -41,7 +46,6 @@ export const ContentScript: React.FC = () => {
           return
         }
         setTranscriptHTML([])
-        // Get Transcript Language Options & Create Language Select Btns
         const langOptionsWithLink = await getLangOptionsWithLink(videoId)
         if (!langOptionsWithLink) {
           logger.log('no langOptionsWithLink')
@@ -57,7 +61,6 @@ export const ContentScript: React.FC = () => {
     fetchTranscript()
   }, [videoId])
 
-  // make useEffect to get transcriptHTML when currentLangOption changes
   useEffect(() => {
     async function fetchTranscript() {
       try {
@@ -66,9 +69,7 @@ export const ContentScript: React.FC = () => {
           return
         }
 
-        // Create Transcript HTML & Add Event Listener
         const transcriptHTML = await getRawTranscript(currentLangOption.link)
-
         setTranscriptHTML(transcriptHTML)
       } catch (error) {
         logger.error('Error fetching data:', error)
@@ -77,9 +78,15 @@ export const ContentScript: React.FC = () => {
 
     fetchTranscript()
   }, [currentLangOption])
+
+  const handleCloseWidget = () => {
+    setIsWidgetVisible(false)
+    chrome.storage.sync.set({ transcriptWidgetVisible: false })
+  }
+
   const isHasTranscripts = transcriptHTML.length > 0 && !!videoId
-  if (!videoId || !isHasTranscripts) {
-    return <div></div>
+  if (!videoId || !isHasTranscripts || !isWidgetVisible) {
+    return null
   }
 
   return (
@@ -108,7 +115,7 @@ export const ContentScript: React.FC = () => {
           open={isHasTranscripts && open}
           onOpenChange={setOpen}
         >
-          <div className="flex items-center flex-1 text-white py-2 px-4 rounded w-full">
+          <div className="flex items-center flex-1 text-white py-2 px-4 rounded w-full relative bg-red">
             <div
               className="text-lg font-bold px-1 flex-1 cursor-pointer hover:text-blue-500"
               onClick={() => {
@@ -187,22 +194,15 @@ export const ContentScript: React.FC = () => {
                 </Tooltip>
               )}
             </div>
+            <Tooltip text="Close BuddyBeep. You can open later in setting page">
+              <button
+                className="hover:bg-blue-700 text-white font-bold rounded-xl dark:bg-gray-900 mb-2"
+                onClick={handleCloseWidget}
+              >
+                <XMarkIcon className="h-5 w-5" />
+              </button>
+            </Tooltip>
           </div>
-          {/* {langOptions.length > 3 && (
-            <div className="flex px-4 pb-1 justify-between items-center gap-1">
-              {langOptions.map((lang) => (
-                <button
-                  key={lang.language}
-                  className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded"
-                  onClick={() => {
-                    setCurrentLangOption(lang)
-                  }}
-                >
-                  {lang.language}
-                </button>
-              ))}
-            </div>
-          )} */}
 
           <CollapsibleContent className="overflow-scroll h-96 bg-white text-primary-text rounded-lg">
             {transcriptHTML.length > 0 && videoId && <Transcript videoId={videoId} transcriptHTML={transcriptHTML} />}

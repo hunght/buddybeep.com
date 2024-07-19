@@ -16,5 +16,11 @@
   },
   "save_and_ask": {
     "message": "Save & Ask"
+  },
+  "save": {
+    "message": "Save"
+  },
+  "ask": {
+    "message": "Ask"
   }
 }

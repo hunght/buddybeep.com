@@ -157,6 +157,13 @@ Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
       return { noteId: id }
     }
   }
+  if (message.action === 'saveContent') {
+    const userId = await getUserId()
+    if (userId) {
+      const id = await saveNote(message, userId)
+      return { noteId: id }
+    }
+  }
   if (message.action === 'createAnwserNote') {
     const userId = await getUserId()
 
@@ -218,8 +225,23 @@ async function saveNoteAndProcessSummary(message: any, userId: string) {
     })
     .select('id')
     .single()
-
+  console.log('note.id', note?.id)
   Browser.storage.local.set({ sidePanelSummaryAtom: { ...message, noteId: note?.id, content: prompt } })
+  return note?.id
+}
+async function saveNote(message: any, userId: string) {
+  const { data: note } = await supabase
+    .from('notes')
+    .insert({
+      title: message.title,
+      content: message.content,
+      user_id: userId,
+      source_url: message.link,
+      description: message.description,
+    })
+    .select('id')
+    .single()
+
   return note?.id
 }
 

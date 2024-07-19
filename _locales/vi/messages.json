@@ -16,5 +16,11 @@
   },
   "save_and_ask": {
     "message": "Lưu & Hỏi"
+  },
+  "save": {
+    "message": "Lưu"
+  },
+  "ask": {
+    "message": "Hỏi"
   }
 }
