@@ -100,6 +100,7 @@ function SidePanelPage() {
           content: answers,
           title: summaryText.content,
           parent_id: summaryText.noteId,
+          type: summaryText.type,
         }
 
         //send note data to background

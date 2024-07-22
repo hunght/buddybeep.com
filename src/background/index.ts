@@ -173,18 +173,27 @@ Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     const note: {
       content: string
       title: string | null
+      type: string | null
       parent_id: string
     } = message.note
 
     if (userId) {
-      const { data, error } = await supabase.from('notes').insert({
-        title: `Explain ${note.title}`,
-        content: note.content,
-        user_id: userId,
-        parent_id: note.parent_id,
-      })
-      console.log('data', data)
-      console.log('error', error)
+      if (note.type === 'summary-youtube-videos' || note.type === 'explain-a-concept') {
+        // update current parent note content
+        await supabase
+          .from('notes')
+          .update({
+            content: note.content,
+          })
+          .eq('id', note.parent_id)
+      } else {
+        await supabase.from('notes').insert({
+          title: `Explain ${note.title}`,
+          content: note.content,
+          user_id: userId,
+          parent_id: note.parent_id,
+        })
+      }
     }
   }
 
@@ -214,21 +223,11 @@ Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
 
 async function saveNoteAndProcessSummary(message: any, userId: string) {
   const prompt = `Get key points from content: Title:${message.title},Link:${message.link} content:${message.content}`
-  const { data: note } = await supabase
-    .from('notes')
-    .insert({
-      title: message.title,
-      content: message.content,
-      user_id: userId,
-      source_url: message.link,
-      description: message.description,
-    })
-    .select('id')
-    .single()
-  console.log('note.id', note?.id)
-  Browser.storage.local.set({ sidePanelSummaryAtom: { ...message, noteId: note?.id, content: prompt } })
-  return note?.id
+  const noteId = await saveNote(message, userId)
+  Browser.storage.local.set({ sidePanelSummaryAtom: { ...message, noteId: noteId, content: prompt } })
+  return noteId
 }
+
 async function saveNote(message: any, userId: string) {
   const { data: note } = await supabase
     .from('notes')
@@ -238,10 +237,11 @@ async function saveNote(message: any, userId: string) {
       user_id: userId,
       source_url: message.link,
       description: message.description,
+      type: message.type,
     })
     .select('id')
     .single()
-
+  console.log('note', note, message.type)
   return note?.id
 }
 

@@ -68,6 +68,7 @@ export type Database = {
           parent_id: string | null
           source_url: string | null
           title: string | null
+          type: string | null
           updated_at: string
           user_id: string
         }
@@ -80,6 +81,7 @@ export type Database = {
           parent_id?: string | null
           source_url?: string | null
           title?: string | null
+          type?: string | null
           updated_at?: string
           user_id: string
         }
@@ -92,6 +94,7 @@ export type Database = {
           parent_id?: string | null
           source_url?: string | null
           title?: string | null
+          type?: string | null
           updated_at?: string
           user_id?: string
         }
