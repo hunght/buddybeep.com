@@ -65,8 +65,10 @@ export type Database = {
           description: string | null
           fts: unknown | null
           id: string
+          is_public: boolean | null
           parent_id: string | null
           source_url: string | null
+          summary: string | null
           title: string | null
           type: string | null
           updated_at: string
@@ -78,8 +80,10 @@ export type Database = {
           description?: string | null
           fts?: unknown | null
           id?: string
+          is_public?: boolean | null
           parent_id?: string | null
           source_url?: string | null
+          summary?: string | null
           title?: string | null
           type?: string | null
           updated_at?: string
@@ -91,8 +95,10 @@ export type Database = {
           description?: string | null
           fts?: unknown | null
           id?: string
+          is_public?: boolean | null
           parent_id?: string | null
           source_url?: string | null
+          summary?: string | null
           title?: string | null
           type?: string | null
           updated_at?: string

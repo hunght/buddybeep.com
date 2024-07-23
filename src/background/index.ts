@@ -178,12 +178,13 @@ Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     } = message.note
 
     if (userId) {
-      if (note.type === 'summary-youtube-videos' || note.type === 'explain-a-concept') {
+      console.log('note', note)
+      if (note.parent_id) {
         // update current parent note content
         await supabase
           .from('notes')
           .update({
-            content: note.content,
+            summary: note.content,
           })
           .eq('id', note.parent_id)
       } else {

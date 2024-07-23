@@ -98,7 +98,7 @@ function SidePanelPage() {
       const createAnwserNote = async (answers: string) => {
         const note = {
           content: answers,
-          title: summaryText.content,
+          title: summaryText.title,
           parent_id: summaryText.noteId,
           type: summaryText.type,
         }
