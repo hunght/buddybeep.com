@@ -6,6 +6,7 @@ import {
   PlayPauseIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
+import { BeakerIcon } from '@heroicons/react/24/solid'
 import { Collapsible, CollapsibleContent } from '@radix-ui/react-collapsible'
 import React, { useEffect, useState } from 'react'
 
@@ -23,6 +24,7 @@ import { useAtomValue } from 'jotai'
 import { youtubeVideoDataAtom } from '~app/state/youtubeAtom'
 import logger from '~utils/logger'
 import { findCurrentItem } from './component/findCurrentItem'
+import { useSuccessPopup } from '~hooks/useSuccessPopup'
 
 export const ContentScript: React.FC = () => {
   const youtubeVideoData = useAtomValue(youtubeVideoDataAtom)
@@ -32,7 +34,7 @@ export const ContentScript: React.FC = () => {
   const [open, setOpen] = React.useState(false)
   const [currentLangOption, setCurrentLangOption] = useState<LangOption>()
   const [isWidgetVisible, setIsWidgetVisible] = useState(true)
-
+  const { setShowSuccess } = useSuccessPopup()
   useEffect(() => {
     chrome.storage.sync.get(['transcriptWidgetVisible'], (result) => {
       setIsWidgetVisible(result.transcriptWidgetVisible !== false)
@@ -117,29 +119,30 @@ export const ContentScript: React.FC = () => {
         >
           <div className="flex items-center flex-1 text-white py-2 px-4 rounded w-full relative bg-red">
             <div
-              className="text-lg font-bold px-1 flex-1 cursor-pointer hover:text-blue-500"
+              className="text-lg font-bold px-1 flex-1 cursor-pointer hover:text-blue-500 flex items-center gap-2"
               onClick={() => {
                 chrome.runtime.sendMessage({
                   action: 'openMainApp',
                 })
               }}
             >
-              {chrome.i18n.getMessage('Transcripts')}{' '}
+              <img src="https://www.buddybeep.com/logo-300.png" alt="logo" width={24} height={24} />
+              {chrome.i18n.getMessage('Transcripts')}
             </div>
             <div className="flex justify-between items-center gap-2 px-4 py-1">
               <Tooltip text="Summary video with BuddyBeep">
                 <button
                   className="px-4 items-center justify-center py-2 bg-indigo-500  hover:bg-blue-700 text-white font-bold rounded-xl"
-                  onClick={() => {
+                  onClick={async () => {
                     const prompt = copyTranscriptAndPrompt(transcriptHTML, document.title)
-
-                    chrome.runtime.sendMessage({
+                    const data = await chrome.runtime.sendMessage({
                       action: 'openSidePanel',
                       content: prompt,
                       link: window.location.href,
                       title: document.title,
                       type: 'summary-youtube-videos',
                     })
+                    setShowSuccess(data?.noteId ?? '')
                   }}
                 >
                   <div className="flex flex-row ">
