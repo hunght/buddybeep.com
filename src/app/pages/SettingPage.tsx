@@ -22,6 +22,7 @@ import ExportDataPanel from '~app/components/Settings/ExportDataPanel'
 import PerplexityAPISettings from '~app/components/Settings/PerplexityAPISettings'
 import ShortcutPanel from '~app/components/Settings/ShortcutPanel'
 import themeIcon from '~/assets/icons/theme.svg'
+import { debounce } from 'lodash' // Add this import
 
 import {
   BingConversationStyle,
@@ -60,6 +61,7 @@ function SettingPage() {
   const [userConfig, setUserConfig] = useState<UserConfig | undefined>(undefined)
   const [transcriptWidgetVisible, setTranscriptWidgetVisible] = useState(true)
   const [dirty, setDirty] = useState(false)
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
     getUserConfig().then((config) => setUserConfig(config))
@@ -70,19 +72,20 @@ function SettingPage() {
 
   const updateConfigValue = useCallback(
     (update: Partial<UserConfig>) => {
-      setUserConfig({ ...userConfig!, ...update })
-      setDirty(true)
+      setUserConfig((prevConfig) => ({ ...prevConfig!, ...update }))
+      debouncedSave()
     },
     [userConfig],
   )
 
-  const handleTranscriptWidgetToggle = (isVisible: boolean) => {
+  const handleTranscriptWidgetToggle = useCallback((isVisible: boolean) => {
     setTranscriptWidgetVisible(isVisible)
     chrome.storage.sync.set({ transcriptWidgetVisible: isVisible })
-    setDirty(true)
-  }
+    debouncedSave()
+  }, [])
 
   const save = useCallback(async () => {
+    setSaving(true)
     let apiHost = userConfig?.openaiApiHost
     if (apiHost) {
       apiHost = apiHost.replace(/\/$/, '')
@@ -99,13 +102,19 @@ function SettingPage() {
       apiHost = undefined
     }
     await updateUserConfig({ ...userConfig!, openaiApiHost: apiHost })
-    // Save transcript widget visibility
-    chrome.storage.sync.set({ transcriptWidgetVisible })
+    await chrome.storage.sync.set({ transcriptWidgetVisible })
 
+    setSaving(false)
     setDirty(false)
     toast.success('Saved')
-    setTimeout(() => location.reload(), 500)
   }, [userConfig, transcriptWidgetVisible])
+
+  const debouncedSave = useCallback(
+    debounce(() => {
+      save()
+    }, 1000),
+    [save],
+  )
 
   if (!userConfig) {
     return null
@@ -227,14 +236,14 @@ function SettingPage() {
           </div>
         </div>
       </div>
-      {dirty && (
+      {(dirty || saving) && (
         <motion.div
           className="sticky bottom-0 w-full bg-primary-background border-t-2 border-primary-border px-5 py-4 drop-shadow flex flex-row items-center justify-center"
           initial={{ y: 100 }}
           animate={{ y: 0 }}
           transition={{ type: 'tween', ease: 'easeInOut' }}
         >
-          <Button color="primary" size="small" text={t('Save changes')} onClick={save} className="py-2" />
+          {saving ? <p>{t('Saving...')}</p> : <p>{t('Changes will be saved automatically')}</p>}
         </motion.div>
       )}
       <Toaster position="bottom-center" />
