@@ -3,7 +3,8 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
   ClipboardDocumentListIcon,
-  PlayPauseIcon,
+  PauseIcon,
+  PlayIcon,
   XMarkIcon,
   ArrowPathIcon,
 } from '@heroicons/react/24/outline'
@@ -38,6 +39,7 @@ export const ContentScript: React.FC = () => {
   const { setShowSuccess } = useSuccessPopup()
   const [autoScroll, setAutoScroll] = useState(false)
   const transcriptRef = useRef<HTMLDivElement>(null)
+  const [isPlaying, setIsPlaying] = useState(false)
 
   useEffect(() => {
     chrome.storage.sync.get(['transcriptWidgetVisible'], (result) => {
@@ -123,6 +125,22 @@ export const ContentScript: React.FC = () => {
     open && autoScroll ? 1000 : null,
   )
 
+  useEffect(() => {
+    const checkPlayState = () => {
+      const video = document.querySelector('video')
+      setIsPlaying(!video?.paused)
+    }
+
+    checkPlayState()
+    document.addEventListener('play', checkPlayState, true)
+    document.addEventListener('pause', checkPlayState, true)
+
+    return () => {
+      document.removeEventListener('play', checkPlayState, true)
+      document.removeEventListener('pause', checkPlayState, true)
+    }
+  }, [])
+
   if (!videoId || !isHasTranscripts || !isWidgetVisible) {
     return null
   }
@@ -205,11 +223,12 @@ export const ContentScript: React.FC = () => {
                 />
               )}
               <ToolbarButton
-                tooltip="Play or Pause Video"
+                tooltip={isPlaying ? 'Pause Video' : 'Play Video'}
                 onClick={() => {
                   pauseVideoToggle()
+                  setIsPlaying(!isPlaying)
                 }}
-                icon={<PlayPauseIcon className="h-5 w-5" />}
+                icon={isPlaying ? <PauseIcon className="h-5 w-5" /> : <PlayIcon className="h-5 w-5" />}
               />
               {isHasTranscripts && (
                 <ToolbarButton
