@@ -2,11 +2,10 @@ import {
   ArrowDownOnSquareStackIcon,
   ChevronDownIcon,
   ChevronUpIcon,
-  DocumentTextIcon,
+  ClipboardDocumentListIcon,
   PlayPauseIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
-import { BeakerIcon } from '@heroicons/react/24/solid'
 import { Collapsible, CollapsibleContent } from '@radix-ui/react-collapsible'
 import React, { useEffect, useState } from 'react'
 
@@ -117,7 +116,7 @@ export const ContentScript: React.FC = () => {
           open={isHasTranscripts && open}
           onOpenChange={setOpen}
         >
-          <div className="flex items-center flex-1 text-white py-2 px-4 rounded w-full relative bg-red">
+          <div className="flex items-center flex-1 text-white py-2 px-4 rounded w-full relative bg-gray-800">
             <div
               className="text-lg font-bold px-1 flex-1 cursor-pointer hover:text-blue-500 flex items-center gap-2"
               onClick={() => {
@@ -130,81 +129,65 @@ export const ContentScript: React.FC = () => {
               {chrome.i18n.getMessage('Transcripts')}
             </div>
             <div className="flex justify-between items-center gap-2 px-4 py-1">
-              <Tooltip text="Summary video with BuddyBeep">
-                <button
-                  className="px-4 items-center justify-center py-2 bg-indigo-500  hover:bg-blue-700 text-white font-bold rounded-xl"
-                  onClick={async () => {
-                    const prompt = copyTranscriptAndPrompt(transcriptHTML, document.title)
-                    const data = await chrome.runtime.sendMessage({
-                      action: 'openSidePanel',
-                      content: prompt,
-                      link: window.location.href,
-                      title: document.title,
-                      type: 'summary-youtube-videos',
-                    })
-                    setShowSuccess(data?.noteId ?? '')
-                  }}
-                >
-                  <div className="flex flex-row ">
-                    {chrome.i18n.getMessage('Summary')} <DocumentTextIcon className="h-6 w-6" />
-                  </div>
-                </button>
-              </Tooltip>
-
+              <ToolbarButton
+                tooltip="Summary video with BuddyBeep"
+                onClick={async () => {
+                  const prompt = copyTranscriptAndPrompt(transcriptHTML, document.title)
+                  const data = await chrome.runtime.sendMessage({
+                    action: 'openSidePanel',
+                    content: prompt,
+                    link: window.location.href,
+                    title: document.title,
+                    type: 'summary-youtube-videos',
+                  })
+                  setShowSuccess(data?.noteId ?? '')
+                }}
+                icon={<ClipboardDocumentListIcon className="h-5 w-5" />}
+                text={chrome.i18n.getMessage('Summary')}
+              />
               {isHasTranscripts && (
-                <Tooltip text="Jump to current time">
-                  <button
-                    className="px-4 items-center justify-center py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-xl"
-                    onClick={() => {
-                      if (!open) {
-                        setOpen(true)
-                      }
-                      const currTime = getTYCurrentTime()
-
-                      const { lastItem, currentItem } = findCurrentItem(transcriptHTML, currTime, 3)
-
-                      const element = getElementById(lastItem ? lastItem.start : currentItem?.start)
-
-                      if (element) {
-                        element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'end' })
-                      }
-                    }}
-                  >
-                    <ArrowDownOnSquareStackIcon className="h-6 w-6" />
-                  </button>
-                </Tooltip>
-              )}
-              <Tooltip text="Play or Pause Video">
-                <button
-                  className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-xl"
+                <ToolbarButton
+                  tooltip="Jump to current time"
                   onClick={() => {
-                    pauseVideoToggle()
+                    if (!open) {
+                      setOpen(true)
+                    }
+                    const currTime = getTYCurrentTime()
+
+                    const { lastItem, currentItem } = findCurrentItem(transcriptHTML, currTime, 3)
+
+                    const element = getElementById(lastItem ? lastItem.start : currentItem?.start)
+
+                    if (element) {
+                      element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'end' })
+                    }
                   }}
-                >
-                  <PlayPauseIcon className="h-6 w-6" />
-                </button>
-              </Tooltip>
+                  icon={<ArrowDownOnSquareStackIcon className="h-5 w-5" />}
+                />
+              )}
+              <ToolbarButton
+                tooltip="Play or Pause Video"
+                onClick={() => {
+                  pauseVideoToggle()
+                }}
+                icon={<PlayPauseIcon className="h-5 w-5" />}
+              />
               {isHasTranscripts && (
-                <Tooltip text="Collap or Expand View">
-                  <button
-                    className="px-4 py-2 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-xl dark:bg-gray-900"
-                    onClick={() => {
-                      setOpen(!open)
-                    }}
-                  >
-                    {!open ? <ChevronDownIcon className="h-6 w-6" /> : <ChevronUpIcon className="h-6 w-6" />}
-                  </button>
-                </Tooltip>
+                <ToolbarButton
+                  tooltip="Collapse or Expand View"
+                  onClick={() => {
+                    setOpen(!open)
+                  }}
+                  icon={!open ? <ChevronDownIcon className="h-5 w-5" /> : <ChevronUpIcon className="h-5 w-5" />}
+                />
               )}
             </div>
-            <Tooltip text="Close BuddyBeep. You can open later in setting page">
-              <button
-                className="hover:bg-blue-700 text-white font-bold rounded-xl dark:bg-gray-900 mb-2"
-                onClick={handleCloseWidget}
-              >
-                <XMarkIcon className="h-5 w-5" />
-              </button>
-            </Tooltip>
+            <ToolbarButton
+              tooltip="Close BuddyBeep. You can open later in setting page"
+              onClick={handleCloseWidget}
+              icon={<XMarkIcon className="h-5 w-5" />}
+              className="ml-2"
+            />
           </div>
 
           <CollapsibleContent className="overflow-scroll h-96 bg-white text-primary-text rounded-lg">
@@ -215,3 +198,21 @@ export const ContentScript: React.FC = () => {
     </div>
   )
 }
+
+const ToolbarButton: React.FC<{
+  tooltip: string
+  onClick: () => void
+  icon: React.ReactNode
+  text?: string
+  className?: string
+}> = ({ tooltip, onClick, icon, text, className }) => (
+  <Tooltip text={tooltip}>
+    <button
+      className={`px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg flex items-center ${className}`}
+      onClick={onClick}
+    >
+      {text && <span className="mr-2">{text}</span>}
+      {icon}
+    </button>
+  </Tooltip>
+)
