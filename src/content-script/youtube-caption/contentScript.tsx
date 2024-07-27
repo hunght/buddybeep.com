@@ -7,7 +7,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { Collapsible, CollapsibleContent } from '@radix-ui/react-collapsible'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { Tooltip } from './component/Tooltip'
 import { Transcript } from './component/Transcript'
@@ -24,6 +24,7 @@ import { youtubeVideoDataAtom } from '~app/state/youtubeAtom'
 import logger from '~utils/logger'
 import { findCurrentItem } from './component/findCurrentItem'
 import { useSuccessPopup } from '~hooks/useSuccessPopup'
+import { useInterval } from '~/hooks/useInterval'
 
 export const ContentScript: React.FC = () => {
   const youtubeVideoData = useAtomValue(youtubeVideoDataAtom)
@@ -34,6 +35,9 @@ export const ContentScript: React.FC = () => {
   const [currentLangOption, setCurrentLangOption] = useState<LangOption>()
   const [isWidgetVisible, setIsWidgetVisible] = useState(true)
   const { setShowSuccess } = useSuccessPopup()
+  const [autoScroll, setAutoScroll] = useState(false)
+  const transcriptRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     chrome.storage.sync.get(['transcriptWidgetVisible'], (result) => {
       setIsWidgetVisible(result.transcriptWidgetVisible !== false)
@@ -86,6 +90,29 @@ export const ContentScript: React.FC = () => {
   }
 
   const isHasTranscripts = transcriptHTML.length > 0 && !!videoId
+
+  const scrollToCurrentTime = () => {
+    if (!transcriptRef.current || !isElementInViewport(transcriptRef.current)) {
+      return
+    }
+
+    const currTime = getTYCurrentTime()
+    const { lastItem, currentItem } = findCurrentItem(transcriptHTML, currTime, 3)
+    const element = getElementById(lastItem ? lastItem.start : currentItem?.start)
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'end' })
+    }
+  }
+
+  useInterval(
+    () => {
+      if (open && autoScroll) {
+        scrollToCurrentTime()
+      }
+    },
+    autoScroll ? 1000 : null,
+  )
+
   if (!videoId || !isHasTranscripts || !isWidgetVisible) {
     return null
   }
@@ -147,22 +174,18 @@ export const ContentScript: React.FC = () => {
               />
               {isHasTranscripts && (
                 <ToolbarButton
-                  tooltip="Jump to current time"
+                  tooltip={autoScroll ? 'Stop auto-scrolling' : 'Auto-scroll to current time'}
                   onClick={() => {
+                    setAutoScroll(!autoScroll)
                     if (!open) {
                       setOpen(true)
                     }
-                    const currTime = getTYCurrentTime()
-
-                    const { lastItem, currentItem } = findCurrentItem(transcriptHTML, currTime, 3)
-
-                    const element = getElementById(lastItem ? lastItem.start : currentItem?.start)
-
-                    if (element) {
-                      element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'end' })
+                    if (!autoScroll) {
+                      scrollToCurrentTime()
                     }
                   }}
                   icon={<ArrowDownOnSquareStackIcon className="h-5 w-5" />}
+                  className={autoScroll ? 'bg-green-600 hover:bg-green-700' : ''}
                 />
               )}
               <ToolbarButton
@@ -190,7 +213,10 @@ export const ContentScript: React.FC = () => {
             />
           </div>
 
-          <CollapsibleContent className="overflow-scroll h-96 bg-white text-primary-text rounded-lg">
+          <CollapsibleContent
+            className="overflow-scroll h-96 bg-white text-primary-text rounded-lg"
+            ref={transcriptRef}
+          >
             {transcriptHTML.length > 0 && videoId && <Transcript videoId={videoId} transcriptHTML={transcriptHTML} />}
           </CollapsibleContent>
         </Collapsible>
@@ -216,3 +242,13 @@ const ToolbarButton: React.FC<{
     </button>
   </Tooltip>
 )
+
+function isElementInViewport(el: HTMLElement) {
+  const rect = el.getBoundingClientRect()
+  return (
+    rect.top >= 0 &&
+    rect.left >= 0 &&
+    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+  )
+}
