@@ -5,6 +5,7 @@ import {
   ClipboardDocumentListIcon,
   PlayPauseIcon,
   XMarkIcon,
+  ArrowPathIcon,
 } from '@heroicons/react/24/outline'
 import { Collapsible, CollapsibleContent } from '@radix-ui/react-collapsible'
 import React, { useEffect, useRef, useState } from 'react'
@@ -104,13 +105,22 @@ export const ContentScript: React.FC = () => {
     }
   }
 
+  const handleToggleCollapse = () => {
+    const newOpenState = !open
+    setOpen(newOpenState)
+    setAutoScroll(newOpenState)
+    if (newOpenState) {
+      scrollToCurrentTime()
+    }
+  }
+
   useInterval(
     () => {
       if (open && autoScroll) {
         scrollToCurrentTime()
       }
     },
-    autoScroll ? 1000 : null,
+    open && autoScroll ? 1000 : null,
   )
 
   if (!videoId || !isHasTranscripts || !isWidgetVisible) {
@@ -184,7 +194,13 @@ export const ContentScript: React.FC = () => {
                       scrollToCurrentTime()
                     }
                   }}
-                  icon={<ArrowDownOnSquareStackIcon className="h-5 w-5" />}
+                  icon={
+                    autoScroll ? (
+                      <ArrowPathIcon className="h-5 w-5 animate-spin" />
+                    ) : (
+                      <ArrowDownOnSquareStackIcon className="h-5 w-5" />
+                    )
+                  }
                   className={autoScroll ? 'bg-green-600 hover:bg-green-700' : ''}
                 />
               )}
@@ -198,9 +214,7 @@ export const ContentScript: React.FC = () => {
               {isHasTranscripts && (
                 <ToolbarButton
                   tooltip="Collapse or Expand View"
-                  onClick={() => {
-                    setOpen(!open)
-                  }}
+                  onClick={handleToggleCollapse}
                   icon={!open ? <ChevronDownIcon className="h-5 w-5" /> : <ChevronUpIcon className="h-5 w-5" />}
                 />
               )}
