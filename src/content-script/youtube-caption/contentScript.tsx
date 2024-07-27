@@ -88,8 +88,13 @@ export const ContentScript: React.FC = () => {
   }, [currentLangOption])
 
   const handleCloseWidget = () => {
-    setIsWidgetVisible(false)
-    chrome.storage.sync.set({ transcriptWidgetVisible: false })
+    if (window.confirm(chrome.i18n.getMessage('CloseWidgetConfirmation'))) {
+      setIsWidgetVisible(false)
+      chrome.storage.sync.set({ transcriptWidgetVisible: false }, () => {
+        // Navigate to the extension page after setting the storage
+        chrome.runtime.sendMessage({ action: 'openSettingPage' })
+      })
+    }
   }
 
   const isHasTranscripts = transcriptHTML.length > 0 && !!videoId

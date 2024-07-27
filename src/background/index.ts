@@ -28,6 +28,16 @@ async function openAppPage({ agentId, botId }: { agentId?: string; botId?: strin
   const hash = startupPage === ALL_IN_ONE_PAGE_ID ? '' : `#/chat/${startupPage}`
   await Browser.tabs.create({ url: `app.html${hash}` })
 }
+async function openSettingPage() {
+  const tabs = await Browser.tabs.query({})
+  const url = Browser.runtime.getURL('app.html#/setting')
+  const tab = tabs.find((tab) => tab.url?.startsWith(url))
+  if (tab) {
+    await Browser.tabs.update(tab.id, { active: true })
+    return
+  }
+  await Browser.tabs.create({ url })
+}
 
 Browser.action.onClicked.addListener(async (tab) => {
   openSidePanel()
@@ -214,6 +224,11 @@ Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
       enabled: false,
     })
   }
+
+  if (message.action === 'openSettingPage') {
+    openSettingPage()
+  }
+
   if (message.target !== 'background') {
     return
   }

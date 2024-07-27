@@ -22,5 +22,8 @@
   },
   "ask": {
     "message": "Ask"
+  },
+  "CloseWidgetConfirmation": {
+    "message": "Are you sure you want to close the BuddyBeep widget? You can reopen it later in the settings page."
   }
 }
