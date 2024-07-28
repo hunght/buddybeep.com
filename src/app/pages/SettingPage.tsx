@@ -70,20 +70,6 @@ function SettingPage() {
     })
   }, [])
 
-  const updateConfigValue = useCallback(
-    (update: Partial<UserConfig>) => {
-      setUserConfig((prevConfig) => ({ ...prevConfig!, ...update }))
-      debouncedSave()
-    },
-    [userConfig],
-  )
-
-  const handleTranscriptWidgetToggle = useCallback((isVisible: boolean) => {
-    setTranscriptWidgetVisible(isVisible)
-    chrome.storage.sync.set({ transcriptWidgetVisible: isVisible })
-    debouncedSave()
-  }, [])
-
   const save = useCallback(async () => {
     setSaving(true)
     let apiHost = userConfig?.openaiApiHost
@@ -115,6 +101,19 @@ function SettingPage() {
     }, 1000),
     [save],
   )
+  const updateConfigValue = useCallback(
+    (update: Partial<UserConfig>) => {
+      setUserConfig((prevConfig) => ({ ...prevConfig!, ...update }))
+      debouncedSave()
+    },
+    [debouncedSave],
+  )
+
+  const handleTranscriptWidgetToggle = useCallback((isVisible: boolean) => {
+    setTranscriptWidgetVisible(isVisible)
+    chrome.storage.sync.set({ transcriptWidgetVisible: isVisible })
+    debouncedSave()
+  }, [])
 
   if (!userConfig) {
     return null
@@ -133,23 +132,23 @@ function SettingPage() {
         </div>
         <div className="flex flex-col gap-5 w-fit max-w-[700px]">
           {/* <ChatBotSettingPanel title="ChatGPT">
-            <RadioGroup
-              options={Object.entries(ChatGPTMode).map(([k, v]) => ({ label: `${k} ${t('Mode')}`, value: v }))}
-              value={userConfig.chatgptMode}
-              onChange={(v) => updateConfigValue({ chatgptMode: v as ChatGPTMode })}
-            />
-            {userConfig.chatgptMode === ChatGPTMode.API ? (
-              <ChatGPTAPISettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
-            ) : userConfig.chatgptMode === ChatGPTMode.Azure ? (
-              <ChatGPTAzureSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
-            ) : userConfig.chatgptMode === ChatGPTMode.Poe ? (
-              <ChatGPTPoeSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
-            ) : userConfig.chatgptMode === ChatGPTMode.OpenRouter ? (
-              <ChatGPTOpenRouterSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
-            ) : (
-              <ChatGPWebSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
-            )}
-          </ChatBotSettingPanel> */}
+                <RadioGroup
+                  options={Object.entries(ChatGPTMode).map(([k, v]) => ({ label: `${k} ${t('Mode')}`, value: v }))}
+                  value={userConfig.chatgptMode}
+                  onChange={(v) => updateConfigValue({ chatgptMode: v as ChatGPTMode })}
+                />
+                {userConfig.chatgptMode === ChatGPTMode.API ? (
+                  <ChatGPTAPISettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
+                ) : userConfig.chatgptMode === ChatGPTMode.Azure ? (
+                  <ChatGPTAzureSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
+                ) : userConfig.chatgptMode === ChatGPTMode.Poe ? (
+                  <ChatGPTPoeSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
+                ) : userConfig.chatgptMode === ChatGPTMode.OpenRouter ? (
+                  <ChatGPTOpenRouterSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
+                ) : (
+                  <ChatGPWebSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
+                )}
+              </ChatBotSettingPanel> */}
 
           <ChatBotSettingPanel title="Gemini Pro">
             <div className="flex flex-col gap-1">
@@ -215,13 +214,6 @@ function SettingPage() {
             )}
           </ChatBotSettingPanel> */}
         </div>
-        <ShortcutPanel />
-        <ExportDataPanel />
-        <div className="w-[300px]">
-          <p className="font-bold text-lg mb-3">{t('Language')}</p>
-          <LanguageSelection />
-        </div>
-        <ThemeSettingModal />
         <div className="flex flex-col gap-2 max-w-[700px]">
           <p className="font-bold text-lg">{t('YouTube Transcript Widget')}</p>
           <div className="flex items-center">
@@ -235,6 +227,13 @@ function SettingPage() {
             <label htmlFor="transcriptWidgetToggle">{t('Show YouTube Transcript Widget')}</label>
           </div>
         </div>
+        <ShortcutPanel />
+        {/* <ExportDataPanel /> */}
+        <div className="w-[300px]">
+          <p className="font-bold text-lg mb-3">{t('Language')}</p>
+          <LanguageSelection />
+        </div>
+        <ThemeSettingModal />
       </div>
       {(dirty || saving) && (
         <motion.div

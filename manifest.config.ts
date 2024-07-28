@@ -51,6 +51,10 @@ export default defineManifest(async () => {
         matches: ['https://chat.openai.com/*'],
         js: ['src/content-script/chatgpt-inpage-proxy.ts'],
       },
+      {
+        matches: ['https://www.linkedin.com/*'],
+        js: ['src/content-script/linkedin-comment/index.tsx'],
+      },
       // {
       //   matches: [
       //     'https://google.com/*',

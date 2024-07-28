@@ -9,6 +9,8 @@ interface Props {
 }
 
 const EnabledBotsSettings: FC<Props> = ({ userConfig, updateConfigValue }) => {
+  console.log('EnabledBotsSettings', userConfig)
+  console.log('updateConfigValue', updateConfigValue)
   const updateStatus = useCallback(
     (botId: BotId, enabled: boolean) => {
       const bots = new Set(userConfig.enabledBots)
