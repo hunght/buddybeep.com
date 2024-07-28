@@ -30,7 +30,7 @@ function NavLink(props: {
         iconOnly && 'justify-center',
       )}
       activeOptions={{ exact: true }}
-      activeProps={{ className: 'text-primary-blue dark:bg-primary-blue shadow-md dark:text-primary-text' }}
+      activeProps={{ className: 'bg-primary-blue shadow-md text-white' }}
       inactiveProps={{
         className:
           'bg-secondary bg-opacity-20 text-primary-text hover:bg-opacity-80 hover:text-primary-blue dark:bg-opacity-30 dark:text-primary-text dark:hover:bg-opacity-80 hover:shadow-sm',
@@ -59,7 +59,7 @@ function NavLink(props: {
 
   function renderIcon() {
     if (agentIcon) {
-      return <div className="bg-secondary flex rounded-full p-1">{agentIcon}</div>
+      return <div className="bg-secondary flex rounded-full p-1 text-primary-text">{agentIcon}</div>
     }
     return agent ? (
       agent.avatar ? (

@@ -22,7 +22,7 @@ import ExportDataPanel from '~app/components/Settings/ExportDataPanel'
 import PerplexityAPISettings from '~app/components/Settings/PerplexityAPISettings'
 import ShortcutPanel from '~app/components/Settings/ShortcutPanel'
 import themeIcon from '~/assets/icons/theme.svg'
-import { debounce } from 'lodash' // Add this import
+import { debounce } from 'lodash'
 
 import {
   BingConversationStyle,
@@ -70,49 +70,57 @@ function SettingPage() {
     })
   }, [])
 
-  const save = useCallback(async () => {
-    setSaving(true)
-    let apiHost = userConfig?.openaiApiHost
-    if (apiHost) {
-      apiHost = apiHost.replace(/\/$/, '')
-      if (!apiHost.startsWith('http')) {
-        apiHost = 'https://' + apiHost
-      }
-      // request host permission to prevent CORS issues
-      try {
-        await Browser.permissions.request({ origins: [apiHost + '/'] })
-      } catch (e) {
-        logger.error('[SettingPage][useCallback]', e)
-      }
-    } else {
-      apiHost = undefined
-    }
-    await updateUserConfig({ ...userConfig!, openaiApiHost: apiHost })
-    await chrome.storage.sync.set({ transcriptWidgetVisible })
-
-    setSaving(false)
-    setDirty(false)
-    toast.success('Saved')
-  }, [userConfig, transcriptWidgetVisible])
-
   const debouncedSave = useCallback(
-    debounce(() => {
-      save()
+    debounce((config: UserConfig) => {
+      save(config)
     }, 1000),
-    [save],
+    [],
   )
+
   const updateConfigValue = useCallback(
     (update: Partial<UserConfig>) => {
-      setUserConfig((prevConfig) => ({ ...prevConfig!, ...update }))
-      debouncedSave()
+      setUserConfig((prevConfig) => {
+        const newConfig = { ...prevConfig!, ...update }
+        debouncedSave(newConfig)
+        return newConfig
+      })
+      console.log('updateConfigValue ===', update)
     },
     [debouncedSave],
+  )
+
+  const save = useCallback(
+    async (config: UserConfig) => {
+      setSaving(true)
+      let apiHost = config.openaiApiHost
+      if (apiHost) {
+        apiHost = apiHost.replace(/\/$/, '')
+        if (!apiHost.startsWith('http')) {
+          apiHost = 'https://' + apiHost
+        }
+        // request host permission to prevent CORS issues
+        try {
+          await Browser.permissions.request({ origins: [apiHost + '/'] })
+        } catch (e) {
+          logger.error('[SettingPage][useCallback]', e)
+        }
+      } else {
+        apiHost = undefined
+      }
+      await updateUserConfig({ ...config, openaiApiHost: apiHost })
+      await chrome.storage.sync.set({ transcriptWidgetVisible })
+
+      setSaving(false)
+      setDirty(false)
+      toast.success('Saved')
+    },
+    [transcriptWidgetVisible],
   )
 
   const handleTranscriptWidgetToggle = useCallback((isVisible: boolean) => {
     setTranscriptWidgetVisible(isVisible)
     chrome.storage.sync.set({ transcriptWidgetVisible: isVisible })
-    debouncedSave()
+    debouncedSave(userConfig!)
   }, [])
 
   if (!userConfig) {
