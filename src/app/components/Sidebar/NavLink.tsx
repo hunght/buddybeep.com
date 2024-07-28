@@ -30,7 +30,7 @@ function NavLink(props: {
         iconOnly && 'justify-center',
       )}
       activeOptions={{ exact: true }}
-      activeProps={{ className: 'text-primary-blue dark:bg-secondary shadow-md' }}
+      activeProps={{ className: 'text-primary-blue dark:bg-primary-blue shadow-md dark:text-primary-text' }}
       inactiveProps={{
         className:
           'bg-secondary bg-opacity-20 text-primary-text hover:bg-opacity-80 hover:text-primary-blue dark:bg-opacity-30 dark:text-primary-text dark:hover:bg-opacity-80 hover:shadow-sm',
@@ -39,7 +39,7 @@ function NavLink(props: {
       params={{ botId, agentId: agent ? agent.agentId : undefined }}
       to={agent ? '/chat-agent/$agentId/$botId' : '/chat/$botId'}
     >
-      {renderIcon()}
+      <div className={'w-10 h-10 text-2xl flex items-center justify-center '}>{renderIcon()}</div>
 
       {!iconOnly && (
         <div className="w-full overflow-hidden">
@@ -58,28 +58,19 @@ function NavLink(props: {
   )
 
   function renderIcon() {
-    const iconClass = 'w-10 h-10 text-2xl flex items-center justify-center rounded-full overflow-hidden'
     if (agentIcon) {
-      return (
-        <div className={iconClass}>
-          <div className="bg-secondary flex rounded-full">{agentIcon}</div>
-        </div>
-      )
+      return <div className="bg-secondary flex rounded-full p-1">{agentIcon}</div>
     }
     return agent ? (
-      <div className={iconClass}>
-        {agent.avatar ? (
-          <img src={agent.avatar} className="w-full h-full" />
-        ) : (
-          <div className="bg-secondary rounded-full flex justify-center items-center">
-            <span className="text-primary-text text-lg font-bold">{agent.name.slice(0, 2)}</span>
-          </div>
-        )}
-      </div>
+      agent.avatar ? (
+        <img src={agent.avatar} className="w-full h-full" />
+      ) : (
+        <div className="bg-secondary rounded-full flex justify-center items-center">
+          <span className="text-primary-text text-lg font-bold">{agent.name.slice(0, 2)}</span>
+        </div>
+      )
     ) : (
-      <div className={iconClass}>
-        <img src={icon} className="w-full h-full bg-secondary rounded-full flex justify-center items-center p-1" />
-      </div>
+      <img src={icon} className="w-8 h-8 rounded-full" />
     )
   }
 }
