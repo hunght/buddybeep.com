@@ -229,6 +229,10 @@ Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     openSettingPage()
   }
 
+  if (message.action === 'version') {
+    return { version: '1.0' }
+  }
+
   if (message.target !== 'background') {
     return
   }

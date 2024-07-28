@@ -105,5 +105,8 @@ export default defineManifest(async () => {
         },
       ],
     },
+    externally_connectable: {
+      matches: ['*://localhost/*', '*://buddybeep.com/*'],
+    },
   }
 })

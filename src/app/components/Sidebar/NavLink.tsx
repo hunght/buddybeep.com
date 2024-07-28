@@ -26,14 +26,14 @@ function NavLink(props: {
   return (
     <Link
       className={cx(
-        'rounded-[10px] w-full pl-2 flex flex-row gap-2 items-center shrink-0 py-2 ',
+        'rounded-[10px] w-full pl-2 flex flex-row gap-3 items-center shrink-0 py-3 transition-all duration-200',
         iconOnly && 'justify-center',
       )}
       activeOptions={{ exact: true }}
-      activeProps={{ className: '  text-primary-blue dark:bg-secondary' }}
+      activeProps={{ className: 'text-primary-blue dark:bg-secondary shadow-md' }}
       inactiveProps={{
         className:
-          'bg-secondary bg-opacity-20 text-primary-text hover:bg-opacity-80 hover:text-primary-blue dark:bg-opacity-30 dark:text-primary-text dark:hover:bg-opacity-80',
+          'bg-secondary bg-opacity-20 text-primary-text hover:bg-opacity-80 hover:text-primary-blue dark:bg-opacity-30 dark:text-primary-text dark:hover:bg-opacity-80 hover:shadow-sm',
       }}
       title={agent ? agent.name : botId}
       params={{ botId, agentId: agent ? agent.agentId : undefined }}
@@ -41,42 +41,45 @@ function NavLink(props: {
     >
       {renderIcon()}
 
-      <div className="w-full">
-        <span className="font-medium text-base w-full line-clamp-1">{iconOnly ? '' : title}</span>
-        {props.lastMessage ? (
-          <div className="flex flex-row w-full pr-1 ">
-            <span className="text-sm w-full line-clamp-1">{iconOnly ? '' : props.lastMessage.text}</span>
-            <span className="text-sm  text-right">{iconOnly ? '' : formatTimestamp(props.lastMessage.time)}</span>
-          </div>
-        ) : (
-          <span> ... </span>
-        )}
-      </div>
+      {!iconOnly && (
+        <div className="w-full overflow-hidden">
+          <span className="font-medium text-base w-full line-clamp-1">{title}</span>
+          {props.lastMessage ? (
+            <div className="flex flex-row w-full pr-1 text-sm text-opacity-70">
+              <span className="w-full line-clamp-1">{props.lastMessage.text}</span>
+              <span className="ml-2 whitespace-nowrap">{formatTimestamp(props.lastMessage.time)}</span>
+            </div>
+          ) : (
+            <span className="text-sm text-opacity-50">No messages yet</span>
+          )}
+        </div>
+      )}
     </Link>
   )
 
   function renderIcon() {
+    const iconClass = 'w-10 h-10 text-2xl flex items-center justify-center rounded-full overflow-hidden'
     if (agentIcon) {
       return (
-        <div>
-          <div className="w-10 h-10 text-2xl text-center items-center justify-center bg-secondary flex rounded-full">
-            {agentIcon}
-          </div>
+        <div className={iconClass}>
+          <div className="bg-secondary flex rounded-full">{agentIcon}</div>
         </div>
       )
     }
     return agent ? (
-      <div>
+      <div className={iconClass}>
         {agent.avatar ? (
-          <img src={agent.avatar} className="w-10 h-10" />
+          <img src={agent.avatar} className="w-full h-full" />
         ) : (
-          <div className="w-10 h-10 bg-secondary rounded-full flex justify-center items-center">
+          <div className="bg-secondary rounded-full flex justify-center items-center">
             <span className="text-primary-text text-lg font-bold">{agent.name.slice(0, 2)}</span>
           </div>
         )}
       </div>
     ) : (
-      <img src={icon} className="w-10 h-10 bg-secondary rounded-full flex justify-center items-center p-1" />
+      <div className={iconClass}>
+        <img src={icon} className="w-full h-full bg-secondary rounded-full flex justify-center items-center p-1" />
+      </div>
     )
   }
 }
