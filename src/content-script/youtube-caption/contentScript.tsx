@@ -176,7 +176,7 @@ export const ContentScript: React.FC = () => {
           open={isHasTranscripts && open}
           onOpenChange={setOpen}
         >
-          <div className="flex items-center flex-1 text-white py-2 px-4 rounded w-full relative bg-gray-800">
+          <div className="flex items-center flex-1 text-white py-2 rounded w-full relative bg-gray-800">
             <div
               className="text-lg font-bold px-1 flex-1 cursor-pointer hover:text-blue-500 flex items-center gap-2"
               onClick={() => {
@@ -243,12 +243,6 @@ export const ContentScript: React.FC = () => {
                 />
               )}
             </div>
-            <ToolbarButton
-              tooltip="Close BuddyBeep. You can open later in setting page"
-              onClick={handleCloseWidget}
-              icon={<XMarkIcon className="h-5 w-5" />}
-              className="ml-2"
-            />
           </div>
 
           <CollapsibleContent
