@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 
 import { convertIntToHms, getTYCurrentTime } from '../helper/transcipt'
 import type { TranscriptItem } from '../type'
@@ -15,49 +15,36 @@ export const Transcript: React.FC<Props> = ({ transcriptHTML, videoId }) => {
   const [transcriptItem, setTranscriptItem] = useState<TranscriptItem>()
   const listRef = useRef<HTMLUListElement>(null)
 
-  useEffect(() => {
-    let count = 0
-    let yourFunctionTimeOutId: number
-    const jumpingToCurrentTranscriptItem = (_transcriptItem?: TranscriptItem) => {
-      // Your function logic goes here
+  const jumpingToCurrentTranscriptItem = useCallback(
+    (_transcriptItem?: TranscriptItem) => {
       const currTime = getTYCurrentTime()
+      const { currentItem: currentTranscriptItem, nextItem } = findCurrentItem(transcriptHTML, currTime)
 
-      const { currentItem: currentTranscriptItem, nextItem, lastItem } = findCurrentItem(transcriptHTML, currTime)
       if (!currentTranscriptItem) {
-        yourFunctionTimeOutId = setTimeout(jumpingToCurrentTranscriptItem, 1000)
-        return
+        return false
       }
-      if (_transcriptItem || _transcriptItem?.start !== currentTranscriptItem?.start) {
-        let isSame = false
-        setTranscriptItem((pre) => {
-          if (pre?.start === currentTranscriptItem?.start) {
-            isSame = true
-            return pre
-          }
-          return currentTranscriptItem
-        })
-        // if (!isSame && count % LAST_ITEM_TO_JUMP === 0) {
-        //   const element = getElementById(lastItem ? lastItem.start : currentTranscriptItem.start)
-        //   if (element) {
-        //     element.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' })
-        //   }
-        // }
-        count++
-      }
-      if (nextItem) {
-        const delay = (Number(nextItem.start) - Number(currentTranscriptItem.start)) * 1000
 
-        // Call your function again after the delay
-        yourFunctionTimeOutId = setTimeout(jumpingToCurrentTranscriptItem, delay)
+      setTranscriptItem((pre) => (pre?.start === currentTranscriptItem?.start ? pre : currentTranscriptItem))
+
+      return nextItem ? (Number(nextItem.start) - Number(currentTranscriptItem.start)) * 1000 : null
+    },
+    [transcriptHTML],
+  )
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout
+
+    const runJumpingLogic = () => {
+      const delay = jumpingToCurrentTranscriptItem(transcriptItem)
+      if (delay !== false) {
+        timeoutId = setTimeout(runJumpingLogic, delay || 1000)
       }
     }
 
-    jumpingToCurrentTranscriptItem(transcriptItem)
+    runJumpingLogic()
 
-    return () => {
-      clearTimeout(yourFunctionTimeOutId)
-    }
-  }, [transcriptHTML])
+    return () => clearTimeout(timeoutId)
+  }, [jumpingToCurrentTranscriptItem, transcriptItem])
 
   return (
     <ul ref={listRef} className="p-4">
@@ -83,6 +70,7 @@ export const Transcript: React.FC<Props> = ({ transcriptHTML, videoId }) => {
     </ul>
   )
 }
+
 function convertToTime(start: string): string {
   return convertIntToHms(Number(start))
 }

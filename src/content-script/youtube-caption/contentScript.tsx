@@ -159,7 +159,7 @@ export const ContentScript: React.FC = () => {
         position: 'relative',
         backgroundColor: '#1b141d',
         width: '420px',
-        height: isHasTranscripts && open ? '28rem' : '4rem',
+        height: (isHasTranscripts && open) || settingsOpen ? '28rem' : '4rem',
         borderRadius: '1rem',
       }}
     >
@@ -255,31 +255,6 @@ export const ContentScript: React.FC = () => {
             {transcriptHTML.length > 0 && videoId && <Transcript videoId={videoId} transcriptHTML={transcriptHTML} />}
           </CollapsibleContent>
         </Collapsible>
-        <Collapsible open={settingsOpen} onOpenChange={setSettingsOpen}>
-          <CollapsibleTrigger asChild>
-            <ToolbarButton tooltip="Settings" onClick={() => {}} icon={<Cog6ToothIcon className="h-5 w-5" />} />
-          </CollapsibleTrigger>
-          <CollapsibleContent className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-            <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-              <SettingsMenuItem
-                icon={<HomeIcon className="h-5 w-5" />}
-                text="Home Page"
-                onClick={() => {
-                  chrome.runtime.sendMessage({ action: 'openMainApp' })
-                  setSettingsOpen(false)
-                }}
-              />
-              <SettingsMenuItem
-                icon={<XMarkIcon className="h-5 w-5" />}
-                text="Close"
-                onClick={() => {
-                  handleCloseWidget()
-                  setSettingsOpen(false)
-                }}
-              />
-            </div>
-          </CollapsibleContent>
-        </Collapsible>
       </div>
     </div>
   )
@@ -301,21 +276,6 @@ const ToolbarButton: React.FC<{
       {icon}
     </button>
   </Tooltip>
-)
-
-const SettingsMenuItem: React.FC<{
-  icon: React.ReactNode
-  text: string
-  onClick: () => void
-}> = ({ icon, text, onClick }) => (
-  <button
-    className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
-    role="menuitem"
-    onClick={onClick}
-  >
-    <span className="mr-3">{icon}</span>
-    {text}
-  </button>
 )
 
 function isElementInViewport(el: HTMLElement) {
