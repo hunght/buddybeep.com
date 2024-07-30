@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-import { convertIntToHms, getTYCurrentTime, getTYEndTime } from '../helper/transcipt'
+import { convertIntToHms, getTYCurrentTime } from '../helper/transcipt'
 import type { TranscriptItem } from '../type'
 
-import { getElementById } from '../helper/htmlSelector'
 import { cx } from '~utils'
-import { LAST_ITEM_TO_JUMP, findCurrentItem } from './findCurrentItem'
+import { findCurrentItem } from './findCurrentItem'
 
 type Props = {
   videoId: string
