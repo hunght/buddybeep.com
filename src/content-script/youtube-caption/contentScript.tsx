@@ -29,6 +29,7 @@ import logger from '~utils/logger'
 import { findCurrentItem } from './component/findCurrentItem'
 import { useSuccessPopup } from '~hooks/useSuccessPopup'
 import { useInterval } from '~/hooks/useInterval'
+import { logoBase64 } from '~app/utils/logo'
 
 export const ContentScript: React.FC = () => {
   const youtubeVideoData = useAtomValue(youtubeVideoDataAtom)
@@ -189,7 +190,7 @@ export const ContentScript: React.FC = () => {
                 })
               }}
             >
-              <img src="https://www.buddybeep.com/logo-300.png" alt="logo" width={24} height={24} />
+              <img src={logoBase64} alt="logo" width={24} height={24} />
               {chrome.i18n.getMessage('Transcripts')}
             </div>
             <div className="flex justify-between items-center gap-2 py-1 pl-2">
