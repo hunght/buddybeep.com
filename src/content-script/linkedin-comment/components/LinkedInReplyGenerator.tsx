@@ -5,22 +5,17 @@ import { PostData } from '~types/chat'
 
 const GenerateReplyButton: React.FC<{ commentBox: Element; postData: PostData }> = ({ commentBox, postData }) => {
   const { t } = useTranslation()
-  const [isOpen, setIsOpen] = useState(true)
-  const [generatedReply, setGeneratedReply] = useState('')
+
   const [isPermanentlyClosed, setIsPermanentlyClosed] = useState(false)
 
   const generateReply = async (commentText: string) => {
-    const response = await chrome.runtime.sendMessage({
+    chrome.runtime.sendMessage({
       action: 'generateLinkedInReply',
       content: commentText,
       link: window.location.href,
       title: document.title,
       postData: postData, // Include the post data for context
     })
-    if (response && response.reply) {
-      setGeneratedReply(response.reply)
-      setIsOpen(true)
-    }
   }
 
   const getCommentText = (): string => {
@@ -34,7 +29,6 @@ const GenerateReplyButton: React.FC<{ commentBox: Element; postData: PostData }>
 
   const handlePermanentClose = () => {
     setIsPermanentlyClosed(true)
-    setIsOpen(false)
   }
 
   if (isPermanentlyClosed) {
