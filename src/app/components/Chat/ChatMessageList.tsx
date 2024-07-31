@@ -1,6 +1,5 @@
-import { FC } from 'react'
+import { FC, useRef, useEffect } from 'react'
 import { cx } from '~/utils'
-import ScrollToBottom from 'react-scroll-to-bottom'
 import { BotId } from '~app/bots'
 import { ChatMessageModel } from '~types'
 import ChatMessageCard from './ChatMessageCard'
@@ -15,22 +14,27 @@ interface Props {
 }
 
 const ChatMessageList: FC<Props> = (props) => {
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [props.messages])
+
   return (
-    <ScrollToBottom className="overflow-auto h-full">
-      <div className={cx('flex flex-col gap-3 h-full', props.className)}>
-        {props.messages.map((message, index) => {
-          return (
-            <ChatMessageCard
-              avatar={props.avatar}
-              key={message.id}
-              message={message}
-              className={index === 0 ? 'mt-5' : undefined}
-            />
-          )
-        })}
+    <div className={cx('overflow-auto h-full', props.className)}>
+      <div className="flex flex-col gap-3 h-full">
+        {props.messages.map((message, index) => (
+          <ChatMessageCard
+            avatar={props.avatar}
+            key={message.id}
+            message={message}
+            className={index === 0 ? 'mt-5' : undefined}
+          />
+        ))}
         {props.messages.length === 0 && <NoMessage onClick={props.onClick} />}
+        <div ref={messagesEndRef} />
       </div>
-    </ScrollToBottom>
+    </div>
   )
 }
 

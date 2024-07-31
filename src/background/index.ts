@@ -158,85 +158,93 @@ Browser.commands.onCommand.addListener(async (command) => {
 Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
   logger.debug('onMessage', message, sender)
 
-  if (message.action === 'openSidePanel') {
-    const tabId = sender.tab?.id
-    await openSidePanelWithTabId(tabId)
-    const userId = await getUserId()
-    if (userId) {
-      const id = await saveNoteAndProcessSummary(message, userId)
-      return { noteId: id }
-    }
-  }
-  if (message.action === 'saveContent') {
-    const userId = await getUserId()
-    if (userId) {
-      const id = await saveNote(message, userId)
-      return { noteId: id }
-    }
-  }
-  if (message.action === 'createAnwserNote') {
-    const userId = await getUserId()
-
-    console.log('message', message)
-    console.log('userId', userId)
-
-    const note: {
-      content: string
-      title: string | null
-      type: string | null
-      parent_id: string
-    } = message.note
-
-    if (userId) {
-      console.log('note', note)
-      if (note.parent_id) {
-        // update current parent note content
-        await supabase
-          .from('notes')
-          .update({
-            summary: note.content,
-          })
-          .eq('id', note.parent_id)
-      } else {
-        await supabase.from('notes').insert({
-          title: `Explain ${note.title}`,
-          content: note.content,
-          user_id: userId,
-          parent_id: note.parent_id,
-        })
+  switch (message.action) {
+    case 'openSidePanel': {
+      const tabId = sender.tab?.id
+      await openSidePanelWithTabId(tabId)
+      const userId = await getUserId()
+      if (userId) {
+        const id = await saveNoteAndProcessSummary(message, userId)
+        return { noteId: id }
       }
+      break
+    }
+
+    case 'saveContent': {
+      const userId = await getUserId()
+      if (userId) {
+        const id = await saveNote(message, userId)
+        return { noteId: id }
+      }
+      break
+    }
+
+    case 'createAnwserNote': {
+      const userId = await getUserId()
+      const note: {
+        content: string
+        title: string | null
+        type: string | null
+        parent_id: string
+      } = message.note
+
+      if (userId) {
+        console.log('note', note)
+        if (note.parent_id) {
+          await supabase
+            .from('notes')
+            .update({
+              summary: note.content,
+            })
+            .eq('id', note.parent_id)
+        } else {
+          await supabase.from('notes').insert({
+            title: `Explain ${note.title}`,
+            content: note.content,
+            user_id: userId,
+            parent_id: note.parent_id,
+          })
+        }
+      }
+      break
+    }
+
+    case 'openSidePanelOnly': {
+      const tabId = sender.tab?.id
+      if (tabId) {
+        chrome.tabs.remove(tabId)
+      }
+      await openSidePanelWithTabId(tabId)
+      break
+    }
+
+    case 'openMainApp': {
+      openAppPage({ agentId: message.agentId, botId: message.botId })
+      await chrome.sidePanel.setOptions({
+        path: 'sidepanel.html',
+        enabled: false,
+      })
+      break
+    }
+
+    case 'openSettingPage': {
+      openSettingPage()
+      break
+    }
+
+    case 'version': {
+      return { version: '1.0' }
+    }
+    case 'generateLinkedInReply': {
+      // Handle the "Reply to this" action
+      await chrome.sidePanel.open({ tabId: sender.tab?.id })
+      const composeMessage: SidePanelMessageType = { ...message, subType: 'reply', type: 'writing-assistant' }
+      console.log('sender.tab?.id', sender.tab?.id)
+      Browser.storage.local.set({ sidePanelSummaryAtom: composeMessage })
     }
   }
 
-  if (message.action === 'openSidePanelOnly') {
-    const tabId = sender.tab?.id
-    if (tabId) {
-      chrome.tabs.remove(tabId)
-    }
-
-    await openSidePanelWithTabId(tabId)
-  }
-
-  if (message.action === 'openMainApp') {
-    openAppPage({ agentId: message.agentId, botId: message.botId })
-    await chrome.sidePanel.setOptions({
-      path: 'sidepanel.html',
-      enabled: false,
-    })
-  }
-
-  if (message.action === 'openSettingPage') {
-    openSettingPage()
-  }
-
-  if (message.action === 'version') {
-    return { version: '1.0' }
-  }
-
-  if (message.target !== 'background') {
-    return
-  }
-  if (message.type === 'read-twitter-csrf-token') {
+  if (message.target === 'background' && message.type === 'read-twitter-csrf-token') {
     return readTwitterCsrfToken(message.data)
   }
 })

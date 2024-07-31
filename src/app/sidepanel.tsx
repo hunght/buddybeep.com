@@ -20,6 +20,7 @@ root.render(
 
 Browser.storage.local.onChanged.addListener((changes) => {
   if (changes.sidePanelSummaryAtom) {
+    console.log('changes.sidePanelSummaryAtom.newValue', changes.sidePanelSummaryAtom.newValue)
     myAtomStore.set(sidePanelSummaryAtom, changes.sidePanelSummaryAtom.newValue)
   }
 })

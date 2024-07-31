@@ -71,6 +71,7 @@ function SidePanelPage() {
   )
 
   useEffect(() => {
+    console.log('summaryText', summaryText)
     // send the prompt to the bot when the agent is set
     if (!summaryText?.type || summaryText?.content === null || chat.generating) {
       return
@@ -122,7 +123,18 @@ function SidePanelPage() {
         .then(createAnwserNote)
       setSummaryText((prev) => (!prev ? null : { ...prev, content: null }))
     }
-  }, [summaryText?.content, chat.generating, summaryText?.type, chat.agentId])
+  }, [
+    summaryText?.content,
+    chat.generating,
+    summaryText?.type,
+    chat.agentId,
+    summaryText,
+    chat,
+    setSubTab,
+    setSummaryText,
+    setOriginalTextAtom,
+    setComposeTextAtom,
+  ])
 
   const resetConversation = useCallback(() => {
     if (!chat.generating) {
