@@ -77,10 +77,21 @@ const LinkedInReplyGenerator: React.FC = () => {
     const post = commentBox.closest('.feed-shared-update-v2')
     if (!post) return {} as PostData
 
-    const authorName = post.querySelector('.feed-shared-actor__name')?.textContent?.trim() || ''
-    const authorHeadline = post.querySelector('.feed-shared-actor__description')?.textContent?.trim() || ''
-    const postContent = post.querySelector('.feed-shared-update-v2__description')?.textContent?.trim() || ''
-    const postTimestamp = post.querySelector('.feed-shared-actor__sub-description')?.textContent?.trim() || ''
+    const authorName = post.querySelector('.update-components-actor__name')?.textContent?.trim() || ''
+    const authorHeadline = post.querySelector('.update-components-actor__description')?.textContent?.trim() || ''
+    const postContentElement = post.querySelector('.feed-shared-update-v2__description')
+    let postContent = ''
+
+    if (postContentElement) {
+      // Remove the "...more" button if present
+      const moreButton = postContentElement.querySelector('.feed-shared-inline-show-more-text__see-more-less-toggle')
+      if (moreButton) {
+        moreButton.remove()
+      }
+      postContent = postContentElement.textContent?.trim() || ''
+    }
+
+    const postTimestamp = post.querySelector('.update-components-actor__sub-description')?.textContent?.trim() || ''
 
     return { authorName, authorHeadline, postContent, postTimestamp }
   }

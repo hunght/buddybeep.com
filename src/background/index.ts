@@ -69,7 +69,13 @@ Browser.contextMenus.onClicked.addListener(async (info, tab) => {
       // Handle the "Compose this" action
       console.log('Composing: ' + info.selectionText)
       await chrome.sidePanel.open({ tabId: tab?.id })
-      const composeMessage: SidePanelMessageType = { ...message, subType: 'compose', type: 'writing-assistant' }
+      const composeMessage: SidePanelMessageType = {
+        ...message,
+        subType: 'compose',
+        type: 'writing-assistant',
+        postData: null,
+        format: 'comment',
+      }
 
       Browser.storage.local.set({ sidePanelSummaryAtom: composeMessage })
       break
@@ -77,7 +83,13 @@ Browser.contextMenus.onClicked.addListener(async (info, tab) => {
     case 'replyToThis': {
       // Handle the "Reply to this" action
       await chrome.sidePanel.open({ tabId: tab?.id })
-      const composeMessage: SidePanelMessageType = { ...message, subType: 'reply', type: 'writing-assistant' }
+      const composeMessage: SidePanelMessageType = {
+        ...message,
+        subType: 'reply',
+        type: 'writing-assistant',
+        postData: null,
+        format: 'comment',
+      }
 
       Browser.storage.local.set({ sidePanelSummaryAtom: composeMessage })
 
@@ -87,7 +99,13 @@ Browser.contextMenus.onClicked.addListener(async (info, tab) => {
       // Handle the "Explain this" action
       await chrome.sidePanel.open({ tabId: tab?.id })
 
-      const composeMessage: SidePanelMessageType = { ...message, subType: null, type: 'explain-a-concept' }
+      const composeMessage: SidePanelMessageType = {
+        ...message,
+        subType: null,
+        type: 'explain-a-concept',
+        postData: null,
+        format: 'comment',
+      }
       const userId = await getUserId()
       if (userId) {
         const { data: note } = await supabase

@@ -1,4 +1,5 @@
 import { PostData } from '~types'
+import { FormatWritingType } from './writing'
 
 export type SidePanelMessageType = {
   content: string | null
@@ -8,5 +9,5 @@ export type SidePanelMessageType = {
   type: 'summary-web-content' | 'summary-youtube-videos' | 'writing-assistant' | 'explain-a-concept'
   subType: 'compose' | 'reply' | null
   noteId?: string
-  format?: 'linkedin-comment'
+  format?: FormatWritingType
 }
