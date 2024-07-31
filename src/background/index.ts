@@ -237,9 +237,10 @@ Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     }
     case 'generateLinkedInReply': {
       // Handle the "Reply to this" action
-      await chrome.sidePanel.open({ tabId: sender.tab?.id })
+      const tabId = sender.tab?.id
+      await openSidePanelWithTabId(tabId)
       const composeMessage: SidePanelMessageType = { ...message, subType: 'reply', type: 'writing-assistant' }
-      console.log('sender.tab?.id', sender.tab?.id)
+
       Browser.storage.local.set({ sidePanelSummaryAtom: composeMessage })
     }
   }

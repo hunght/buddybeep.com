@@ -24,6 +24,7 @@ import Dialog from '~app/components/Dialog'
 import MenuDropDown from '~app/components/side-panel/MenuDropDown'
 
 import { getLinkFromSummaryObject } from '~app/utils/summary'
+import Browser from 'webextension-polyfill'
 
 function SidePanelPage() {
   const [tab, setTab] = useState<'chat' | 'write'>('chat')
@@ -51,10 +52,21 @@ function SidePanelPage() {
   }, [agentType, tab])
   useEffect(() => {
     if (summaryText) {
-      console.log('Summary text updated:', summaryText)
-      // You can perform any actions based on the updated summaryText here
+      return
     }
-  }, [summaryText])
+    const loadSummaryTextFromLocalStorage = async () => {
+      try {
+        const storedSummaryText = await Browser.storage.local.get('sidePanelSummaryAtom')
+        if (storedSummaryText.sidePanelSummaryAtom) {
+          setSummaryText(storedSummaryText.sidePanelSummaryAtom)
+        }
+      } catch (error) {
+        console.error('Error loading summary text from local storage:', error)
+      }
+    }
+
+    loadSummaryTextFromLocalStorage()
+  }, [])
   const chat = useChat(botId, agentId)
 
   useEffect(() => {
