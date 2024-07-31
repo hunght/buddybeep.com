@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import ReactDOM from 'react-dom/client'
 
-const LinkedInReplyGenerator: React.FC = () => {
+const GenerateReplyButton: React.FC<{ commentBox: Element }> = ({ commentBox }) => {
   const { t } = useTranslation()
-  const [isOpen, setIsOpen] = useState(false)
 
   const generateReply = async (commentText: string) => {
     const response = await chrome.runtime.sendMessage({
@@ -11,7 +11,7 @@ const LinkedInReplyGenerator: React.FC = () => {
       content: commentText,
     })
     if (response && response.reply) {
-      const textarea = document.querySelector('.comments-comment-box__form-container textarea') as HTMLTextAreaElement
+      const textarea = commentBox.querySelector('textarea') as HTMLTextAreaElement
       if (textarea) {
         textarea.value = response.reply
         textarea.dispatchEvent(new Event('input', { bubbles: true }))
@@ -19,41 +19,45 @@ const LinkedInReplyGenerator: React.FC = () => {
     }
   }
 
-  const injectReplyButton = () => {
+  const handleClick = () => {
+    const commentText = (commentBox.querySelector('textarea') as HTMLTextAreaElement).value
+    generateReply(commentText)
+  }
+
+  return (
+    <button className="buddy-beep-reply-button" onClick={handleClick}>
+      {t('Generate Reply')}
+    </button>
+  )
+}
+
+const LinkedInReplyGenerator: React.FC = () => {
+  const processedBoxes = useRef(new Set<Element>())
+
+  const injectReplyButtons = () => {
     const commentBoxes = document.querySelectorAll('.comments-comment-box__form-container')
     commentBoxes.forEach((box) => {
-      if (!box.querySelector('.buddy-beep-reply-button')) {
-        const button = document.createElement('button')
-        button.textContent = t('Generate Reply')
-        button.className = 'buddy-beep-reply-button'
-        button.addEventListener('click', () => {
-          const commentText = (box.querySelector('textarea') as HTMLTextAreaElement).value
-          generateReply(commentText)
-        })
-        box.appendChild(button)
+      if (!processedBoxes.current.has(box)) {
+        const container = document.createElement('div')
+        container.className = 'buddy-beep-reply-container'
+        box.appendChild(container)
+        ReactDOM.createRoot(container).render(<GenerateReplyButton commentBox={box} />)
+        processedBoxes.current.add(box)
       }
     })
   }
 
-  React.useEffect(() => {
-    const observer = new MutationObserver(() => {
-      if (isOpen) {
-        injectReplyButton()
-      }
-    })
-
+  useEffect(() => {
+    const observer = new MutationObserver(injectReplyButtons)
     observer.observe(document.body, { childList: true, subtree: true })
+    injectReplyButtons() // Initial injection
+    return () => {
+      observer.disconnect()
+      processedBoxes.current.clear()
+    }
+  }, [])
 
-    return () => observer.disconnect()
-  }, [isOpen])
-
-  return (
-    <div className="buddy-beep-linkedin-widget">
-      <button onClick={() => setIsOpen(!isOpen)}>
-        {isOpen ? t('Disable Reply Generator') : t('Enable Reply Generator')}
-      </button>
-    </div>
-  )
+  return null
 }
 
 export default LinkedInReplyGenerator
