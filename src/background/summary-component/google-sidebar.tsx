@@ -7,7 +7,7 @@ import { getDocumentDescription, getDocumentTextFromDOM } from '~content-script/
 import { useTranslation } from 'react-i18next'
 import logger from '~utils/logger'
 import LoadingOverlay from './loading-overlay'
-import { useSuccessPopup } from '~/hooks/useSuccessPopup' // Add this import
+import { useSuccessPopup } from '~/hooks/useSuccessPopup'
 
 // Debounce function with TypeScript type annotations
 function debounce<F extends (...args: any[]) => any>(func: F, wait: number): F {
@@ -27,6 +27,7 @@ const GoogleSidebar: React.FC = () => {
   const isPrintLayout = document.body.id === 'print-layout'
   const [selectedOption, setSelectedOption] = useState('article')
   const { setShowSuccess } = useSuccessPopup()
+  const [buttonsDisabled, setButtonsDisabled] = useState(false)
 
   useEffect(() => {
     function highlightTextSelection(event: { target: any }) {
@@ -192,7 +193,9 @@ const GoogleSidebar: React.FC = () => {
     return <div />
   }
   const onClickSave = async () => {
+    if (buttonsDisabled) return
     try {
+      setButtonsDisabled(true)
       setLoading(true)
       const content = getDocumentTextFromDOM(currentNodeSelected)
 
@@ -211,10 +214,13 @@ const GoogleSidebar: React.FC = () => {
       logger.error(error)
     } finally {
       setLoading(false)
+      setButtonsDisabled(false)
     }
   }
   const onClickSaveAndAsk = async () => {
+    if (buttonsDisabled) return
     try {
+      setButtonsDisabled(true)
       setLoading(true)
       const content = getDocumentTextFromDOM(currentNodeSelected)
 
@@ -234,6 +240,7 @@ const GoogleSidebar: React.FC = () => {
       logger.error(error)
     } finally {
       setLoading(false)
+      setButtonsDisabled(false)
     }
   }
   const onClickExpandElement = () => {
@@ -317,16 +324,22 @@ const GoogleSidebar: React.FC = () => {
                   borderRadius: '4px',
                   fontWeight: '600',
                   fontSize: '14px',
-                  cursor: 'pointer',
+                  cursor: buttonsDisabled ? 'not-allowed' : 'pointer',
                   transition: 'background-color 0.2s',
+                  opacity: buttonsDisabled ? 0.5 : 1,
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#4338CA'
+                  if (!buttonsDisabled) {
+                    e.currentTarget.style.backgroundColor = '#4338CA'
+                  }
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#4F46E5'
+                  if (!buttonsDisabled) {
+                    e.currentTarget.style.backgroundColor = '#4F46E5'
+                  }
                 }}
                 onClick={onClickSave}
+                disabled={buttonsDisabled}
               >
                 {chrome.i18n.getMessage('save')}
               </button>
@@ -344,16 +357,22 @@ const GoogleSidebar: React.FC = () => {
                   borderRadius: '4px',
                   fontWeight: '600',
                   fontSize: '14px',
-                  cursor: 'pointer',
+                  cursor: buttonsDisabled ? 'not-allowed' : 'pointer',
                   transition: 'background-color 0.2s, color 0.2s',
+                  opacity: buttonsDisabled ? 0.5 : 1,
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#EEF2FF'
+                  if (!buttonsDisabled) {
+                    e.currentTarget.style.backgroundColor = '#EEF2FF'
+                  }
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'white'
+                  if (!buttonsDisabled) {
+                    e.currentTarget.style.backgroundColor = 'white'
+                  }
                 }}
                 onClick={onClickSaveAndAsk}
+                disabled={buttonsDisabled}
               >
                 {chrome.i18n.getMessage('ask')}
               </button>
