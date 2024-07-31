@@ -5,6 +5,5 @@ export function generatePromptFromPostData(postData: PostData): string {
 Author: ${postData.authorName}
 Author Headline: ${postData.authorHeadline}
 Post Content: ${postData.postContent}
-Posted at: ${postData.postTimestamp}
 `
 }
