@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import ReactDOM from 'react-dom/client'
+import { PostData } from '~types/chat'
 
-const GenerateReplyButton: React.FC<{ commentBox: Element }> = ({ commentBox }) => {
+const GenerateReplyButton: React.FC<{ commentBox: Element; postData: PostData }> = ({ commentBox, postData }) => {
   const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(true)
   const [generatedReply, setGeneratedReply] = useState('')
@@ -14,6 +15,7 @@ const GenerateReplyButton: React.FC<{ commentBox: Element }> = ({ commentBox }) 
       content: commentText,
       link: window.location.href,
       title: document.title,
+      postData: postData, // Include the post data for context
     })
     if (response && response.reply) {
       setGeneratedReply(response.reply)
@@ -71,6 +73,18 @@ const GenerateReplyButton: React.FC<{ commentBox: Element }> = ({ commentBox }) 
 const LinkedInReplyGenerator: React.FC = () => {
   const processedBoxes = useRef(new Set<Element>())
 
+  const getPostData = (commentBox: Element): PostData => {
+    const post = commentBox.closest('.feed-shared-update-v2')
+    if (!post) return {} as PostData
+
+    const authorName = post.querySelector('.feed-shared-actor__name')?.textContent?.trim() || ''
+    const authorHeadline = post.querySelector('.feed-shared-actor__description')?.textContent?.trim() || ''
+    const postContent = post.querySelector('.feed-shared-update-v2__description')?.textContent?.trim() || ''
+    const postTimestamp = post.querySelector('.feed-shared-actor__sub-description')?.textContent?.trim() || ''
+
+    return { authorName, authorHeadline, postContent, postTimestamp }
+  }
+
   const injectReplyButtons = () => {
     const commentBoxes = document.querySelectorAll('.comments-comment-box__form-container')
     commentBoxes.forEach((box) => {
@@ -78,7 +92,8 @@ const LinkedInReplyGenerator: React.FC = () => {
         const container = document.createElement('div')
         container.className = 'buddy-beep-reply-container'
         box.appendChild(container)
-        ReactDOM.createRoot(container).render(<GenerateReplyButton commentBox={box} />)
+        const postData = getPostData(box)
+        ReactDOM.createRoot(container).render(<GenerateReplyButton commentBox={box} postData={postData} />)
         processedBoxes.current.add(box)
       }
     })

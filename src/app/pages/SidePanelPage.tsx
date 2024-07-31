@@ -18,13 +18,20 @@ import guildeWebContent from '~/assets/screen/guilde-web-content.png'
 import { WritingPresetModal } from '~app/components/write-reply/modal'
 import { PrimaryButton } from '~app/components/PrimaryButton'
 import { buildPromptWithLang } from '~app/utils/lang'
-import { composeTextAtom, originalTextAtom, subTabAtom } from '~app/state/writingAssistantAtom'
+import {
+  composeTextAtom,
+  formatAtom,
+  originalTextAtom,
+  replyContentAtom,
+  subTabAtom,
+} from '~app/state/writingAssistantAtom'
 import Dialog from '~app/components/Dialog'
 
 import MenuDropDown from '~app/components/side-panel/MenuDropDown'
 
 import { getLinkFromSummaryObject } from '~app/utils/summary'
 import Browser from 'webextension-polyfill'
+import { generatePromptFromPostData } from '~app/utils/promptGenerator' // Assume this utility function exists
 
 function SidePanelPage() {
   const [tab, setTab] = useState<'chat' | 'write'>('chat')
@@ -35,6 +42,8 @@ function SidePanelPage() {
   const [openSummaryModal, setOpenSummaryModal] = useState(false)
   const [, setOriginalTextAtom] = useAtom(originalTextAtom)
   const [, setComposeTextAtom] = useAtom(composeTextAtom)
+  const [, setReplyContentAtom] = useAtom(replyContentAtom)
+  const [, setFormatAtom] = useAtom(formatAtom)
 
   const [, setSubTab] = useAtom(subTabAtom)
   const botInfo = CHATBOTS[botId]
@@ -50,6 +59,7 @@ function SidePanelPage() {
     }
     return agentType ?? null
   }, [agentType, tab])
+
   useEffect(() => {
     if (summaryText) {
       return
@@ -94,7 +104,14 @@ function SidePanelPage() {
       setOpenWritingPreset(true)
       setSubTab(summaryText.subType ?? 'compose')
       if (summaryText.subType === 'reply') {
-        setOriginalTextAtom(summaryText.content ?? '')
+        if (summaryText.postData) {
+          const promptFromPostData = generatePromptFromPostData(summaryText.postData)
+          setOriginalTextAtom(promptFromPostData)
+          setReplyContentAtom(summaryText.content ?? '')
+          setFormatAtom(summaryText.format ?? 'comment')
+        } else {
+          setOriginalTextAtom(summaryText.content ?? '')
+        }
       }
       if (summaryText.subType === 'compose') {
         setComposeTextAtom(summaryText.content ?? '')
@@ -146,6 +163,7 @@ function SidePanelPage() {
     setSummaryText,
     setOriginalTextAtom,
     setComposeTextAtom,
+    setReplyContentAtom,
   ])
 
   const resetConversation = useCallback(() => {

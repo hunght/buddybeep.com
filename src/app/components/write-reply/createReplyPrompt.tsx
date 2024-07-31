@@ -38,6 +38,8 @@ export function createReplyPrompt({
     email: 'as an email',
     message: 'as a direct message',
     twitter: 'as a tweet',
+    'linkedin-comment':
+      "as a LinkedIn comment.Please provide a thoughtful and relevant reply that adds value to the conversation, considering the post content and the user's draft comment if provided. The reply should be professional, engaging, and appropriate for a LinkedIn audience.",
   }
 
   // Create the prompt based on the mappings and provided inputs

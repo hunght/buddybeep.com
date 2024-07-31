@@ -239,7 +239,12 @@ Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
       // Handle the "Reply to this" action
       const tabId = sender.tab?.id
       await openSidePanelWithTabId(tabId)
-      const composeMessage: SidePanelMessageType = { ...message, subType: 'reply', type: 'writing-assistant' }
+      const composeMessage: SidePanelMessageType = {
+        ...message,
+        subType: 'reply',
+        type: 'writing-assistant',
+        format: 'linkedin-comment',
+      }
 
       Browser.storage.local.set({ sidePanelSummaryAtom: composeMessage })
     }
