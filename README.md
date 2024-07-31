@@ -53,8 +53,8 @@
 
 - Clone the source code
 - `corepack enable`
-- `yarn install`
-- `yarn build`
+- `pnpm install`
+- `pnpm build`
 - In Chrome/Edge go to the Extensions page (chrome://extensions or edge://extensions)
 - Enable Developer Mode
 - Drag the `dist` folder anywhere on the page to import it (do not delete the folder afterward)
