@@ -69,6 +69,8 @@ function SidePanelPage() {
         const storedSummaryText = await Browser.storage.local.get('sidePanelSummaryAtom')
         if (storedSummaryText.sidePanelSummaryAtom) {
           setSummaryText(storedSummaryText.sidePanelSummaryAtom)
+          // Remove the summary text from local storage after loading
+          await Browser.storage.local.set({ sidePanelSummaryAtom: null })
         }
       } catch (error) {
         console.error('Error loading summary text from local storage:', error)

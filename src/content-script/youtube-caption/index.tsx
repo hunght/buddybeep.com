@@ -64,17 +64,3 @@ observer.observe(document.body, {
   childList: true,
   subtree: true,
 })
-
-function mount() {
-  const root = document.createElement('div')
-  root.id = 'buddy-beep-youtube-reply-generator'
-  document.body.appendChild(root)
-
-  createRoot(root).render(
-    <Provider store={myAtomStore}>
-      <YouTubeReplyGenerator />
-    </Provider>,
-  )
-}
-
-mount()

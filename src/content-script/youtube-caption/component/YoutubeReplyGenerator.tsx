@@ -105,22 +105,51 @@ const GenerateReplyButton: React.FC<{ commentBox: Element; postData: PostData }>
 export const YouTubeReplyGenerator: React.FC = () => {
   const processedBoxes = useRef(new Set<Element>())
 
-  const getPostData = (commentBox: Element): PostData => {
+  const getPostData = async (commentBox: Element): Promise<PostData> => {
     const videoTitle = document.querySelector('h1.ytd-watch-metadata')?.textContent || ''
     const channelName = document.querySelector('#text.ytd-channel-name')?.textContent || ''
     const videoDescription = document.querySelector('#description-inline-expander')?.textContent || ''
+    const transcript = await getTranscript()
 
-    return { videoTitle, channelName, videoDescription }
+    return { videoTitle, channelName, videoDescription, transcript }
+  }
+
+  const getTranscript = async (): Promise<string> => {
+    // Find the "Show transcript" button and click it
+    const showTranscriptButton = Array.from(document.querySelectorAll('button')).find((button) =>
+      button.textContent?.includes('Show transcript'),
+    )
+
+    if (showTranscriptButton) {
+      showTranscriptButton.click()
+
+      // Wait for the transcript to load
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+
+      // Extract the transcript text
+      const transcriptSegments = document.querySelectorAll('ytd-transcript-segment-renderer')
+      const transcriptText = Array.from(transcriptSegments)
+        .map((segment) => segment.textContent?.trim())
+        .join(' ')
+
+      // Close the transcript
+      showTranscriptButton.click()
+      console.log('transcriptText', transcriptText)
+      return transcriptText
+    }
+
+    return ''
   }
 
   const injectReplyButtons = () => {
     const commentBoxes = document.querySelectorAll('ytd-comment-simplebox-renderer')
-    commentBoxes.forEach((box) => {
+    commentBoxes.forEach(async (box) => {
       if (!processedBoxes.current.has(box)) {
         const container = document.createElement('div')
         container.className = 'buddy-beep-reply-container'
         box.appendChild(container)
-        const postData = getPostData(box)
+        const postData = await getPostData(box)
+
         ReactDOM.createRoot(container).render(<GenerateReplyButton commentBox={box} postData={postData} />)
         processedBoxes.current.add(box)
       }
