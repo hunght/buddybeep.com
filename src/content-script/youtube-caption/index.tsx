@@ -9,7 +9,6 @@ import { Provider } from 'jotai'
 import { myAtomStore } from '~app/state/store'
 import { youtubeVideoDataAtom } from '~app/state/youtubeAtom'
 import { getSearchParam } from './helper/searchParam'
-import { YouTubeReplyGenerator } from './component/YoutubeReplyGenerator'
 import './base.css'
 import logger from '~utils/logger'
 const root = document.createElement('div')

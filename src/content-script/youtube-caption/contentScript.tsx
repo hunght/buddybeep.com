@@ -43,7 +43,7 @@ export const ContentScript: React.FC = () => {
   const [autoScroll, setAutoScroll] = useState(false)
   const transcriptRef = useRef<HTMLDivElement>(null)
   const [isPlaying, setIsPlaying] = useState(false)
-  const [settingsOpen, setSettingsOpen] = useState(false)
+
   const [isSummaryDisabled, setIsSummaryDisabled] = useState(false)
 
   useEffect(() => {
@@ -161,7 +161,7 @@ export const ContentScript: React.FC = () => {
         position: 'relative',
         backgroundColor: '#1b141d',
         width: '420px',
-        height: (isHasTranscripts && open) || settingsOpen ? '28rem' : '4rem',
+        height: isHasTranscripts && open ? '28rem' : '4rem',
         borderRadius: '1rem',
       }}
     >
