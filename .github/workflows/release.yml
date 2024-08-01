@@ -24,14 +24,14 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Setup pnpm
+      - name: Setup yarn
         run: corepack enable
 
       - name: Install dependencies
-        run: pnpm install
+        run: yarn install
 
       - name: Build
-        run: pnpm build
+        run: yarn build
 
       - name: Package
         uses: vimtor/action-zip@v1.1
