@@ -7,6 +7,8 @@ import { getDocumentDescription, getDocumentTextFromDOM } from '~content-script/
 import { useTranslation } from 'react-i18next'
 import logger from '~utils/logger'
 import LoadingOverlay from './loading-overlay'
+import { useSuccessPopup } from '~/hooks/useSuccessPopup' // Add this import
+
 // Debounce function with TypeScript type annotations
 function debounce<F extends (...args: any[]) => any>(func: F, wait: number): F {
   let timeoutId: number | null = null
@@ -24,33 +26,7 @@ const GoogleSidebar: React.FC = () => {
   const { t } = useTranslation()
   const isPrintLayout = document.body.id === 'print-layout'
   const [selectedOption, setSelectedOption] = useState('article')
-  const [showSuccess, setShowSuccess] = useState<string | null>(null)
-
-  useEffect(() => {
-    if (showSuccess) {
-      const popup = document.createElement('div')
-      popup.innerText = 'Note created successfully! Click to view.'
-      popup.style.position = 'fixed'
-      popup.style.top = '20px'
-      popup.style.right = '20px'
-      popup.style.transform = 'translate(-50%, -50%)'
-      popup.style.backgroundColor = '#872DD3'
-      popup.style.color = 'white'
-      popup.style.padding = '10px'
-      popup.style.borderRadius = '5px'
-      popup.style.zIndex = '9999'
-      popup.style.cursor = 'pointer'
-      popup.onclick = () => {
-        //Open the note in seperate tab
-        window.open(`https://www.buddybeep.com/dashboard/${showSuccess}`, '_blank')
-      }
-      document.body.appendChild(popup)
-
-      setTimeout(() => {
-        document.body.removeChild(popup)
-      }, 10000)
-    }
-  }, [showSuccess])
+  const { setShowSuccess } = useSuccessPopup()
 
   useEffect(() => {
     function highlightTextSelection(event: { target: any }) {
@@ -250,9 +226,6 @@ const GoogleSidebar: React.FC = () => {
         type: 'summary-web-content',
         description: getDocumentDescription(),
       })
-      console.log(`==== data ===`)
-      console.log(data)
-      console.log('==== end log ===')
 
       setIsOpen(false)
       setLoading(false)

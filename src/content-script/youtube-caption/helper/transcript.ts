@@ -85,7 +85,7 @@ export async function getRawTranscript(link: string): Promise<TranscriptItem[]> 
     return {
       start: i.start,
       duration: i.dur,
-      text: he.decode(i.text),
+      text: i.text ? he.decode(i.text) : '',
     }
   })
 }

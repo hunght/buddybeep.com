@@ -22,6 +22,7 @@ import ExportDataPanel from '~app/components/Settings/ExportDataPanel'
 import PerplexityAPISettings from '~app/components/Settings/PerplexityAPISettings'
 import ShortcutPanel from '~app/components/Settings/ShortcutPanel'
 import themeIcon from '~/assets/icons/theme.svg'
+import { debounce } from 'lodash'
 
 import {
   BingConversationStyle,
@@ -60,6 +61,7 @@ function SettingPage() {
   const [userConfig, setUserConfig] = useState<UserConfig | undefined>(undefined)
   const [transcriptWidgetVisible, setTranscriptWidgetVisible] = useState(true)
   const [dirty, setDirty] = useState(false)
+  const [saving, setSaving] = useState(false)
 
   useEffect(() => {
     getUserConfig().then((config) => setUserConfig(config))
@@ -68,44 +70,58 @@ function SettingPage() {
     })
   }, [])
 
-  const updateConfigValue = useCallback(
-    (update: Partial<UserConfig>) => {
-      setUserConfig({ ...userConfig!, ...update })
-      setDirty(true)
-    },
-    [userConfig],
+  const debouncedSave = useCallback(
+    debounce((config: UserConfig) => {
+      save(config)
+    }, 1000),
+    [],
   )
 
-  const handleTranscriptWidgetToggle = (isVisible: boolean) => {
+  const updateConfigValue = useCallback(
+    (update: Partial<UserConfig>) => {
+      setUserConfig((prevConfig) => {
+        const newConfig = { ...prevConfig!, ...update }
+        debouncedSave(newConfig)
+        return newConfig
+      })
+      console.log('updateConfigValue ===', update)
+    },
+    [debouncedSave],
+  )
+
+  const save = useCallback(
+    async (config: UserConfig) => {
+      setSaving(true)
+      let apiHost = config.openaiApiHost
+      if (apiHost) {
+        apiHost = apiHost.replace(/\/$/, '')
+        if (!apiHost.startsWith('http')) {
+          apiHost = 'https://' + apiHost
+        }
+        // request host permission to prevent CORS issues
+        try {
+          await Browser.permissions.request({ origins: [apiHost + '/'] })
+        } catch (e) {
+          logger.error('[SettingPage][useCallback]', e)
+        }
+      } else {
+        apiHost = undefined
+      }
+      await updateUserConfig({ ...config, openaiApiHost: apiHost })
+      await chrome.storage.sync.set({ transcriptWidgetVisible })
+
+      setSaving(false)
+      setDirty(false)
+      toast.success('Saved')
+    },
+    [transcriptWidgetVisible],
+  )
+
+  const handleTranscriptWidgetToggle = useCallback((isVisible: boolean) => {
     setTranscriptWidgetVisible(isVisible)
     chrome.storage.sync.set({ transcriptWidgetVisible: isVisible })
-    setDirty(true)
-  }
-
-  const save = useCallback(async () => {
-    let apiHost = userConfig?.openaiApiHost
-    if (apiHost) {
-      apiHost = apiHost.replace(/\/$/, '')
-      if (!apiHost.startsWith('http')) {
-        apiHost = 'https://' + apiHost
-      }
-      // request host permission to prevent CORS issues
-      try {
-        await Browser.permissions.request({ origins: [apiHost + '/'] })
-      } catch (e) {
-        logger.error('[SettingPage][useCallback]', e)
-      }
-    } else {
-      apiHost = undefined
-    }
-    await updateUserConfig({ ...userConfig!, openaiApiHost: apiHost })
-    // Save transcript widget visibility
-    chrome.storage.sync.set({ transcriptWidgetVisible })
-
-    setDirty(false)
-    toast.success('Saved')
-    setTimeout(() => location.reload(), 500)
-  }, [userConfig, transcriptWidgetVisible])
+    debouncedSave(userConfig!)
+  }, [])
 
   if (!userConfig) {
     return null
@@ -124,23 +140,23 @@ function SettingPage() {
         </div>
         <div className="flex flex-col gap-5 w-fit max-w-[700px]">
           {/* <ChatBotSettingPanel title="ChatGPT">
-            <RadioGroup
-              options={Object.entries(ChatGPTMode).map(([k, v]) => ({ label: `${k} ${t('Mode')}`, value: v }))}
-              value={userConfig.chatgptMode}
-              onChange={(v) => updateConfigValue({ chatgptMode: v as ChatGPTMode })}
-            />
-            {userConfig.chatgptMode === ChatGPTMode.API ? (
-              <ChatGPTAPISettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
-            ) : userConfig.chatgptMode === ChatGPTMode.Azure ? (
-              <ChatGPTAzureSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
-            ) : userConfig.chatgptMode === ChatGPTMode.Poe ? (
-              <ChatGPTPoeSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
-            ) : userConfig.chatgptMode === ChatGPTMode.OpenRouter ? (
-              <ChatGPTOpenRouterSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
-            ) : (
-              <ChatGPWebSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
-            )}
-          </ChatBotSettingPanel> */}
+                <RadioGroup
+                  options={Object.entries(ChatGPTMode).map(([k, v]) => ({ label: `${k} ${t('Mode')}`, value: v }))}
+                  value={userConfig.chatgptMode}
+                  onChange={(v) => updateConfigValue({ chatgptMode: v as ChatGPTMode })}
+                />
+                {userConfig.chatgptMode === ChatGPTMode.API ? (
+                  <ChatGPTAPISettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
+                ) : userConfig.chatgptMode === ChatGPTMode.Azure ? (
+                  <ChatGPTAzureSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
+                ) : userConfig.chatgptMode === ChatGPTMode.Poe ? (
+                  <ChatGPTPoeSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
+                ) : userConfig.chatgptMode === ChatGPTMode.OpenRouter ? (
+                  <ChatGPTOpenRouterSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
+                ) : (
+                  <ChatGPWebSettings userConfig={userConfig} updateConfigValue={updateConfigValue} />
+                )}
+              </ChatBotSettingPanel> */}
 
           <ChatBotSettingPanel title="Gemini Pro">
             <div className="flex flex-col gap-1">
@@ -206,13 +222,6 @@ function SettingPage() {
             )}
           </ChatBotSettingPanel> */}
         </div>
-        <ShortcutPanel />
-        <ExportDataPanel />
-        <div className="w-[300px]">
-          <p className="font-bold text-lg mb-3">{t('Language')}</p>
-          <LanguageSelection />
-        </div>
-        <ThemeSettingModal />
         <div className="flex flex-col gap-2 max-w-[700px]">
           <p className="font-bold text-lg">{t('YouTube Transcript Widget')}</p>
           <div className="flex items-center">
@@ -226,15 +235,22 @@ function SettingPage() {
             <label htmlFor="transcriptWidgetToggle">{t('Show YouTube Transcript Widget')}</label>
           </div>
         </div>
+        <ShortcutPanel />
+        {/* <ExportDataPanel /> */}
+        <div className="w-[300px]">
+          <p className="font-bold text-lg mb-3">{t('Language')}</p>
+          <LanguageSelection />
+        </div>
+        <ThemeSettingModal />
       </div>
-      {dirty && (
+      {(dirty || saving) && (
         <motion.div
           className="sticky bottom-0 w-full bg-primary-background border-t-2 border-primary-border px-5 py-4 drop-shadow flex flex-row items-center justify-center"
           initial={{ y: 100 }}
           animate={{ y: 0 }}
           transition={{ type: 'tween', ease: 'easeInOut' }}
         >
-          <Button color="primary" size="small" text={t('Save changes')} onClick={save} className="py-2" />
+          {saving ? <p>{t('Saving...')}</p> : <p>{t('Changes will be saved automatically')}</p>}
         </motion.div>
       )}
       <Toaster position="bottom-center" />

@@ -119,7 +119,7 @@ export async function getUserConfig(): Promise<UserConfig> {
 }
 
 export async function updateUserConfig(updates: Partial<UserConfig>) {
-  logger.debug('update configs', updates)
+  logger.debug('update configs ===', updates.enabledBots)
   await Browser.storage.sync.set(updates)
   for (const [key, value] of Object.entries(updates)) {
     if (value === undefined) {

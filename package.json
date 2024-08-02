@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "preinstall": "corepack enable",
     "dev": "vite",
     "build": "sh tools/build.sh",
     "db": "supabase gen types typescript --project-id xigrnhxrexexsfrkmogd --schema public > src/lib/supabase/schema.ts"
