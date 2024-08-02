@@ -30,7 +30,7 @@ const SuccessPopup: React.FC<SuccessPopupProps> = ({ noteId, onClose }) => {
         cursor: 'pointer',
       }}
     >
-      Note created successfully! Click to view.1
+      Note created successfully! Click to view.
     </div>
   )
 }

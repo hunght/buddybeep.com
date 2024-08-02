@@ -11,18 +11,19 @@ const GenerateReplyButton: React.FC<{ commentBox: Element; postData: PostData }>
 
   const generateReply = async (commentText: string) => {
     chrome.runtime.sendMessage({
-      action: 'generateLinkedInReply',
+      action: 'generateYouTubeReply',
       content: commentText,
       link: window.location.href,
       title: document.title,
-      postData: postData, // Include the post data for context
+      postData: postData,
     })
   }
 
   const getCommentText = (): string => {
-    const editor = commentBox.querySelector('.ql-editor')
+    const editor = commentBox.querySelector('#contenteditable-root')
     return editor ? editor.textContent || '' : ''
   }
+
   const handleGenerate = () => {
     const commentText = getCommentText()
     generateReply(commentText)
@@ -43,7 +44,7 @@ const GenerateReplyButton: React.FC<{ commentBox: Element; postData: PostData }>
     alignItems: 'center',
     padding: '6px 12px',
     border: 'none',
-    borderRadius: '16px',
+    borderRadius: '18px',
     fontSize: '14px',
     cursor: 'pointer',
     transition: 'background-color 0.3s',
@@ -51,14 +52,14 @@ const GenerateReplyButton: React.FC<{ commentBox: Element; postData: PostData }>
 
   const replyButtonStyle: React.CSSProperties = {
     ...buttonBaseStyle,
-    backgroundColor: '#0a66c2',
+    backgroundColor: '#065fd4',
     color: 'white',
   }
 
   const closeButtonStyle: React.CSSProperties = {
     ...buttonBaseStyle,
-    backgroundColor: '#f3f2ef',
-    color: '#666',
+    backgroundColor: '#f2f2f2',
+    color: '#606060',
     padding: '6px',
     minWidth: '28px',
     minHeight: '28px',
@@ -82,8 +83,8 @@ const GenerateReplyButton: React.FC<{ commentBox: Element; postData: PostData }>
       <button
         style={replyButtonStyle}
         onClick={handleGenerate}
-        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#004182')}
-        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0a66c2')}
+        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#0456bf')}
+        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#065fd4')}
       >
         <img src={logoBase64} alt="Logo" style={logoStyle} />
         {t('Generate Reply')}
@@ -91,8 +92,8 @@ const GenerateReplyButton: React.FC<{ commentBox: Element; postData: PostData }>
       <button
         style={closeButtonStyle}
         onClick={handlePermanentClose}
-        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#e1e1e1')}
-        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#f3f2ef')}
+        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#e5e5e5')}
+        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#f2f2f2')}
         aria-label={t('Close')}
       >
         <IoClose size={16} />
@@ -101,34 +102,19 @@ const GenerateReplyButton: React.FC<{ commentBox: Element; postData: PostData }>
   )
 }
 
-const LinkedInReplyGenerator: React.FC = () => {
+export const YouTubeReplyGenerator: React.FC = () => {
   const processedBoxes = useRef(new Set<Element>())
 
   const getPostData = (commentBox: Element): PostData => {
-    const post = commentBox.closest('.feed-shared-update-v2')
-    if (!post) return {} as PostData
+    const videoTitle = document.querySelector('h1.ytd-watch-metadata')?.textContent || ''
+    const channelName = document.querySelector('#text.ytd-channel-name')?.textContent || ''
+    const videoDescription = document.querySelector('#description-inline-expander')?.textContent || ''
 
-    const authorName = post.querySelector('.update-components-actor__name')?.textContent?.trim() || ''
-    const authorHeadline = post.querySelector('.update-components-actor__description')?.textContent?.trim() || ''
-    const postContentElement = post.querySelector('.feed-shared-update-v2__description')
-    let postContent = ''
-
-    if (postContentElement) {
-      // Remove the "...more" button if present
-      const moreButton = postContentElement.querySelector('.feed-shared-inline-show-more-text__see-more-less-toggle')
-      if (moreButton) {
-        moreButton.remove()
-      }
-      postContent = postContentElement.textContent?.trim() || ''
-    }
-
-    const postTimestamp = post.querySelector('.update-components-actor__sub-description')?.textContent?.trim() || ''
-
-    return { authorName, authorHeadline, postContent, postTimestamp }
+    return { videoTitle, channelName, videoDescription }
   }
 
   const injectReplyButtons = () => {
-    const commentBoxes = document.querySelectorAll('.comments-comment-box__form-container')
+    const commentBoxes = document.querySelectorAll('ytd-comment-simplebox-renderer')
     commentBoxes.forEach((box) => {
       if (!processedBoxes.current.has(box)) {
         const container = document.createElement('div')
@@ -153,5 +139,3 @@ const LinkedInReplyGenerator: React.FC = () => {
 
   return null
 }
-
-export default LinkedInReplyGenerator

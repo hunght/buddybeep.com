@@ -29,6 +29,7 @@ import logger from '~utils/logger'
 import { findCurrentItem } from './component/findCurrentItem'
 import { useSuccessPopup } from '~hooks/useSuccessPopup'
 import { useInterval } from '~/hooks/useInterval'
+import { logoBase64 } from '~app/utils/logo'
 
 export const ContentScript: React.FC = () => {
   const youtubeVideoData = useAtomValue(youtubeVideoDataAtom)
@@ -43,6 +44,7 @@ export const ContentScript: React.FC = () => {
   const transcriptRef = useRef<HTMLDivElement>(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [isSummaryDisabled, setIsSummaryDisabled] = useState(false)
 
   useEffect(() => {
     chrome.storage.sync.get(['transcriptWidgetVisible'], (result) => {
@@ -188,25 +190,34 @@ export const ContentScript: React.FC = () => {
                 })
               }}
             >
-              <img src="https://www.buddybeep.com/logo-300.png" alt="logo" width={24} height={24} />
+              <img src={logoBase64} alt="logo" width={24} height={24} />
               {chrome.i18n.getMessage('Transcripts')}
             </div>
             <div className="flex justify-between items-center gap-2 px-4 py-1">
               <ToolbarButton
                 tooltip="Summary video with BuddyBeep"
                 onClick={async () => {
-                  const prompt = copyTranscriptAndPrompt(transcriptHTML, document.title)
-                  const data = await chrome.runtime.sendMessage({
-                    action: 'openSidePanel',
-                    content: prompt,
-                    link: window.location.href,
-                    title: document.title,
-                    type: 'summary-youtube-videos',
-                  })
-                  setShowSuccess(data?.noteId ?? '')
+                  if (isSummaryDisabled) return
+                  setIsSummaryDisabled(true)
+                  try {
+                    const prompt = copyTranscriptAndPrompt(transcriptHTML, document.title)
+                    const data = await chrome.runtime.sendMessage({
+                      action: 'openSidePanel',
+                      content: prompt,
+                      link: window.location.href,
+                      title: document.title,
+                      type: 'summary-youtube-videos',
+                    })
+                    setShowSuccess(data?.noteId ?? '')
+                  } catch (error) {
+                    console.error('Error generating summary:', error)
+                  } finally {
+                    setIsSummaryDisabled(false)
+                  }
                 }}
                 icon={<ClipboardDocumentListIcon className="h-5 w-5" />}
                 text={chrome.i18n.getMessage('Summary')}
+                disabled={isSummaryDisabled}
               />
               {isHasTranscripts && (
                 <ToolbarButton
@@ -266,11 +277,15 @@ const ToolbarButton: React.FC<{
   icon: React.ReactNode
   text?: string
   className?: string
-}> = ({ tooltip, onClick, icon, text, className }) => (
+  disabled?: boolean
+}> = ({ tooltip, onClick, icon, text, className, disabled }) => (
   <Tooltip text={tooltip}>
     <button
-      className={`px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg flex items-center ${className}`}
+      className={`px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg flex items-center ${
+        className ?? ''
+      } ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
       onClick={onClick}
+      disabled={disabled}
     >
       {text && <span className="mr-2">{text}</span>}
       {icon}

@@ -12,3 +12,10 @@ export interface ChatMessageModel {
 export interface ConversationModel {
   messages: ChatMessageModel[]
 }
+
+export interface PostData {
+  authorName: string
+  authorHeadline: string
+  postContent: string
+  postTimestamp: string
+}

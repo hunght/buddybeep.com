@@ -9,6 +9,7 @@ import { Provider } from 'jotai'
 import { myAtomStore } from '~app/state/store'
 import { youtubeVideoDataAtom } from '~app/state/youtubeAtom'
 import { getSearchParam } from './helper/searchParam'
+import { YouTubeReplyGenerator } from './component/YoutubeReplyGenerator'
 import './base.css'
 import logger from '~utils/logger'
 const root = document.createElement('div')
@@ -63,3 +64,17 @@ observer.observe(document.body, {
   childList: true,
   subtree: true,
 })
+
+function mount() {
+  const root = document.createElement('div')
+  root.id = 'buddy-beep-youtube-reply-generator'
+  document.body.appendChild(root)
+
+  createRoot(root).render(
+    <Provider store={myAtomStore}>
+      <YouTubeReplyGenerator />
+    </Provider>,
+  )
+}
+
+mount()

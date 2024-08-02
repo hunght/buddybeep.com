@@ -82,11 +82,12 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
   const [originalText, setOriginalText] = useAtom(originalTextAtom)
   const [composeText, setComposeText] = useAtom(composeTextAtom)
   const [tab, setTab] = useAtom(subTabAtom)
+
   const getDisabled = (): boolean | undefined => {
     if (tab === 'compose') {
       return composeText.length === 0
     }
-    return originalText.length === 0 || replyContent.length === 0
+    return originalText.length === 0
   }
 
   return (
@@ -168,12 +169,14 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
       )}
 
       {tab === 'reply' ? (
-        <div className="mb-4  ">
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm font-medium leading-6  text-primary-text">{t('Format')}</h2>
+        format !== 'linkedin-comment' && (
+          <div className="mb-4  ">
+            <div className="flex items-center justify-between">
+              <h2 className="text-sm font-medium leading-6  text-primary-text">{t('Format')}</h2>
+            </div>
+            <RadioGroupView options={formatOptions} value={format} onChange={(value) => setFormat(value)} />
           </div>
-          <RadioGroupView options={formatOptions} value={format} onChange={(value) => setFormat(value)} />
-        </div>
+        )
       ) : (
         <div className="mb-4  ">
           <div className="flex items-center gap-1">
