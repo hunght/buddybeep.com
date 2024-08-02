@@ -197,23 +197,15 @@ export const ContentScript: React.FC = () => {
               <ToolbarButton
                 tooltip="Summary video with BuddyBeep"
                 onClick={async () => {
-                  if (isSummaryDisabled) return
-                  setIsSummaryDisabled(true)
-                  try {
-                    const prompt = copyTranscriptAndPrompt(transcriptHTML, document.title)
-                    const data = await chrome.runtime.sendMessage({
-                      action: 'openSidePanel',
-                      content: prompt,
-                      link: window.location.href,
-                      title: document.title,
-                      type: 'summary-youtube-videos',
-                    })
-                    setShowSuccess(data?.noteId ?? '')
-                  } catch (error) {
-                    console.error('Error generating summary:', error)
-                  } finally {
-                    setIsSummaryDisabled(false)
-                  }
+                  const prompt = copyTranscriptAndPrompt(transcriptHTML, document.title)
+                  const data = await chrome.runtime.sendMessage({
+                    action: 'openSidePanel',
+                    content: prompt,
+                    link: window.location.href,
+                    title: document.title,
+                    type: 'summary-youtube-videos',
+                  })
+                  setShowSuccess(data?.noteId ?? '')
                 }}
                 icon={<ClipboardDocumentListIcon className="h-5 w-5" />}
                 text={chrome.i18n.getMessage('Summary')}

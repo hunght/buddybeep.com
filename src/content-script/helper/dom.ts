@@ -12,9 +12,6 @@ export function getDocumentTextFromDOM(fromElement: HTMLElement | null): string 
   const newDoc = document.implementation.createHTMLDocument('title')
   newDoc.body.innerHTML = clone.outerHTML // Changed to use outerHTML
 
-  // Logging for debugging
-  console.log('Cloned HTML:', newDoc.body.innerHTML)
-
   const readability = new Readability(newDoc)
   const article = readability.parse()
 

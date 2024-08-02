@@ -188,34 +188,22 @@ const GoogleSidebar: React.FC = () => {
       existingElement.style.display = isOpen ? 'block' : 'none'
     }
   }, [isOpen])
-
+  const content = getDocumentTextFromDOM(currentNodeSelected)
   if (isPrintLayout) {
     return <div />
   }
   const onClickSave = async () => {
-    if (buttonsDisabled) return
-    try {
-      setButtonsDisabled(true)
-      setLoading(true)
-      const content = getDocumentTextFromDOM(currentNodeSelected)
+    const data = await chrome.runtime.sendMessage({
+      action: 'saveContent',
+      content,
+      link: window.location.href,
+      title: document.title,
+      description: getDocumentDescription(),
+    })
 
-      const data = await chrome.runtime.sendMessage({
-        action: 'saveContent',
-        content,
-        link: window.location.href,
-        title: document.title,
-        description: getDocumentDescription(),
-      })
+    setIsOpen(false)
 
-      setIsOpen(false)
-      setLoading(false)
-      setShowSuccess(data?.noteId ?? '')
-    } catch (error) {
-      logger.error(error)
-    } finally {
-      setLoading(false)
-      setButtonsDisabled(false)
-    }
+    setShowSuccess(data?.noteId ?? '')
   }
   const onClickSaveAndAsk = async () => {
     if (buttonsDisabled) return
