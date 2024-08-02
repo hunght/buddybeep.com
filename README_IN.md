@@ -87,8 +87,8 @@
 ## 🔨 Membangun dari Source
 
 - Clone source code
-- `yarn install`
-- `yarn build`
+- `pnpm install`
+- `pnpm build`
 - Muat folder `dist` ke browser dengan mengikuti langkah-langkah dalam _Instalasi Manual_
 
 ## 📜 Changelog

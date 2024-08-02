@@ -193,7 +193,7 @@ export const ContentScript: React.FC = () => {
               <img src={logoBase64} alt="logo" width={24} height={24} />
               {chrome.i18n.getMessage('Transcripts')}
             </div>
-            <div className="flex justify-between items-center gap-2 px-4 py-1">
+            <div className="flex justify-between items-center gap-2 py-1 pl-2">
               <ToolbarButton
                 tooltip="Summary video with BuddyBeep"
                 onClick={async () => {
@@ -256,6 +256,12 @@ export const ContentScript: React.FC = () => {
                   icon={!open ? <ChevronDownIcon className="h-5 w-5" /> : <ChevronUpIcon className="h-5 w-5" />}
                 />
               )}
+              <ToolbarButton
+                tooltip="Close Widget"
+                onClick={handleCloseWidget}
+                className="bg-transparent"
+                icon={<XMarkIcon className="h-5 w-5" />}
+              />
             </div>
           </div>
 
