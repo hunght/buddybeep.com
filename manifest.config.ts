@@ -55,6 +55,10 @@ export default defineManifest(async () => {
         matches: ['https://www.linkedin.com/*'],
         js: ['src/content-script/linkedin-comment/index.tsx'],
       },
+      {
+        matches: ['https://www.reddit.com/*'],
+        js: ['src/content-script/reddit-comment/index.tsx'],
+      },
       // {
       //   matches: [
       //     'https://google.com/*',
