@@ -82,7 +82,7 @@ const ConversationPanel: FC<Props> = (props) => {
   }
   const agent = allAgents[props.agentId ?? '']
   const agentIcon = agentIcons[props.agentId ?? '']
-  const avatar = agent ? agentIcon ?? agent.avatar ?? agent.name.slice(0, 2) : botInfo.avatar
+  const avatar = agent ? (agentIcon ?? agent.avatar ?? agent.name.slice(0, 2)) : botInfo.avatar
 
   return (
     <ConversationContext.Provider value={context}>
