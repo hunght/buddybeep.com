@@ -1,27 +1,20 @@
-import * as Sentry from '@sentry/react'
-import { getVersion, isProduction } from '../utils'
-import { supabase } from '~lib/supabase/client'
+import { BrowserClient, defaultStackParser, getDefaultIntegrations, makeFetchTransport, Scope } from '@sentry/browser'
 
-Sentry.init({
-  dsn: import.meta.env.VITE_SENTRY_DSN,
-  debug: !isProduction(),
-  release: getVersion(),
-  integrations: [Sentry.extraErrorDataIntegration({ depth: 3 })],
-  sampleRate: 1.0,
+// filter integrations that use the global variable
+const integrations = getDefaultIntegrations({}).filter((defaultIntegration) => {
+  return !['BrowserApiErrors', 'Breadcrumbs', 'GlobalHandlers'].includes(defaultIntegration.name)
 })
 
-export async function configureSentryUser() {
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
-  if (session?.user) {
-    Sentry.setUser({
-      id: session.user.id,
-      email: session.user.email,
-    })
-  } else {
-    Sentry.setUser(null) // Clear user data if not logged in
-  }
-}
+const client = new BrowserClient({
+  dsn: import.meta.env.VITE_SENTRY_DSN,
+  transport: makeFetchTransport,
+  stackParser: defaultStackParser,
+  integrations: integrations,
+})
 
-export { Sentry }
+const scope = new Scope()
+scope.setClient(client)
+
+client.init() // initializing has to be done after setting the client on the scope
+scope.captureException(new Error('example'))
+export { scope as Sentry }

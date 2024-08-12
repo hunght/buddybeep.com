@@ -6,7 +6,8 @@ import { readTwitterCsrfToken } from './twitter-cookie'
 import contentTest from './contentTest?script'
 import logger from '~utils/logger'
 import { SidePanelMessageType } from '~app/types/sidePanel'
-import supabase, { getUserId } from '~lib/supabase/client'
+import supabase from '~lib/supabase/client'
+import { getUserId } from '~lib/supabase/service'
 
 // expose storage.session to content scripts
 // using `chrome.*` API because `setAccessLevel` is not supported by `Browser.*` API
