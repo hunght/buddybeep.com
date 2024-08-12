@@ -16,5 +16,4 @@ const scope = new Scope()
 scope.setClient(client)
 
 client.init() // initializing has to be done after setting the client on the scope
-scope.captureException(new Error('example'))
 export { scope as Sentry }
