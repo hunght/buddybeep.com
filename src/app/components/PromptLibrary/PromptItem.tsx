@@ -23,7 +23,7 @@ export const PromptItem = (props: {
   const { t } = useTranslation()
   const { agent } = props
   const [saved, setSaved] = useState(false)
-  const [botId, setBotId] = useState<BotId>('gemini')
+  const [botId, setBotId] = useState<BotId>('bing')
 
   const bots = useEnabledBots()
   const agentIcon = agentIcons[agent.agentId]

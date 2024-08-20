@@ -13,14 +13,23 @@ function launchWebAuthFlow(url: string, interactive: boolean): Promise<string> {
 }
 
 export const getUserId = async (): Promise<string | undefined> => {
+  // Check if we have a stored session
+  const storedSession = await chrome.storage.local.get('supabaseSession')
+  if (storedSession.supabaseSession) {
+    // Set the stored session
+    await supabase.auth.setSession(storedSession.supabaseSession)
+  }
+
   const {
     data: { session },
   } = await supabase.auth.getSession()
   if (session) {
     const userId = session.user.id
-
+    // Store the session
+    await chrome.storage.local.set({ supabaseSession: session })
     return userId
   }
+
   const manifest = chrome.runtime.getManifest()
 
   const url = new URL('https://accounts.google.com/o/oauth2/auth')
@@ -53,9 +62,21 @@ export const getUserId = async (): Promise<string | undefined> => {
     if (error) {
       console.error('Error logging in:', error.message)
     } else {
+      // Store the new session
+      const {
+        data: { session: newSession },
+      } = await supabase.auth.getSession()
+      if (newSession) {
+        await chrome.storage.local.set({ supabaseSession: newSession })
+      }
       return data.user.id
     }
   } catch (error) {
     console.error('Error logging in:', error)
   }
+}
+
+export const logout = async (): Promise<void> => {
+  await supabase.auth.signOut()
+  await chrome.storage.local.remove('supabaseSession')
 }
