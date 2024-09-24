@@ -32,6 +32,7 @@ import MenuDropDown from '~app/components/side-panel/MenuDropDown'
 import { getLinkFromSummaryObject } from '~app/utils/summary'
 import Browser from 'webextension-polyfill'
 import { generatePromptFromPostData } from '~app/utils/promptGenerator' // Assume this utility function exists
+import Tooltip from '~app/components/Tooltip'
 
 function SidePanelPage() {
   const [tab, setTab] = useState<'chat' | 'write'>('chat')
@@ -232,7 +233,11 @@ function SidePanelPage() {
 
           <div className="flex flex-row items-center gap-2">
             <img src={botInfo.avatar} className="w-4 h-4 object-contain rounded-full" />
-            <ChatbotName botId={botId} name={botInfo.name} onSwitchBot={setBotId} />
+            <Tooltip content={t('Change AI Model')}>
+              <div>
+                <ChatbotName botId={botId} name={botInfo.name} onSwitchBot={setBotId} />
+              </div>
+            </Tooltip>
           </div>
 
           <div className="flex flex-row items-center gap-3">

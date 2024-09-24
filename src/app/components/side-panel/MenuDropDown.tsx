@@ -6,16 +6,20 @@ import { IoMdRemoveCircleOutline } from 'react-icons/io'
 import { t } from 'i18next'
 import { LanguageSelection } from '~app/pages/LanguageSelection'
 import { BiExpand } from 'react-icons/bi'
+import Tooltip from '~app/components/Tooltip'
+import { FaRegNoteSticky } from 'react-icons/fa6'
 
 const MenuDropDown: FC<{ onExpand: () => void; clearHistory: () => void }> = ({ onExpand, clearHistory }) => {
   return (
     <Menu as="div" className="relative ml-3 text-primary-text ">
       <div>
-        <Menu.Button className="relative flex max-w-xs items-center text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ">
-          <span className="absolute -inset-1.5" />
-          <span className="sr-only">Open user menu</span>
-          <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
-        </Menu.Button>
+        <Tooltip content={t('Menu')}>
+          <Menu.Button className="relative flex max-w-xs items-center text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ">
+            <span className="absolute -inset-1.5" />
+            <span className="sr-only">Open user menu</span>
+            <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+          </Menu.Button>
+        </Tooltip>
       </div>
       <Transition
         as={Fragment}
@@ -29,6 +33,17 @@ const MenuDropDown: FC<{ onExpand: () => void; clearHistory: () => void }> = ({ 
         <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md  shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none bg-secondary px-2 py-3 gap-2">
           <Menu.Item>
             <LanguageSelection />
+          </Menu.Item>
+          <Menu.Item>
+            <a
+              href="https://buddybeep.com/dashboard"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex flex-row hover:bg-primary-blue cursor-pointer items-center gap-1 rounded py-2"
+            >
+              <FaRegNoteSticky size={24} className="bg-secondary p-1 rounded-[10px] w-fit hover:opacity-80" />
+              <span>{t('Open Notes')}</span>
+            </a>
           </Menu.Item>
           <Menu.Item>
             <div
