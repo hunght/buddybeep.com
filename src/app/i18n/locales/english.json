@@ -1,5 +1,6 @@
 {
     "anwser_reply_prompt": "For example, \"I am sorry to hear that you are dissatisfied with our service. We strive to provide the best service possible and we are sorry that we did not meet your expectations.\"",
     "title_reply_prompt": "For example, \"I am writing to you to express my dissatisfaction with the service I received from your company.\"",
-    "title_compose_prompt": "For example, \"The impact of climate change on the economy.\""
+    "title_compose_prompt": "For example, \"The impact of climate change on the economy.\"",
+    "Clear history": "Clear conversation"
 }

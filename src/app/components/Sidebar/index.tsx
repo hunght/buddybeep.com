@@ -13,16 +13,13 @@ import logo from '~/assets/logo-64.png'
 import { cx } from '~/utils'
 import { FaRegEdit } from 'react-icons/fa'
 import { FiSettings } from 'react-icons/fi'
-import { releaseNotesAtom, showDiscountModalAtom, sidebarCollapsedAtom } from '~app/state'
-import { getPremiumActivation } from '~services/premium'
-import { checkReleaseNotes } from '~services/release-notes'
-import * as api from '~services/server-api'
-import { getAppOpenTimes, getPremiumModalOpenTimes } from '~services/storage/open-times'
+import { sidebarCollapsedAtom } from '~app/state'
+
 import GuideModal from '../GuideModal'
-import ThemeSettingModal from '../ThemeSettingModal'
+
 import Tooltip from '../Tooltip'
 import NavLink from './NavLink'
-import PremiumEntry from './PremiumEntry'
+
 import PromptLibraryDialog from '../PromptLibrary/Dialog'
 import { trackEvent } from '~app/plausible'
 
@@ -31,11 +28,9 @@ import { atomChatStateLocalStorage, chatStatesArrayAtomValue } from '~app/state/
 import { getAllAgentsAtom } from '~app/state/agentAtom'
 import { InsertPropmtType } from '~app/types/InsertPropmtType'
 import { useEnabledBots } from '~app/hooks/use-enabled-bots'
-import { IconButton } from './IconButton'
-import Button from '../Button'
-import { PrimaryButton } from '../PrimaryButton'
-import { RoundedSecondaryButton } from '../RoundedSecondaryButton'
+
 import { BiCollapse } from 'react-icons/bi'
+
 function Sidebar() {
   const { t } = useTranslation()
   const [collapsed, setCollapsed] = useAtom(sidebarCollapsedAtom)
@@ -96,22 +91,28 @@ function Sidebar() {
         </div>
 
         <div className="flex flex-row justify-center items-center gap-2">
-          <Link to="/setting">
-            <FiSettings
-              size={34}
-              className="cursor-pointer p-[6px] rounded-[10px] w-fit  hover:opacity-80 bg-secondary"
-              title={t('Prompt Library')}
-            />
-          </Link>
-          <BiCollapse
-            size={34}
-            className="cursor-pointer p-[6px] rounded-[10px] w-fit  hover:opacity-80 bg-secondary"
-            onClick={() => {
-              chrome.runtime.sendMessage({
-                action: 'openSidePanelOnly',
-              })
-            }}
-          />
+          <Tooltip content={t('Settings')}>
+            <Link to="/setting">
+              <FiSettings
+                size={34}
+                className="cursor-pointer p-[6px] rounded-[10px] w-fit  hover:opacity-80 bg-secondary"
+                title={t('Prompt Library')}
+              />
+            </Link>
+          </Tooltip>
+          <Tooltip content={t('Collapse')}>
+            <div>
+              <BiCollapse
+                size={34}
+                className="cursor-pointer p-[6px] rounded-[10px] w-fit  hover:opacity-80 bg-secondary"
+                onClick={() => {
+                  chrome.runtime.sendMessage({
+                    action: 'openSidePanelOnly',
+                  })
+                }}
+              />
+            </div>
+          </Tooltip>
         </div>
         {isPromptLibraryDialogOpen && (
           <PromptLibraryDialog

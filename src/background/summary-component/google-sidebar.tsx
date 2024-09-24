@@ -18,6 +18,46 @@ function debounce<F extends (...args: any[]) => any>(func: F, wait: number): F {
   } as F
 }
 
+interface TooltipProps {
+  children: React.ReactNode
+  text: string
+}
+
+const Tooltip: React.FC<TooltipProps> = ({ children, text }) => {
+  const [isVisible, setIsVisible] = useState(false)
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <div onMouseEnter={() => setIsVisible(true)} onMouseLeave={() => setIsVisible(false)}>
+        {children}
+      </div>
+      {isVisible && (
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '100%',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+            color: 'white',
+            padding: '5px 10px',
+            borderRadius: '4px',
+            fontSize: '12px',
+            maxWidth: '200px', // Set a max-width
+            width: 'max-content', // Ensure it's not always at max-width
+            wordWrap: 'break-word', // Allow long words to break
+            whiteSpace: 'normal', // Allow text to wrap
+            textAlign: 'center', // Center the text
+            zIndex: 1000,
+          }}
+        >
+          {text}
+        </div>
+      )}
+    </div>
+  )
+}
+
 const GoogleSidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(true)
   const [loading, setLoading] = useState(false)
@@ -298,72 +338,84 @@ const GoogleSidebar: React.FC = () => {
               X
             </span>
 
-            <div style={{ display: 'flex', flexDirection: 'row', gap: '8px', marginTop: '12px', marginBottom: '8px' }}>
-              <button
-                style={{
-                  display: 'flex',
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                gap: '8px',
+                marginTop: '12px',
+                marginBottom: '8px',
+              }}
+            >
+              <Tooltip text={chrome.i18n.getMessage('saveTooltip') || 'Save the selected content to your notes'}>
+                <button
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '4px 8px',
+                    backgroundColor: '#4F46E5',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    fontWeight: '600',
+                    fontSize: '14px',
+                    cursor: buttonsDisabled ? 'not-allowed' : 'pointer',
+                    transition: 'background-color 0.2s',
+                    opacity: buttonsDisabled ? 0.5 : 1,
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!buttonsDisabled) {
+                      e.currentTarget.style.backgroundColor = '#4338CA'
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!buttonsDisabled) {
+                      e.currentTarget.style.backgroundColor = '#4F46E5'
+                    }
+                  }}
+                  onClick={onClickSave}
+                  disabled={buttonsDisabled}
+                >
+                  {chrome.i18n.getMessage('save')}
+                </button>
+              </Tooltip>
 
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '4px 8px',
-                  backgroundColor: '#4F46E5',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  fontWeight: '600',
-                  fontSize: '14px',
-                  cursor: buttonsDisabled ? 'not-allowed' : 'pointer',
-                  transition: 'background-color 0.2s',
-                  opacity: buttonsDisabled ? 0.5 : 1,
-                }}
-                onMouseEnter={(e) => {
-                  if (!buttonsDisabled) {
-                    e.currentTarget.style.backgroundColor = '#4338CA'
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!buttonsDisabled) {
-                    e.currentTarget.style.backgroundColor = '#4F46E5'
-                  }
-                }}
-                onClick={onClickSave}
-                disabled={buttonsDisabled}
+              <Tooltip
+                text={chrome.i18n.getMessage('askTooltip') || 'Save the content and open AI chat to ask questions'}
               >
-                {chrome.i18n.getMessage('save')}
-              </button>
-
-              <button
-                style={{
-                  display: 'flex',
-                  flex: '1',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '4px 8px',
-                  backgroundColor: 'white',
-                  color: '#4F46E5',
-                  border: '1px solid #4F46E5',
-                  borderRadius: '4px',
-                  fontWeight: '600',
-                  fontSize: '14px',
-                  cursor: buttonsDisabled ? 'not-allowed' : 'pointer',
-                  transition: 'background-color 0.2s, color 0.2s',
-                  opacity: buttonsDisabled ? 0.5 : 1,
-                }}
-                onMouseEnter={(e) => {
-                  if (!buttonsDisabled) {
-                    e.currentTarget.style.backgroundColor = '#EEF2FF'
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (!buttonsDisabled) {
-                    e.currentTarget.style.backgroundColor = 'white'
-                  }
-                }}
-                onClick={onClickSaveAndAsk}
-                disabled={buttonsDisabled}
-              >
-                {chrome.i18n.getMessage('ask')}
-              </button>
+                <button
+                  style={{
+                    width: '100px',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '4px 8px',
+                    backgroundColor: 'white',
+                    color: '#4F46E5',
+                    border: '1px solid #4F46E5',
+                    borderRadius: '4px',
+                    fontWeight: '600',
+                    fontSize: '14px',
+                    cursor: buttonsDisabled ? 'not-allowed' : 'pointer',
+                    transition: 'background-color 0.2s, color 0.2s',
+                    opacity: buttonsDisabled ? 0.5 : 1,
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!buttonsDisabled) {
+                      e.currentTarget.style.backgroundColor = '#EEF2FF'
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!buttonsDisabled) {
+                      e.currentTarget.style.backgroundColor = 'white'
+                    }
+                  }}
+                  onClick={onClickSaveAndAsk}
+                  disabled={buttonsDisabled}
+                >
+                  {chrome.i18n.getMessage('ask')}
+                </button>
+              </Tooltip>
             </div>
             <ul>
               <li
