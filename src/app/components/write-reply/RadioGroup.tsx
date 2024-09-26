@@ -30,7 +30,9 @@ export const RadioGroupView = <T,>({ options, value, onChange, label }: Props<T>
               )
             }
           >
-            <RadioGroup.Label as="span">{option.name}</RadioGroup.Label>
+            <RadioGroup.Label as="span" className="text-[11px]">
+              {option.name}
+            </RadioGroup.Label>
           </RadioGroup.Option>
         ))}
       </div>

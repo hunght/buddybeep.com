@@ -257,7 +257,7 @@ function SidePanelPage() {
           {tab === 'chat' ? (
             <>
               <Dialog
-                title={t('Summary Web Content')}
+                title={t('Summarize Web')}
                 open={openSummaryModal}
                 onClose={() => {
                   setOpenSummaryModal(false)
@@ -269,7 +269,7 @@ function SidePanelPage() {
               <div className="flex flex-col mx-3 my-3 gap-3">
                 <hr className="grow border-primary-border" />
                 <PrimaryButton
-                  title={t('Summary Web Content')}
+                  title={t('Summarize Web')}
                   onClick={async () => {
                     chrome.tabs.query({ active: true, currentWindow: true }, async ([tab]) => {
                       if (!tab.id) {

@@ -194,7 +194,7 @@
   "How can I assist you today?": "Wie kann ich Ihnen heute helfen?",
   "Expand": "Erweitern",
   "Clear history": "Verlauf löschen",
-  "Summary Web Content": "Zusammenfassung Webinhalt",
+  "Summarize Web": "Web zusammenfassen",
   "anwser_reply_prompt": "Zum Beispiel, \"Es tut mir leid zu hören, dass Sie mit unserem Service unzufrieden sind. Wir bemühen uns, den bestmöglichen Service zu bieten, und es tut uns leid, dass wir Ihre Erwartungen nicht erfüllen konnten.\"",
   "title_reply_prompt": "Zum Beispiel, \"Ich schreibe Ihnen, um meine Unzufriedenheit mit dem Service, den ich von Ihrem Unternehmen erhalten habe, auszudrücken.\"",
   "title_compose_prompt": "Zum Beispiel, \"Die Auswirkungen des Klimawandels auf die Wirtschaft.\""

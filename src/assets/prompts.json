@@ -11,7 +11,7 @@
     },
     "summary-web-content": {
         "agentId": "summary-web-content",
-        "name": "Summary Web Content",
+        "name": "Summarize Web",
         "prompt": "I want you to act as a web content summarizer. I will provide you with a web page content, and you will provide me with a summary of the content on that page. Your summary should be concise and informative, covering the most important aspects of the content."
     },
     "summary-youtube-videos": {

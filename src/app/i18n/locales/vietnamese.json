@@ -197,7 +197,7 @@
     "How can I assist you today?": "Tôi có thể giúp gì cho bạn hôm nay?",
     "Expand": "Mở rộng",
     "Clear history": "Xóa lịch sử",
-    "Summary Web Content": "Tóm tắt Nội dung Web",
+    "Summarize Web": "Tóm tắt Web",
     "anwser_reply_prompt": "Ví dụ, \"Tôi rất tiếc khi nghe bạn không hài lòng với dịch vụ của chúng tôi. Chúng tôi nỗ lực cung cấp dịch vụ tốt nhất có thể và chúng tôi rất tiếc vì không đáp ứng được kỳ vọng của bạn.\"",
     "title_reply_prompt": "Ví dụ, \"Tôi viết thư này để bày tỏ sự không hài lòng của tôi với dịch vụ tôi nhận được từ công ty của bạn.\"",
     "title_compose_prompt": "Ví dụ, \"Ảnh hưởng của biến đổi khí hậu đối với nền kinh tế.\""
