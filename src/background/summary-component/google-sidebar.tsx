@@ -418,22 +418,26 @@ const GoogleSidebar: React.FC = () => {
               </Tooltip>
             </div>
             <ul>
-              <li
-                className={` ${selectedOption === 'article' ? 'selected' : ''}`}
-                onClick={() => {
-                  handleSelectOption('article')
-                }}
-              >
-                Article
-              </li>
-              <li
-                className={selectedOption === 'selection' ? 'selected' : ''}
-                onClick={() => {
-                  handleSelectOption('selection')
-                }}
-              >
-                Selection
-              </li>
+              <Tooltip text="Choose a section using + and -">
+                <li
+                  className={` ${selectedOption === 'article' ? 'selected' : ''}`}
+                  onClick={() => {
+                    handleSelectOption('article')
+                  }}
+                >
+                  Article
+                </li>
+              </Tooltip>
+              <Tooltip text="Freely choose a part on the page">
+                <li
+                  className={selectedOption === 'selection' ? 'selected' : ''}
+                  onClick={() => {
+                    handleSelectOption('selection')
+                  }}
+                >
+                  Selection
+                </li>
+              </Tooltip>
               <li
                 className={selectedOption === 'full-page' ? 'selected' : ''}
                 onClick={() => handleSelectOption('full-page')}

@@ -213,7 +213,7 @@ export const WriteReplyUI: React.FC<{ onGenerate: (prompt: string) => void }> = 
           <LanguageWritingSelection lang={lang} onLanguageChange={setLang} />
         </div>
         <PrimaryButton
-          title={t('Generate draft')}
+          title={t('Generate')}
           disabled={getDisabled()}
           onClick={() => {
             if (tab === 'compose') {

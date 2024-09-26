@@ -87,6 +87,7 @@ ul {
 }
 
 li {
+  position: relative;
   padding: 6px;
   margin: 5px 0;
   background-color: #444;
