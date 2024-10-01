@@ -297,7 +297,7 @@ function SidePanelPage() {
                     chat.generating ? (
                       <Button text={t('Stop')} color="flat" size="small" onClick={chat.stopGenerating} />
                     ) : (
-                      <Button text={t('Send')} color="primary" type="submit" size="small" />
+                      <Button text={t('Send')} color="primary" type="submit" size="normal" className="text-lg" />
                     )
                   }
                 />
