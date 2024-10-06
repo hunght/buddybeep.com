@@ -52,12 +52,13 @@ function CommunityPrompts(props: {
     },
     [user, mutate],
   )
-  const editPrompt = useCallback(async (id: number, name: string, prompt: string, botId: string) => {
-    const { data } = await supabase.from('prompts').update({ name, prompt, bot_id: botId }).eq('id', id)
-    if (data) {
-      setFormData(data[0])
-    }
-  }, [])
+  const editPrompt = useCallback(
+    async (id: number, name: string, prompt: string) => {
+      await supabase.from('prompts').update({ name, prompt }).eq('id', id)
+      mutate()
+    },
+    [mutate],
+  )
 
   const removePrompt = useCallback(
     async (id: number) => {
@@ -127,7 +128,7 @@ function CommunityPrompts(props: {
               title={prompt.name}
               prompt={prompt.prompt}
               insertPrompt={props.insertPrompt}
-              copyToLocal={(botId: BotId) => savePrompt({ ...prompt, botId })}
+              clonePrompt={(botId: BotId) => savePrompt({ ...prompt, botId })}
             />
           ))}
         </div>
@@ -152,6 +153,7 @@ function CommunityPrompts(props: {
                   {userPrompts.map((prompt) => (
                     <MyPromptItem
                       key={prompt.id}
+                      id={prompt.id}
                       title={prompt.name ?? ''}
                       prompt={prompt.prompt ?? ''}
                       insertPrompt={props.insertPrompt}
@@ -159,9 +161,7 @@ function CommunityPrompts(props: {
                         savePrompt({ name: prompt.name ?? '', prompt: prompt.prompt ?? '', botId })
                       }
                       remove={() => removePrompt(prompt.id)}
-                      edit={() =>
-                        editPrompt(prompt.id, prompt.name ?? '', prompt.prompt ?? '', prompt.bot_id ?? 'gemini')
-                      }
+                      edit={editPrompt}
                     />
                   ))}
                 </div>
@@ -205,7 +205,7 @@ function CommunityPrompts(props: {
             title={prompt.name}
             prompt={prompt.prompt}
             insertPrompt={props.insertPrompt}
-            copyToLocal={(botId: BotId) => savePrompt({ name: prompt.name ?? '', prompt: prompt.prompt ?? '', botId })}
+            clonePrompt={(botId: BotId) => savePrompt({ name: prompt.name ?? '', prompt: prompt.prompt ?? '', botId })}
           />
         ))}
       </div>

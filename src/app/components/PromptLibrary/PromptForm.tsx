@@ -34,7 +34,7 @@ export function PromptForm(props: { initialData: Prompt; onSubmit: (data: Prompt
       </div>
       <div className="w-full">
         <span className="text-sm font-semibold block mb-1 text-primary-text">Prompt {t('Content')}</span>
-        <Textarea className="w-full" name="prompt" defaultValue={props.initialData.prompt} />
+        <Textarea className="w-full min-h-20" name="prompt" defaultValue={props.initialData.prompt} />
       </div>
       <div className="flex flex-row gap-2 mt-1">
         <Button color="primary" text={t('Save')} className="w-fit" size="small" type="submit" />
