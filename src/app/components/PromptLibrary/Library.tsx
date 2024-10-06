@@ -18,6 +18,7 @@ import { getAllAgentsAtom } from '~app/state/agentAtom'
 import supabase from '~lib/supabase/client'
 import { useUser } from '~hooks/useUser'
 import { Database } from '~lib/supabase/schema'
+import { MyPromptItem } from './MyPromptItem'
 type PromptDB = Database['public']['Tables']['prompts']['Row']
 
 function CommunityPrompts(props: {
@@ -51,9 +52,15 @@ function CommunityPrompts(props: {
     },
     [user, mutate],
   )
+  const editPrompt = useCallback(async (id: number, name: string, prompt: string, botId: string) => {
+    const { data } = await supabase.from('prompts').update({ name, prompt, bot_id: botId }).eq('id', id)
+    if (data) {
+      setFormData(data[0])
+    }
+  }, [])
 
   const removePrompt = useCallback(
-    async (id: string) => {
+    async (id: number) => {
       if (user) {
         try {
           await supabase.from('prompts').delete().eq('id', id)
@@ -143,15 +150,18 @@ function CommunityPrompts(props: {
               ) : userPrompts.length ? (
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 pt-2">
                   {userPrompts.map((prompt) => (
-                    <PromptItem
+                    <MyPromptItem
                       key={prompt.id}
                       title={prompt.name ?? ''}
                       prompt={prompt.prompt ?? ''}
                       insertPrompt={props.insertPrompt}
-                      copyToLocal={(agentId: string) =>
-                        savePrompt({ name: prompt.name ?? '', prompt: prompt.prompt ?? '', agentId })
+                      clonePrompt={(botId: BotId) =>
+                        savePrompt({ name: prompt.name ?? '', prompt: prompt.prompt ?? '', botId })
                       }
-                      remove={() => removePrompt(prompt.id.toString())}
+                      remove={() => removePrompt(prompt.id)}
+                      edit={() =>
+                        editPrompt(prompt.id, prompt.name ?? '', prompt.prompt ?? '', prompt.bot_id ?? 'gemini')
+                      }
                     />
                   ))}
                 </div>

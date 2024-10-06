@@ -1,3 +1,4 @@
+import { Session } from '@supabase/supabase-js'
 import supabase from './client'
 
 function launchWebAuthFlow(url: string, interactive: boolean): Promise<string> {
@@ -13,6 +14,11 @@ function launchWebAuthFlow(url: string, interactive: boolean): Promise<string> {
 }
 
 export const getUserId = async (): Promise<string | undefined> => {
+  const session = await getSession()
+  return session?.user.id
+}
+
+export const getSession = async (): Promise<Session | null> => {
   // Check if we have a stored session
   const storedSession = await chrome.storage.local.get('supabaseSession')
   if (storedSession.supabaseSession) {
@@ -24,10 +30,9 @@ export const getUserId = async (): Promise<string | undefined> => {
     data: { session },
   } = await supabase.auth.getSession()
   if (session) {
-    const userId = session.user.id
     // Store the session
     await chrome.storage.local.set({ supabaseSession: session })
-    return userId
+    return session
   }
 
   const manifest = chrome.runtime.getManifest()
@@ -46,14 +51,14 @@ export const getUserId = async (): Promise<string | undefined> => {
 
     // auth was successful, extract the ID token from the redirectedTo URL
     if (!redirectedTo) {
-      return
+      return null
     }
     const redirectedUrl = new URL(redirectedTo)
 
     const params = new URLSearchParams(redirectedUrl.hash.replace('#', ''))
     const idToken = params.get('id_token')
     if (!idToken) {
-      return
+      return null
     }
     const { data, error } = await supabase.auth.signInWithIdToken({
       provider: 'google',
@@ -61,6 +66,7 @@ export const getUserId = async (): Promise<string | undefined> => {
     })
     if (error) {
       console.error('Error logging in:', error.message)
+      return null
     } else {
       // Store the new session
       const {
@@ -69,10 +75,11 @@ export const getUserId = async (): Promise<string | undefined> => {
       if (newSession) {
         await chrome.storage.local.set({ supabaseSession: newSession })
       }
-      return data.user.id
+      return newSession
     }
   } catch (error) {
     console.error('Error logging in:', error)
+    return null
   }
 }
 

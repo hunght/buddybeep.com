@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { User } from '@supabase/supabase-js'
 import supabase from '~lib/supabase/client'
+import { getSession } from '~lib/supabase/service'
 
 export function useUser() {
   const [user, setUser] = useState<User | null>(null)
@@ -24,20 +25,4 @@ export function useUser() {
   }, [])
 
   return { user, loading }
-}
-
-async function getSession() {
-  const storedSession = await chrome.storage.local.get('supabaseSession')
-  if (storedSession.supabaseSession) {
-    // Set the stored session
-    await supabase.auth.setSession(storedSession.supabaseSession)
-  }
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession()
-  if (session) {
-    await chrome.storage.local.set({ supabaseSession: session })
-    return session
-  }
 }
