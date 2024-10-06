@@ -1,9 +1,9 @@
-import { Suspense, useCallback, useState } from 'react'
+import { Suspense, useCallback, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BeatLoader } from 'react-spinners'
 import useSWR from 'swr'
 import { trackEvent } from '~app/plausible'
-import { Prompt, loadLocalPrompts, removeLocalPrompt, saveLocalPrompt } from '~services/prompts'
+import { Prompt } from '~services/prompts'
 import { uuid } from '~utils'
 import Button from '../Button'
 
@@ -14,45 +14,67 @@ import Sidebar from './Sidebar'
 import { agentsByCategoryAtom, categoryAtom } from '~app/state/agentAtom'
 import { useAtom, useAtomValue } from 'jotai'
 import { SearchInput } from './SearchInput'
-import { LanguageSelection } from '~app/pages/LanguageSelection'
 import { getAllAgentsAtom } from '~app/state/agentAtom'
+import supabase from '~lib/supabase/client'
+import { useUser } from '~hooks/useUser'
+import { Database } from '~lib/supabase/schema'
+type PromptDB = Database['public']['Tables']['prompts']['Row']
 
 function CommunityPrompts(props: {
   insertPrompt: ({ botId, agentId }: { botId: BotId; agentId: string | null }) => void
 }) {
-  const copyToLocal = useCallback(async (prompt: Prompt) => {
-    await saveLocalPrompt({ ...prompt, agentId: uuid() })
-  }, [])
-  const agentsArray = useAtomValue(agentsByCategoryAtom)
-  const [category, setCategory] = useAtom(categoryAtom)
-  const allAgents = useAtomValue(getAllAgentsAtom)
-
   const { t } = useTranslation()
   const [formData, setFormData] = useState<Prompt | null>(null)
-  const localPromptsQuery = useSWR('local-prompts', () => loadLocalPrompts(), { suspense: true })
+  const { user, loading: userLoading } = useUser()
+
+  // Use SWR to fetch user prompts
+  const { data: userPrompts, mutate } = useSWR<PromptDB[]>(user ? 'user-prompts' : null, async () => {
+    const { data } = await supabase
+      .from('prompts')
+      .select('*')
+      .eq('user_id', user?.id ?? '')
+    return data ?? []
+  })
 
   const savePrompt = useCallback(
-    async (prompt: Prompt) => {
-      const existed = await saveLocalPrompt(prompt)
-      localPromptsQuery.mutate()
-      setFormData(null)
-      trackEvent(existed ? 'edit_local_prompt' : 'add_local_prompt')
+    async ({ name, prompt, botId }: { name: string; prompt: string; botId: string }) => {
+      if (user) {
+        try {
+          await supabase.from('prompts').insert({ name, prompt, user_id: user.id, bot_id: botId })
+          mutate() // Trigger a re-fetch of user prompts
+          setFormData(null)
+          trackEvent('save_custom_prompt')
+        } catch (error) {
+          console.error('Error saving user prompt:', error)
+        }
+      }
     },
-    [localPromptsQuery],
+    [user, mutate],
   )
 
   const removePrompt = useCallback(
     async (id: string) => {
-      await removeLocalPrompt(id)
-      localPromptsQuery.mutate()
-      trackEvent('remove_local_prompt')
+      if (user) {
+        try {
+          await supabase.from('prompts').delete().eq('id', id)
+          mutate() // Trigger a re-fetch of user prompts
+          trackEvent('remove_custom_prompt')
+        } catch (error) {
+          console.error('Error removing user prompt:', error)
+        }
+      }
     },
-    [localPromptsQuery],
+    [user, mutate],
   )
 
   const create = useCallback(() => {
     setFormData({ agentId: uuid(), name: '', prompt: '', botId: 'gemini' })
   }, [])
+
+  const agentsArray = useAtomValue(agentsByCategoryAtom)
+  const [category, setCategory] = useAtom(categoryAtom)
+  const allAgents = useAtomValue(getAllAgentsAtom)
+
   if (category.category !== null || category.subcategory !== null) {
     return (
       <div>
@@ -98,7 +120,7 @@ function CommunityPrompts(props: {
               title={prompt.name}
               prompt={prompt.prompt}
               insertPrompt={props.insertPrompt}
-              copyToLocal={(botId: BotId) => copyToLocal({ ...prompt, botId })}
+              copyToLocal={(botId: BotId) => savePrompt({ ...prompt, botId })}
             />
           ))}
         </div>
@@ -111,32 +133,60 @@ function CommunityPrompts(props: {
         <h2 className="text-2xl font-bold text-primary-text mb-3">{t('All')}</h2>
         <SearchInput />
       </div>
-      {/* {localPromptsQuery.data.length ? (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 pt-2">
-          {localPromptsQuery.data.map((prompt) => (
-            <PromptItem
-              agentId={prompt.agentId}
-              key={prompt.agentId}
-              title={prompt.name}
-              prompt={prompt.prompt}
-              edit={() => !formData && setFormData(prompt)}
-              remove={() => removePrompt(prompt.agentId)}
-              insertPrompt={props.insertPrompt}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-3 text-center text-sm mt-5 text-primary-text">
-          You have no prompts.
-        </div>
+      {!userLoading && (
+        <>
+          <h2 className="text-2xl font-bold text-primary-text mb-3 mt-8">{t('My Prompts')}</h2>
+          {user ? (
+            <>
+              {!userPrompts ? (
+                <BeatLoader size={10} color="rgb(var(--primary-text))" />
+              ) : userPrompts.length ? (
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 pt-2">
+                  {userPrompts.map((prompt) => (
+                    <PromptItem
+                      key={prompt.id}
+                      title={prompt.name ?? ''}
+                      prompt={prompt.prompt ?? ''}
+                      insertPrompt={props.insertPrompt}
+                      copyToLocal={(agentId: string) =>
+                        savePrompt({ name: prompt.name ?? '', prompt: prompt.prompt ?? '', agentId })
+                      }
+                      remove={() => removePrompt(prompt.id.toString())}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-3 text-center text-sm mt-5 text-primary-text">
+                  You have no custom prompts.
+                </div>
+              )}
+              <div className="mt-5">
+                {formData ? (
+                  <PromptForm initialData={formData} onSubmit={savePrompt} onClose={() => setFormData(null)} />
+                ) : (
+                  <Button text={t('Create new prompt')} size="small" onClick={create} />
+                )}
+              </div>
+            </>
+          ) : (
+            <div className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-3 text-center text-sm mt-5 text-primary-text">
+              <p>Login to create and manage custom prompts.</p>
+              <Button
+                text={t('Login')}
+                size="small"
+                onClick={async () => {
+                  console.log('clicked')
+                  const response = await chrome.runtime.sendMessage({ action: 'getSession' })
+                  console.log(response)
+                  await supabase.auth.setSession(response)
+                }}
+                className="mt-3"
+              />
+            </div>
+          )}
+        </>
       )}
-      <div className="mt-5">
-        {formData ? (
-          <PromptForm initialData={formData} onSubmit={savePrompt} onClose={() => setFormData(null)} />
-        ) : (
-          <Button text={t('Create new prompt')} size="small" onClick={create} />
-        )}
-      </div> */}
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 pt-2">
         {agentsArray.map((prompt) => (
           <PromptItem
@@ -145,7 +195,7 @@ function CommunityPrompts(props: {
             title={prompt.name}
             prompt={prompt.prompt}
             insertPrompt={props.insertPrompt}
-            copyToLocal={(botId: BotId) => copyToLocal({ ...prompt, botId })}
+            copyToLocal={(botId: BotId) => savePrompt({ name: prompt.name ?? '', prompt: prompt.prompt ?? '', botId })}
           />
         ))}
       </div>
@@ -171,8 +221,6 @@ function CommunityPrompts(props: {
 const PromptLibrary = (props: {
   insertPrompt: ({ botId, agentId }: { botId: BotId; agentId: string | null }) => void
 }) => {
-  const { t } = useTranslation()
-
   const insertPrompt = useCallback(
     ({ botId, agentId }: { botId: BotId; agentId: string | null }) => {
       props.insertPrompt({ botId, agentId })

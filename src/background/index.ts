@@ -254,6 +254,9 @@ Browser.runtime.onMessage.addListener(async (message, sender, sendResponse) => {
     case 'version': {
       return { version: '1.0' }
     }
+    case 'getUserId': {
+      return { userId: await getUserId() }
+    }
     case 'generateLinkedInReply': {
       // Handle the "Reply to this" action
       const tabId = sender.tab?.id

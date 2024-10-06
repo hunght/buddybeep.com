@@ -32,6 +32,33 @@ export type Database = {
           },
         ]
       }
+      feedback: {
+        Row: {
+          created_at: string
+          email: string | null
+          feedback_type: string | null
+          id: string
+          message: string | null
+          name: string | null
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          feedback_type?: string | null
+          id?: string
+          message?: string | null
+          name?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          feedback_type?: string | null
+          id?: string
+          message?: string | null
+          name?: string | null
+        }
+        Relationships: []
+      }
       note_tags: {
         Row: {
           created_at: string
@@ -62,9 +89,11 @@ export type Database = {
         Row: {
           content: string | null
           created_at: string
+          deleted_at: string | null
           description: string | null
           fts: unknown | null
           id: string
+          is_favorite: boolean | null
           is_public: boolean | null
           parent_id: string | null
           source_url: string | null
@@ -77,9 +106,11 @@ export type Database = {
         Insert: {
           content?: string | null
           created_at?: string
+          deleted_at?: string | null
           description?: string | null
           fts?: unknown | null
           id?: string
+          is_favorite?: boolean | null
           is_public?: boolean | null
           parent_id?: string | null
           source_url?: string | null
@@ -92,9 +123,11 @@ export type Database = {
         Update: {
           content?: string | null
           created_at?: string
+          deleted_at?: string | null
           description?: string | null
           fts?: unknown | null
           id?: string
+          is_favorite?: boolean | null
           is_public?: boolean | null
           parent_id?: string | null
           source_url?: string | null
@@ -198,6 +231,33 @@ export type Database = {
         }
         Relationships: []
       }
+      prompts: {
+        Row: {
+          bot_id: string | null
+          created_at: string
+          id: number
+          name: string | null
+          prompt: string | null
+          user_id: string
+        }
+        Insert: {
+          bot_id?: string | null
+          created_at?: string
+          id?: number
+          name?: string | null
+          prompt?: string | null
+          user_id?: string
+        }
+        Update: {
+          bot_id?: string | null
+          created_at?: string
+          id?: number
+          name?: string | null
+          prompt?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           cancel_at: string | null
@@ -289,24 +349,36 @@ export type Database = {
         Row: {
           avatar_url: string | null
           billing_address: Json | null
+          email: string | null
+          email_campaign_status: number
           full_name: string | null
           id: string
+          is_admin: boolean | null
+          last_active: string | null
           payment_method: Json | null
           username: string | null
         }
         Insert: {
           avatar_url?: string | null
           billing_address?: Json | null
+          email?: string | null
+          email_campaign_status?: number
           full_name?: string | null
           id: string
+          is_admin?: boolean | null
+          last_active?: string | null
           payment_method?: Json | null
           username?: string | null
         }
         Update: {
           avatar_url?: string | null
           billing_address?: Json | null
+          email?: string | null
+          email_campaign_status?: number
           full_name?: string | null
           id?: string
+          is_admin?: boolean | null
+          last_active?: string | null
           payment_method?: Json | null
           username?: string | null
         }
