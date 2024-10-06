@@ -6,12 +6,31 @@ import React from 'react'
 import { categoryAtom } from '~app/state/agentAtom'
 import { Category, categories } from '~app/state/data/categoriesData'
 import { cx } from '~utils'
+import { useUser } from '~hooks/useUser'
 
 const Sidebar: React.FC = () => {
   const [category, setCategory] = useAtom(categoryAtom)
+  const { user } = useUser()
 
   return (
     <div className="w-64 h-full overflow-y-auto dark:text-gray-400  p-5 rounded-lg">
+      {/* My Prompts item */}
+      {user && (
+        <div className="mb-4">
+          <h3
+            className={cx(
+              'font-semibold text-lg rounded-sm',
+              'mt-1 hover:text-primary-text cursor-pointer hover:underline',
+              category.category === 'My Prompts' && 'text-primary-text font-bold',
+            )}
+            onClick={() => setCategory({ category: 'My Prompts', subcategory: null })}
+          >
+            {t('My Prompts')}
+          </h3>
+        </div>
+      )}
+
+      {/* Existing categories */}
       {categories.map((item: Category, index: number) => {
         const isMainCategorySelected = category.category === item.category && category.subcategory === null
         return (

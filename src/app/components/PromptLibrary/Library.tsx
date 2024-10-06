@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useState, useEffect } from 'react'
+import { Suspense, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { BeatLoader } from 'react-spinners'
 import useSWR from 'swr'
@@ -83,6 +83,68 @@ function CommunityPrompts(props: {
   const [category, setCategory] = useAtom(categoryAtom)
   const allAgents = useAtomValue(getAllAgentsAtom)
 
+  if (category.category === 'My Prompts') {
+    return (
+      <div>
+        <h2 className="text-2xl font-bold text-primary-text mb-3">{t('My Prompts')}</h2>
+        {!userLoading && (
+          <>
+            {user ? (
+              <>
+                {!userPrompts ? (
+                  <BeatLoader size={10} color="rgb(var(--primary-text))" />
+                ) : userPrompts.length ? (
+                  <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 pt-2">
+                    {userPrompts.map((prompt) => (
+                      <MyPromptItem
+                        key={prompt.id}
+                        id={prompt.id}
+                        title={prompt.name ?? ''}
+                        prompt={prompt.prompt ?? ''}
+                        insertPrompt={props.insertPrompt}
+                        clonePrompt={(botId: BotId) =>
+                          savePrompt({ name: prompt.name ?? '', prompt: prompt.prompt ?? '', botId })
+                        }
+                        remove={() => removePrompt(prompt.id)}
+                        edit={editPrompt}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-3 text-center text-sm mt-5 text-primary-text">
+                    You have no custom prompts.
+                  </div>
+                )}
+                <div className="mt-5">
+                  {formData ? (
+                    <PromptForm initialData={formData} onSubmit={savePrompt} onClose={() => setFormData(null)} />
+                  ) : (
+                    <Button text={t('Create new prompt')} size="small" onClick={create} />
+                  )}
+                </div>
+              </>
+            ) : (
+              <div className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-3 text-center text-sm mt-5 text-primary-text">
+                <p>Login to create and manage custom prompts.</p>
+                <Button
+                  text={t('Login')}
+                  size="small"
+                  onClick={async () => {
+                    console.log('clicked')
+                    const response = await chrome.runtime.sendMessage({ action: 'getSession' })
+                    console.log(response)
+                    await supabase.auth.setSession(response)
+                  }}
+                  className="mt-3"
+                />
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    )
+  }
+
   if (category.category !== null || category.subcategory !== null) {
     return (
       <div>
@@ -141,62 +203,6 @@ function CommunityPrompts(props: {
         <h2 className="text-2xl font-bold text-primary-text mb-3">{t('All')}</h2>
         <SearchInput />
       </div>
-      {!userLoading && (
-        <>
-          <h2 className="text-2xl font-bold text-primary-text mb-3 mt-8">{t('My Prompts')}</h2>
-          {user ? (
-            <>
-              {!userPrompts ? (
-                <BeatLoader size={10} color="rgb(var(--primary-text))" />
-              ) : userPrompts.length ? (
-                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 pt-2">
-                  {userPrompts.map((prompt) => (
-                    <MyPromptItem
-                      key={prompt.id}
-                      id={prompt.id}
-                      title={prompt.name ?? ''}
-                      prompt={prompt.prompt ?? ''}
-                      insertPrompt={props.insertPrompt}
-                      clonePrompt={(botId: BotId) =>
-                        savePrompt({ name: prompt.name ?? '', prompt: prompt.prompt ?? '', botId })
-                      }
-                      remove={() => removePrompt(prompt.id)}
-                      edit={editPrompt}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <div className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-3 text-center text-sm mt-5 text-primary-text">
-                  You have no custom prompts.
-                </div>
-              )}
-              <div className="mt-5">
-                {formData ? (
-                  <PromptForm initialData={formData} onSubmit={savePrompt} onClose={() => setFormData(null)} />
-                ) : (
-                  <Button text={t('Create new prompt')} size="small" onClick={create} />
-                )}
-              </div>
-            </>
-          ) : (
-            <div className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-3 text-center text-sm mt-5 text-primary-text">
-              <p>Login to create and manage custom prompts.</p>
-              <Button
-                text={t('Login')}
-                size="small"
-                onClick={async () => {
-                  console.log('clicked')
-                  const response = await chrome.runtime.sendMessage({ action: 'getSession' })
-                  console.log(response)
-                  await supabase.auth.setSession(response)
-                }}
-                className="mt-3"
-              />
-            </div>
-          )}
-        </>
-      )}
-
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 pt-2">
         {agentsArray.map((prompt) => (
           <PromptItem

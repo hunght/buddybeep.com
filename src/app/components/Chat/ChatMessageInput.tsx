@@ -15,13 +15,13 @@ import { fileOpen } from 'browser-fs-access'
 import { cx } from '~/utils'
 import { ClipboardEventHandler, FC, ReactNode, memo, useCallback, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { GoBook, GoImage } from 'react-icons/go'
+import { GoImage } from 'react-icons/go'
 import { RiDeleteBackLine } from 'react-icons/ri'
 import { trackEvent } from '~app/plausible'
 import { Prompt } from '~services/prompts'
 import Button from '../Button'
 import PromptCombobox, { ComboboxContext } from '../PromptCombobox'
-import PromptLibraryDialog from '../PromptLibrary/Dialog'
+
 import TextInput from './TextInput'
 
 interface Props {
