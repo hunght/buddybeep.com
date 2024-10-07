@@ -5,7 +5,7 @@ import jotaiReactRefresh from 'jotai/babel/plugin-react-refresh'
 import { defineConfig } from 'vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 import manifest from './manifest.config'
-
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 export default defineConfig(({ mode }) => {
   return {
     plugins: [
@@ -16,8 +16,14 @@ export default defineConfig(({ mode }) => {
         },
       }),
       crx({ manifest }),
+      sentryVitePlugin({
+        authToken: process.env.SENTRY_AUTH_TOKEN,
+        org: 'nexttradingbot',
+        project: 'extensions',
+      }),
     ],
     build: {
+      sourcemap: true,
       rollupOptions: {
         input: ['app.html'],
       },
