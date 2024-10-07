@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import closeIcon from '~/assets/icons/close.svg'
 
 import { BotId } from '~app/bots'
 import Select from '../Select'
@@ -9,11 +8,11 @@ import { ActionButton } from './ActionButton'
 import { useEnabledBots } from '~app/hooks/use-enabled-bots'
 
 export const MyPromptItem = (props: {
-  id: number
+  id: string
   title: string
   prompt: string
-  edit?: (id: number, title: string, prompt: string) => void
-  remove?: (id: number) => void
+  edit?: (id: string, title: string, prompt: string) => void
+  remove?: (id: string) => void
   clonePrompt?: (botId: BotId) => void
   insertPrompt: ({ botId, agentId }: { botId: BotId; agentId: string | null }) => void
 }) => {
@@ -63,7 +62,7 @@ export const MyPromptItem = (props: {
           <button
             type="button"
             className="rounded bg-indigo-500 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500"
-            onClick={() => props.insertPrompt({ botId, agentId: null })}
+            onClick={() => props.insertPrompt({ botId, agentId: id })}
           >
             {t('Use')}
           </button>
@@ -124,14 +123,6 @@ export const MyPromptItem = (props: {
       <div className="flex flex-row space-x-4 items-start">
         <div className="flex-1 w-full">{isEditing ? renderEditMode() : renderViewMode()}</div>
       </div>
-      {props.remove && props.id && !isEditing && (
-        <img
-          src={closeIcon}
-          alt="Close"
-          className="hidden group-hover:block absolute right-[-10px] top-[-10px] cursor-pointer w-6 h-6 rounded-full bg-primary-background p-1 transition duration-150 ease-in-out hover:bg-gray-200"
-          onClick={() => props.remove?.(props.id ?? 0)}
-        />
-      )}
     </div>
   )
 }

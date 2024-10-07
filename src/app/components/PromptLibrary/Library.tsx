@@ -11,7 +11,7 @@ import { BotId } from '~app/bots'
 import { PromptItem } from './PromptItem'
 import { PromptForm } from './PromptForm'
 import Sidebar from './Sidebar'
-import { agentsByCategoryAtom, categoryAtom } from '~app/state/agentAtom'
+import { agentsByCategoryAtom, categoryAtom, promptLibraryAtom } from '~app/state/agentAtom'
 import { useAtom, useAtomValue } from 'jotai'
 import { SearchInput } from './SearchInput'
 import { getAllAgentsAtom } from '~app/state/agentAtom'
@@ -27,17 +27,27 @@ function CommunityPrompts(props: {
   const { t } = useTranslation()
   const [formData, setFormData] = useState<Prompt | null>(null)
   const { user, loading: userLoading } = useUser()
-
+  const [, setPromptLibrary] = useAtom(promptLibraryAtom)
   // Use SWR to fetch user prompts
   const { data: userPrompts, mutate } = useSWR<PromptDB[]>(user ? 'user-prompts' : null, async () => {
     const { data } = await supabase
       .from('prompts')
       .select('*')
       .eq('user_id', user?.id ?? '')
+    if (data) {
+      setPromptLibrary(
+        Object.fromEntries(
+          data.map((prompt) => [
+            prompt.id,
+            { agentId: prompt.id, name: prompt.name, prompt: prompt.prompt, avatar: null },
+          ]),
+        ),
+      )
+    }
     return data ?? []
   })
 
-  const savePrompt = useCallback(
+  const clonePrompt = useCallback(
     async ({ name, prompt, botId }: { name: string; prompt: string; botId: string }) => {
       if (user) {
         try {
@@ -53,7 +63,7 @@ function CommunityPrompts(props: {
     [user, mutate],
   )
   const editPrompt = useCallback(
-    async (id: number, name: string, prompt: string) => {
+    async (id: string, name: string, prompt: string) => {
       await supabase.from('prompts').update({ name, prompt }).eq('id', id)
       mutate()
     },
@@ -61,7 +71,7 @@ function CommunityPrompts(props: {
   )
 
   const removePrompt = useCallback(
-    async (id: number) => {
+    async (id: string) => {
       if (user) {
         try {
           await supabase.from('prompts').delete().eq('id', id)
@@ -103,7 +113,7 @@ function CommunityPrompts(props: {
                         prompt={prompt.prompt ?? ''}
                         insertPrompt={props.insertPrompt}
                         clonePrompt={(botId: BotId) =>
-                          savePrompt({ name: prompt.name ?? '', prompt: prompt.prompt ?? '', botId })
+                          clonePrompt({ name: prompt.name ?? '', prompt: prompt.prompt ?? '', botId })
                         }
                         remove={() => removePrompt(prompt.id)}
                         edit={editPrompt}
@@ -117,7 +127,7 @@ function CommunityPrompts(props: {
                 )}
                 <div className="mt-5">
                   {formData ? (
-                    <PromptForm initialData={formData} onSubmit={savePrompt} onClose={() => setFormData(null)} />
+                    <PromptForm initialData={formData} onSubmit={clonePrompt} onClose={() => setFormData(null)} />
                   ) : (
                     <Button text={t('Create new prompt')} size="small" onClick={create} />
                   )}
@@ -190,7 +200,10 @@ function CommunityPrompts(props: {
               title={prompt.name}
               prompt={prompt.prompt}
               insertPrompt={props.insertPrompt}
-              clonePrompt={(botId: BotId) => savePrompt({ ...prompt, botId })}
+              clonePrompt={async (botId: BotId) => {
+                await clonePrompt({ ...prompt, botId })
+                setCategory({ category: 'My Prompts', subcategory: null })
+              }}
             />
           ))}
         </div>
@@ -211,7 +224,9 @@ function CommunityPrompts(props: {
             title={prompt.name}
             prompt={prompt.prompt}
             insertPrompt={props.insertPrompt}
-            clonePrompt={(botId: BotId) => savePrompt({ name: prompt.name ?? '', prompt: prompt.prompt ?? '', botId })}
+            clonePrompt={(botId: BotId) => {
+              clonePrompt({ name: prompt.name ?? '', prompt: prompt.prompt ?? '', botId })
+            }}
           />
         ))}
       </div>

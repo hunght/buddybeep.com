@@ -15,6 +15,7 @@ import { agentsCategorization } from './data/categoriesData'
 
 import { languageAtom } from './langAtom'
 import { omit } from 'lodash-es'
+import { atomWithStorage } from 'jotai/utils'
 
 type AgentType = {
   agentId: string
@@ -29,13 +30,15 @@ export const categoryAtom = atom<{ category: string | null; subcategory: string 
   subcategory: null,
 })
 export const searchQueryAtom = atom<string>('')
+export const promptLibraryAtom = atomWithStorage<Record<string, AgentType>>('promptLibrary', {})
 
 export const getAllAgentsAtom = atom<Record<string, AgentType>>((get) => {
   const allAgents = jsonData as unknown as Record<string, AgentType>
   const lang = get(languageAtom)
-
+  const promptLibrary = get(promptLibraryAtom)
+  console.log('promptLibrary', promptLibrary)
   if (lang === 'en') {
-    return allAgents
+    return { ...allAgents, ...promptLibrary }
   }
   let object: Record<string, string> = {}
 
@@ -72,7 +75,7 @@ export const getAllAgentsAtom = atom<Record<string, AgentType>>((get) => {
       object = inJsonData as unknown as Record<string, string>
       break
     default:
-      return allAgents
+      return { ...allAgents, ...promptLibrary }
   }
 
   const result: Record<string, AgentType> = {}
@@ -86,7 +89,7 @@ export const getAllAgentsAtom = atom<Record<string, AgentType>>((get) => {
     }
   })
 
-  return result
+  return { ...result, ...promptLibrary }
 })
 
 export const agentsByCategoryAtom = atom<AgentType[]>((get) => {

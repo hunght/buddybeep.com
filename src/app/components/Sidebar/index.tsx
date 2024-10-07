@@ -1,13 +1,8 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { motion } from 'framer-motion'
-import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { useCallback, useEffect, useState } from 'react'
+import { useAtom, useAtomValue } from 'jotai'
+import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
-import collapseIcon from '~/assets/icons/collapse.svg'
-import feedbackIcon from '~/assets/icons/feedback.svg'
-import githubIcon from '~/assets/icons/github.svg'
-import settingIcon from '~/assets/icons/setting.svg'
 
 import logo from '~/assets/logo-64.png'
 import { cx } from '~/utils'
@@ -33,7 +28,7 @@ import { BiCollapse } from 'react-icons/bi'
 
 function Sidebar() {
   const { t } = useTranslation()
-  const [collapsed, setCollapsed] = useAtom(sidebarCollapsedAtom)
+  const [collapsed] = useAtom(sidebarCollapsedAtom)
   const allAgents = useAtomValue(getAllAgentsAtom)
   const chatStatesArray = useAtomValue(chatStatesArrayAtomValue)
 
@@ -50,6 +45,10 @@ function Sidebar() {
   const insertPrompt: InsertPropmtType = ({ botId, agentId }): void => {
     const botSlug = getBotSlug({ botId, agentId })
     const storedChatState = chatStateLocalStorage[botSlug]
+    console.log('storedChatState', storedChatState)
+    console.log('botSlug', botSlug)
+    console.log('botId', botId)
+    console.log('agentId', agentId)
     if (!storedChatState) {
       setChatStateLocalStorage((prev) => {
         return {
@@ -62,6 +61,7 @@ function Sidebar() {
         }
       })
     }
+
     if (agentId) {
       //navigate to the agent
       navigate({ to: '/chat-agent/$agentId/$botId', params: { agentId, botId } })
@@ -146,7 +146,10 @@ function Sidebar() {
           />
         </div>
         {chatStatesArray.map(({ botId, agentId, lastMessage }) => {
-          const agent = allAgents[agentId ?? '']
+          if (!agentId) {
+            return null
+          }
+          const agent = allAgents[agentId]
 
           return (
             <NavLink

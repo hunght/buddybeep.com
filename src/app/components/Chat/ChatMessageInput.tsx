@@ -43,7 +43,6 @@ const ChatMessageInput: FC<Props> = (props) => {
   const [image, setImage] = useState<File | undefined>(undefined)
   const formRef = useRef<HTMLFormElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
-  const [isPromptLibraryDialogOpen, setIsPromptLibraryDialogOpen] = useState(false)
 
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
   const [isComboboxOpen, setIsComboboxOpen] = useState(false)

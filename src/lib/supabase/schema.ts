@@ -235,7 +235,7 @@ export type Database = {
         Row: {
           bot_id: string | null
           created_at: string
-          id: number
+          id: string | null
           name: string | null
           prompt: string | null
           user_id: string
@@ -243,7 +243,7 @@ export type Database = {
         Insert: {
           bot_id?: string | null
           created_at?: string
-          id?: number
+          id?: string | null
           name?: string | null
           prompt?: string | null
           user_id?: string
@@ -251,7 +251,7 @@ export type Database = {
         Update: {
           bot_id?: string | null
           created_at?: string
-          id?: number
+          id?: string | null
           name?: string | null
           prompt?: string | null
           user_id?: string

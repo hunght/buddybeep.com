@@ -125,6 +125,7 @@ export function useChat(botId: BotId, agentId: string | null) {
 
   // send the prompt to the bot when the agent is set
   useEffect(() => {
+    console.log('agentId', agentId)
     if (
       agentId === 'summary-web-content' ||
       agentId === 'summary-youtube-videos' ||
@@ -135,6 +136,10 @@ export function useChat(botId: BotId, agentId: string | null) {
       return
     }
     const prompt = agentId ? allAgents[agentId]?.prompt : undefined
+    console.log('prompt', prompt)
+    console.log('chatState.isSetup', chatState.isSetup)
+    console.log('agentId', agentId)
+    console.log('allAgents', allAgents)
     if (prompt && !chatState.isSetup) {
       sendMessage(buildPromptWithLang(prompt))
       setChatState((draft) => {
