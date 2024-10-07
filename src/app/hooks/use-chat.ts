@@ -67,6 +67,10 @@ export function useChat(botId: BotId, agentId: string | null) {
     async (input: string, image?: File, summary?: { link: string; title: string }): Promise<string> => {
       trackEvent('send_message', { botId, withImage: !!image, name: chatState.bot.name })
 
+      if (chatState.generatingMessageId) {
+        stopGenerating()
+      }
+
       const botMessageId = uuid()
       setChatState((draft) => {
         draft.messages.push(
@@ -136,10 +140,7 @@ export function useChat(botId: BotId, agentId: string | null) {
       return
     }
     const prompt = agentId ? allAgents[agentId]?.prompt : undefined
-    console.log('prompt', prompt)
-    console.log('chatState.isSetup', chatState.isSetup)
-    console.log('agentId', agentId)
-    console.log('allAgents', allAgents)
+
     if (prompt && !chatState.isSetup) {
       sendMessage(buildPromptWithLang(prompt))
       setChatState((draft) => {
