@@ -118,7 +118,8 @@
     "uuid": "^9.0.1",
     "webextension-polyfill": "^0.10.0",
     "websocket-as-promised": "^2.0.1",
-    "xmldom": "^0.6.0"
+    "xmldom": "^0.6.0",
+    "react-ga4": "^2.1.0"
   },
   "packageManager": "pnpm@9.6.0"
 }
