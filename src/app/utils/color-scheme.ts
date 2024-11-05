@@ -49,9 +49,6 @@ function applyThemeMode(mode: ThemeMode) {
 
 function getDefaultThemeColor() {
   const themeMode = getUserThemeMode()
-  console.log(`==== themeMode ===`)
-  console.log(themeMode)
-  console.log('==== end log ===')
 
   if (themeMode === ThemeMode.Dark) {
     return ''

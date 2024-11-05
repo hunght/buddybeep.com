@@ -95,6 +95,8 @@ export function useChat(botId: BotId, agentId: string | null) {
         image: compressedImage,
         signal: abortController.signal,
       })
+      logger.log('input', input)
+      logger.log('resp', resp)
       let lastAnswer = ''
       try {
         for await (const answer of resp) {
