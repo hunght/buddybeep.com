@@ -1,6 +1,6 @@
 // SearchInput.tsx
 import React, { useState, useEffect, useCallback } from 'react'
-import { debounce } from 'lodash'
+import { debounce } from 'lodash-es'
 import closeIcon from '~/assets/icons/close.svg'
 import { useAtom } from 'jotai'
 import { searchQueryAtom } from '~app/state/agentAtom'
