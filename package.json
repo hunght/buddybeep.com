@@ -7,10 +7,11 @@
     "preinstall": "corepack enable",
     "dev": "vite",
     "build": "sh tools/build.sh",
-    "db": "supabase gen types typescript --project-id xigrnhxrexexsfrkmogd --schema public > src/lib/supabase/schema.ts"
+    "db": "supabase gen types typescript --project-id xigrnhxrexexsfrkmogd --schema public > src/lib/supabase/schema.ts",
+    "clear-cache": "rm -rf node_modules/.vite"
   },
   "devDependencies": {
-    "@crxjs/vite-plugin": "2.0.0-beta.21",
+    "@crxjs/vite-plugin": "2.0.0-beta.26",
     "@headlessui/tailwindcss": "^0.2.0",
     "@types/cookie": "^0.6.0",
     "@types/he": "^1.2.3",
@@ -56,6 +57,7 @@
     "@mozilla/readability": "^0.5.0",
     "@radix-ui/react-collapsible": "^1.0.3",
     "@radix-ui/react-tooltip": "^1.0.7",
+    "@sentry/browser": "^8.40.0",
     "@sentry/vite-plugin": "^2.22.5",
     "@supabase/supabase-js": "^2.42.0",
     "@tailwindcss/forms": "^0.5.7",
@@ -92,6 +94,7 @@
     "react-confetti-explosion": "^2.1.2",
     "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "^18.2.0",
+    "react-ga4": "^2.1.0",
     "react-hot-toast": "^2.4.1",
     "react-i18next": "^13.5.0",
     "react-icons": "^4.12.0",
@@ -118,8 +121,7 @@
     "uuid": "^9.0.1",
     "webextension-polyfill": "^0.10.0",
     "websocket-as-promised": "^2.0.1",
-    "xmldom": "^0.6.0",
-    "react-ga4": "^2.1.0"
+    "xmldom": "^0.6.0"
   },
   "packageManager": "pnpm@9.6.0"
 }
