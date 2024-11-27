@@ -18,7 +18,7 @@ cp key.json key.json.bak
 # Remove key from key.json
 jq 'del(.key)' key.json >temp.json && mv temp.json key.json
 
-vite build
+vite build --mode edge
 
 zip -r build/buddybeep-$new_version-edge.zip dist
 

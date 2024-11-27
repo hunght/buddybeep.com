@@ -7,21 +7,28 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 import manifest from './manifest.config'
 import { sentryVitePlugin } from '@sentry/vite-plugin'
 export default defineConfig(({ mode }) => {
-  return {
-    plugins: [
-      tsconfigPaths(),
-      react({
-        babel: {
-          plugins: [jotaiDebugLabel, jotaiReactRefresh],
-        },
-      }),
-      crx({ manifest }),
+  const plugins = [
+    tsconfigPaths(),
+    react({
+      babel: {
+        plugins: [jotaiDebugLabel, jotaiReactRefresh],
+      },
+    }),
+    crx({ manifest }),
+  ]
+
+  if (mode !== 'edge') {
+    plugins.push(
       sentryVitePlugin({
         authToken: process.env.SENTRY_AUTH_TOKEN,
         org: 'nexttradingbot',
         project: 'extensions',
-      }),
-    ],
+      })
+    )
+  }
+
+  return {
+    plugins,
     build: {
       sourcemap: true,
       rollupOptions: {
