@@ -1,7 +1,7 @@
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { sample, uniqBy } from 'lodash-es'
-import { FC, Suspense, useCallback, useEffect, useMemo } from 'react'
+import { FC, Suspense, useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { cx } from '~/utils'
 import Button from '~app/components/Button'
@@ -22,6 +22,7 @@ const twoPanelBotsAtom = atomWithStorage<BotId[]>('multiPanelBots:2', DEFAULT_BO
 const threePanelBotsAtom = atomWithStorage<BotId[]>('multiPanelBots:3', DEFAULT_BOTS.slice(0, 3))
 const fourPanelBotsAtom = atomWithStorage<BotId[]>('multiPanelBots:4', DEFAULT_BOTS.slice(0, 4))
 const sixPanelBotsAtom = atomWithStorage<BotId[]>('multiPanelBots:6', DEFAULT_BOTS.slice(0, 6))
+const bingPingSentAtom = atomWithStorage('bingPingSent', false)
 
 function replaceDeprecatedBots(bots: BotId[]): BotId[] {
   return bots.map((bot) => {
@@ -44,6 +45,7 @@ const GeneralChatPanel: FC<{
   const setPremiumModalOpen = useSetAtom(showPremiumModalAtom)
   const premiumState = usePremium()
   const disabled = useMemo(() => !premiumState.isLoading && !premiumState.activated, [premiumState])
+  const [bingPingSent, setBingPingSent] = useAtom(bingPingSentAtom)
 
   useEffect(() => {
     if (disabled && (chats.length > 2 || supportImageInput)) {
@@ -77,6 +79,11 @@ const GeneralChatPanel: FC<{
         return
       }
       trackEvent('switch_bot', { botId, panel: chats.length })
+      if (botId === 'bing' && !bingPingSent) {
+        const chat = chats.find((c) => c.botId === botId)
+        chat?.sendMessage('ping')
+        setBingPingSent(true)
+      }
       setBots((bots) => {
         const newBots = [...bots]
         newBots[index] = botId

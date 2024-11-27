@@ -31,7 +31,10 @@ import MenuDropDown from '~app/components/side-panel/MenuDropDown'
 
 import { getLinkFromSummaryObject } from '~app/utils/summary'
 import Browser from 'webextension-polyfill'
-import { generatePromptFromPostData } from '~app/utils/promptGenerator' // Assume this utility function exists
+import { generatePromptFromPostData } from '~app/utils/promptGenerator'
+import { atomWithStorage } from 'jotai/utils'
+
+const bingPingSentAtom = atomWithStorage('bingPingSent', false)
 
 function SidePanelPage() {
   const [tab, setTab] = useState<'chat' | 'write'>('chat')
@@ -187,6 +190,17 @@ function SidePanelPage() {
       botId: botId,
     })
   }
+
+  const { sendMessage } = chat
+  const [bingPingSent, setBingPingSent] = useAtom(bingPingSentAtom)
+
+  useEffect(() => {
+    if (botId === 'bing' && !bingPingSent) {
+      sendMessage('ping')
+      setBingPingSent(true)
+    }
+  }, [botId, sendMessage, bingPingSent, setBingPingSent])
+
   return (
     <ConversationContext.Provider value={context}>
       <div className="flex flex-col overflow-hidden bg-primary-background h-full">
