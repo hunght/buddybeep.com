@@ -1,15 +1,5 @@
-import logger from '~utils/logger'
+import { trackEventSentry } from '~services/sentry'
 
 export function trackEvent(name: string, props?: { [propName: string]: string | number | boolean | undefined }) {
-  try {
-    logger.log('[plausible.trackEvent]', name, props)
-    //  trackEvent(name, {
-    //   props: {
-    //     version: getVersion(),
-    //     ...omitBy(props || {}, isUndefined),
-    //   },
-    // })
-  } catch (err) {
-    logger.error('plausible.trackEvent error', err)
-  }
+  trackEventSentry('plausible', name, props)
 }

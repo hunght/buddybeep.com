@@ -1,4 +1,13 @@
-import { BrowserClient, browserProfilingIntegration, browserTracingIntegration, defaultStackParser, getDefaultIntegrations, makeFetchTransport, Scope } from '@sentry/browser'
+import {
+  BrowserClient,
+  browserProfilingIntegration,
+  browserTracingIntegration,
+  defaultStackParser,
+  getDefaultIntegrations,
+  makeFetchTransport,
+  Scope,
+} from '@sentry/browser'
+import logger from '~utils/logger'
 
 // filter integrations that use the global variable
 const integrations = getDefaultIntegrations({}).filter((defaultIntegration) => {
@@ -9,25 +18,40 @@ const client = new BrowserClient({
   dsn: import.meta.env.VITE_SENTRY_DSN,
   transport: makeFetchTransport,
   stackParser: defaultStackParser,
-  integrations:  [...integrations,
-    browserTracingIntegration(),
-    browserProfilingIntegration(),
-  ],
- 
+  integrations: [...integrations, browserTracingIntegration(), browserProfilingIntegration()],
+
   // Tracing
-  tracesSampleRate: 1.0, //  Capture 100% of the transactions
-  // Set 'tracePropagationTargets' to control for which URLs distributed tracing should be enabled
-  tracePropagationTargets: ["localhost", /^https:\/\/buddybeep\.com\/api/],
-  // Set profilesSampleRate to 1.0 to profile every transaction.
-  // Since profilesSampleRate is relative to tracesSampleRate,
-  // the final profiling rate can be computed as tracesSampleRate * profilesSampleRate
-  // For example, a tracesSampleRate of 0.5 and profilesSampleRate of 0.5 would
-  // results in 25% of transactions being profiled (0.5*0.5=0.25)
+  tracesSampleRate: 1.0,
+  tracePropagationTargets: ['localhost', /^https:\/\/buddybeep\.com\/api/],
   profilesSampleRate: 1.0,
+
+  // Enhanced tracking
+  maxBreadcrumbs: 50,
+  attachStacktrace: true,
+  environment: import.meta.env.MODE || 'development',
 })
 
 const scope = new Scope()
 scope.setClient(client)
 
-client.init() // initializing has to be done after setting the client on the scope
+// Main tracking function to replace Plausible's trackEvent
+export function trackEventSentry(
+  category: string,
+  action: string,
+  data?: Record<string, string | number | boolean | undefined>,
+) {
+  try {
+    scope.addBreadcrumb({
+      category,
+      message: action,
+      level: 'info',
+      type: 'user',
+      data: data ? Object.fromEntries(Object.entries(data).filter(([_, v]) => v !== undefined)) : undefined,
+    })
+  } catch (err) {
+    logger.error('sentry.trackEvent error', err)
+  }
+}
+
+client.init()
 export { scope as Sentry }
