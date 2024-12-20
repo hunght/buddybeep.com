@@ -1,5 +1,4 @@
-import { trackEventSentry } from '~services/sentry'
-
-export function trackEvent(name: string, props?: { [propName: string]: string | number | boolean | undefined }) {
-  trackEventSentry('plausible', name, props)
+export function trackEvent(name: string, props?: Record<string, string | number | boolean>) {
+  // Add your preferred analytics tracking here
+  console.log('Analytics event:', name, props)
 }

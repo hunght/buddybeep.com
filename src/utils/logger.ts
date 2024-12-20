@@ -1,4 +1,3 @@
-import { Sentry } from '~services/sentry'
 import { isProduction } from '~utils'
 
 const logger = {
@@ -11,9 +10,6 @@ const logger = {
   error: (...errors: any[]) => {
     try {
       console.error(...errors) // Always log errors in the console
-      if (isProduction()) {
-        Sentry.captureException(`[logger.error]=${errors.join('\n')}`) // Send the first error to Sentry
-      }
     } catch (error) {
       console.log(`==== error ===`)
       console.log(error)
@@ -39,5 +35,4 @@ const logger = {
     }
   },
 }
-
 export default logger
