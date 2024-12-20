@@ -3,11 +3,11 @@ import { createRoot } from 'react-dom/client'
 import './base.scss'
 import './i18n'
 
-import { initGA } from '~/services/analytics'
+import { initPostHog } from '~/services/posthog'
 import { router } from './router'
 
-// Initialize Google Analytics
-initGA()
+// Initialize analytics
+initPostHog()
 
 const container = document.getElementById('app')!
 const root = createRoot(container)

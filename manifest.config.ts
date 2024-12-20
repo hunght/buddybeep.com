@@ -27,6 +27,7 @@ export default defineManifest(async () => {
       'https://*.poe.com/',
       'https://*.anthropic.com/',
       'https://*.claude.ai/',
+      'https://*.i.posthog.com/',
     ],
     optional_host_permissions: ['wss://*/*'],
     permissions: [

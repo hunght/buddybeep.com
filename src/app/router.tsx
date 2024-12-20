@@ -14,7 +14,8 @@ import SettingPage from './pages/SettingPage'
 import SingleBotChatPanel from './pages/SingleBotChatPanel'
 import { useEnabledBots } from './hooks/use-enabled-bots'
 import { first } from 'lodash-es'
-import ReactGA from 'react-ga4'
+import posthog from 'posthog-js'
+
 const rootRoute = createRootRoute()
 
 const layoutRoute = createRoute({
@@ -89,7 +90,7 @@ const router = createRouter({ routeTree, history: hashHistory })
 router.subscribe('onLoad', () => {
   const path = window.location.hash.substring(1) || '/'
   console.log('onLoad', path)
-  ReactGA.send({ hitType: 'pageview', page: path })
+  posthog.capture('$pageview', { path })
 })
 
 declare module '@tanstack/react-router' {
