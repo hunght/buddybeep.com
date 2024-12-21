@@ -20,14 +20,10 @@ export default defineManifest(async () => {
     action: {},
     host_permissions: [
       'https://*.bing.com/',
-      'https://*.openai.com/',
       'https://gemini.google.com/',
       'https://*.buddybeep.com/',
-      'https://*.duckduckgo.com/',
-      'https://*.poe.com/',
       'https://*.anthropic.com/',
       'https://*.claude.ai/',
-      'https://*.i.posthog.com/',
     ],
     optional_host_permissions: ['wss://*/*'],
     permissions: [
