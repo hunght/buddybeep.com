@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://lh3.googleusercontent.com/ByMrvSoXu5EHrRBjG_6Cu0nXPfdy0skOHOkryCoiJou6vUuDjh_aptyy5i4S1tipJKgvZFy817xS3ZMuDCcucAybyg=s1280-w1280-h800" width="150">
+    <img src="https://lh3.googleusercontent.com/ByMrvSoXu5EHrRBjG_6Cu0nXPfdy0skOHOkryCoiJou6vUuDjh_aptyy5i4S1tipJKgvZFy817xS3ZMuDCcucAybyg=s1280-w1280-h800" width="1280">
 </p>
 
 <h1 align="center">BuddyBeep - Your Everyday AI Personal Assistant</h1>
