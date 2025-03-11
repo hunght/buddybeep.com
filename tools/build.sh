@@ -12,7 +12,8 @@ rm -rf build/*
 
 vite build
 
-zip -r build/buddybeep-$new_version.zip dist
+# Add verbose output and explicit manifest inclusion
+zip -rv build/buddybeep-$new_version.zip dist/manifest.json dist
 key.json backup to key.json.bak
 cp key.json key.json.bak
 # Remove key from key.json
@@ -20,7 +21,16 @@ jq 'del(.key)' key.json >temp.json && mv temp.json key.json
 
 vite build --mode edge
 
-zip -r build/buddybeep-$new_version-edge.zip dist
+# Debug: Print out dist directory contents before zipping
+echo "Contents of dist directory for edge build:"
+ls -la dist
+
+# Add verbose output and explicit manifest inclusion
+zip -rv build/buddybeep-$new_version-edge.zip dist/manifest.json $(find dist -type f ! -name "*.map")
+
+# Debug: Verify zip contents
+echo "Contents of edge zip file:"
+unzip -l build/buddybeep-$new_version-edge.zip | grep manifest
 
 # Restore key.json from backup key.json.bak
 mv key.json.bak key.json
