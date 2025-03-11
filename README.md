@@ -2,36 +2,47 @@
     <img src="./src/assets/icon.png" width="150">
 </p>
 
-<h1 align="center">BuddyBeep</h1>
+<h1 align="center">BuddyBeep - Your Everyday AI Personal Assistant</h1>
 
 <div align="center">
 
 ### Install
 
-<a href="https://microsoftedge.microsoft.com/addons/detail/okjbfkonbgmfhcekhdpbodcfadofdefg"><img src="https://user-images.githubusercontent.com/64502893/231991498-8df6dd63-727c-41d0-916f-c90c15127de3.png" width="200" alt="Get BuddyBeep for Chromium"></a>
-<a href="https://microsoftedge.microsoft.com/addons/detail/buddybeep-allinone-chat/kdlmggoacmfoombiokflpeompajfljga?utm_source=github"><img src="https://user-images.githubusercontent.com/64502893/231991158-1b54f831-2fdc-43b6-bf9a-f894000e5aa8.png" width="160" alt="Get BuddyBeep for Microsoft Edge"></a>
+<a href="https://chromewebstore.google.com/detail/buddybeep-your-everyday-a/cbibgdcbkoikdkeahemkjkpacmgicaco">BuddyBeep for Chrome</a> | 
+<a href="https://microsoftedge.microsoft.com/addons/detail/okjbfkonbgmfhcekhdpbodcfadofdefg">BuddyBeep for Microsoft Edge</a> | 
+<a href="https://www.buddybeep.com/">Official Website</a>
+
+**Elevate your browsing experience with AI-powered summaries, video insights, and smart assistance**
 
 </div>
 
-## 📷 Screenshot
+## 🚀 What is BuddyBeep?
 
-![Screenshot](screenshots/extension.png?raw=true#gh-light-mode-only)
+BuddyBeep is an all-in-one AI assistant browser extension that transforms how you browse, research, and interact with web content. It combines powerful AI capabilities with intuitive features to save you time and boost productivity by 10x.
 
-![Screenshot (Dark Mode)](screenshots/dark.png?raw=true#gh-dark-mode-only)
+## ✨ Key Features
 
-## ✨ Features
+### AI Website & YouTube Summaries
+- 📖 **Website Summaries** - Save 90% of your time by getting instant key points from any webpage
+- 🎬 **YouTube Insights** - Extract video content without watching, with just one click
+- 📝 **Web to Note** - Save any internet content to your BuddyBeep notes for later reference
 
-- 🤖 Use different chatbots in one app, currently supporting ChatGPT, new Bing Chat, Google Gemini, Claude, and open-source models including LLama2, Vicuna, ChatGLM etc
-- 💬 Chat with multiple chatbots at the same time, making it easy to compare their answers
-- 🚀 Support ChatGPT API and GPT-4 Browsing
-- 🔍 Shortcut to quickly activate the app anywhere in the browser
-- 🎨 Markdown and code highlight support
-- 📚 Prompt Library for custom prompts and community prompts
-- 💾 Conversation history saved locally
-- 📥 Export and Import all your data
-- 🔗 Share conversation to markdown
-- 🌙 Dark mode
-- 🌐 Web access
+### AI Assistant Integration
+- 🤖 **Multiple AI Models** - Access ChatGPT, Bing Chat, Google Gemini, Claude, and open-source models like LLama2
+- 💬 **Multi-Chat Comparison** - Chat with multiple AI assistants simultaneously to compare responses
+- 🔍 **Quick Access** - Activate anywhere in your browser with convenient shortcuts
+
+### Productivity Tools
+- ⌨️ **AI Writing Assistant** - Generate high-quality content for emails, social media, essays, and more
+- 🧠 **Second Brain** - Store all your internet knowledge in a private dashboard with easy organization
+- 📚 **Prompt Library** - Access custom and community prompts for specialized tasks
+
+### User Experience
+- 💾 **Local Storage** - All conversation history saved locally for privacy
+- 📥 **Data Control** - Export and import all your data seamlessly
+- 🔗 **Easy Sharing** - Share conversations in markdown format
+- 🌙 **Dark Mode** - Comfortable browsing in any lighting condition
+- 🌐 **Web Access** - Use BuddyBeep features across the internet
 
 ## 🤖 Supported Bots
 
@@ -49,6 +60,15 @@
 - Baichuan
 - ...
 
+## 💯 Why Choose BuddyBeep?
+
+- **Save Time** - Reduce content consumption time by up to 90%
+- **Boost Productivity** - Stop switching between tabs and tools with an all-in-one solution
+- **Enhance Learning** - Better retain information with AI-powered summaries and notes
+- **Improve Writing** - Create better content faster with AI assistance
+- **Free to Use** - No subscription required
+- **Privacy-Focused** - We prioritize your data security and privacy
+
 ## 🔨 Build from Source
 
 - Clone the source code
@@ -58,3 +78,9 @@
 - In Chrome/Edge go to the Extensions page (chrome://extensions or edge://extensions)
 - Enable Developer Mode
 - Drag the `dist` folder anywhere on the page to import it (do not delete the folder afterward)
+
+## 🔗 Links
+
+- [Official Website](https://www.buddybeep.com/)
+- [Chrome Web Store](https://chromewebstore.google.com/detail/buddybeep-your-everyday-a/cbibgdcbkoikdkeahemkjkpacmgicaco)
+- [Microsoft Edge Add-ons](https://microsoftedge.microsoft.com/addons/detail/okjbfkonbgmfhcekhdpbodcfadofdefg)
