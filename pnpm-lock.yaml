@@ -283,8 +283,8 @@ importers:
         specifier: ^10.4.16
         version: 10.4.19(postcss@8.4.40)
       chrome-types:
-        specifier: ^0.1.246
-        version: 0.1.297
+        specifier: ^0.1.384
+        version: 0.1.384
       eslint:
         specifier: ^8.56.0
         version: 8.57.0
@@ -438,6 +438,7 @@ packages:
 
   '@crxjs/vite-plugin@2.0.0-beta.26':
     resolution: {integrity: sha512-fZiSeOB4LOwq3cLIwHJnJ4x/duBU/Gkn3JKF7b7mZIRAXtu1waorJ6QaH7qoZPcN5LzyA3J+/t3Kuwa/oo8XNg==}
+    deprecated: Beta versions are no longer maintained. Please upgrade to the stable 2.0.0 release
 
   '@csstools/selector-resolve-nested@1.1.0':
     resolution: {integrity: sha512-uWvSaeRcHyeNenKg8tp17EVDRkpflmdyvbE0DHo6D/GdBb6PDnCYYU6gRpXhtICMGMcahQmj2zGxwFM/WC8hCg==}
@@ -1394,8 +1395,8 @@ packages:
     resolution: {integrity: sha512-7VT13fmjotKpGipCW9JEQAusEPE+Ei8nl6/g4FBAmIm0GOOLMua9NDDo/DWp0ZAxCr3cPq5ZpBqmPAQgDda2Pw==}
     engines: {node: '>= 8.10.0'}
 
-  chrome-types@0.1.297:
-    resolution: {integrity: sha512-pVvyKx+JBZ5jh08bU6qL2IepJItfVOyGeMJtxfi9T5/LBXGbRlbCm7wMUvW51VqqGniPwJjtU20/M0oxH/wsFg==}
+  chrome-types@0.1.384:
+    resolution: {integrity: sha512-50vqTtyGcfQTxLJ49Js9/N5fahKTzUsXlA39YjymNluIvy2TB0cO9LTsYnC4B7salOLRIbvFhTHSlslb2gA3pA==}
 
   classnames@2.3.1:
     resolution: {integrity: sha512-OlQdbZ7gLfGarSqxesMesDa5uz7KFbID8Kpq/SxIoNGDqY8lSYs0D+hhtBXhcdB3rcbXArFr7vlHheLk1voeNA==}
@@ -1687,6 +1688,7 @@ packages:
   eslint@8.57.0:
     resolution: {integrity: sha512-dZ6+mexnaTIbSBZWgou51U6OmzIhYM2VcNdtiTtI7qPNZm35Akpr0f6vtw3w1Kmn5PYo+tZVfh13WrhpS6oLqQ==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    deprecated: This version is no longer supported. Please see https://eslint.org/version-support for other options.
     hasBin: true
 
   espree@9.6.1:
@@ -4596,7 +4598,7 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  chrome-types@0.1.297: {}
+  chrome-types@0.1.384: {}
 
   classnames@2.3.1: {}
 
